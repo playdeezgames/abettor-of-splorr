@@ -2,6 +2,8 @@ Imports System
 
 Module Program
     Sub Main(args As String())
-        Console.WriteLine("Hello World!")
+        Using host As New Host()
+            host.Run()
+        End Using
     End Sub
 End Module
