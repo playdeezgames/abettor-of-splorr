@@ -5,21 +5,21 @@ Public Class Host(Of THue, TCommand As Structure)
     Private ReadOnly _viewWidth As Integer
     Private ReadOnly _viewHeight As Integer
     Private ReadOnly _graphics As GraphicsDeviceManager
+    Private ReadOnly _renderer As IRenderer(Of THue)
+    Private ReadOnly _bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue))
+    Private ReadOnly _commandTransform As Func(Of Keys, TCommand?)
+    Private ReadOnly _commandHandler As ICommandHandler(Of TCommand)
     Private _texture As Texture2D
     Private _spriteBatch As SpriteBatch
-    Private ReadOnly _updatifier As Action(Of IDisplayBuffer(Of THue))
     Private _keyboardState As KeyboardState
     Private _displayBuffer As IDisplayBuffer(Of THue)
-    Private _bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue))
-    Private _commandTransform As Func(Of Keys, TCommand?)
-    Private _commandHandler As ICommandHandler(Of TCommand)
     Sub New(
            windowWidth As Integer,
            windowHeight As Integer,
            viewWidth As Integer,
            viewHeight As Integer,
            bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue)),
-           updatifier As Action(Of IDisplayBuffer(Of THue)),
+           renderer As IRenderer(Of THue),
            commandTransform As Func(Of Keys, TCommand?),
            commandHandler As ICommandHandler(Of TCommand))
         _graphics = New GraphicsDeviceManager(Me)
@@ -27,7 +27,7 @@ Public Class Host(Of THue, TCommand As Structure)
         _windowWidth = windowWidth
         _viewWidth = viewWidth
         _viewHeight = viewHeight
-        _updatifier = updatifier
+        _renderer = renderer
         _bufferCreator = bufferCreator
         _commandTransform = commandTransform
         _commandHandler = commandHandler
@@ -55,7 +55,7 @@ Public Class Host(Of THue, TCommand As Structure)
             End If
         Next
         _keyboardState = newState
-        _updatifier(_displayBuffer)
+        _renderer.Render(_displayBuffer)
         _displayBuffer.Commit()
         MyBase.Update(gameTime)
     End Sub
