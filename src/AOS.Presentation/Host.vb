@@ -1,4 +1,4 @@
-Public Class Host(Of THue As Structure)
+Public Class Host(Of THue, TCommand As Structure)
     Inherits Game
     Private ReadOnly _windowWidth As Integer
     Private ReadOnly _windowHeight As Integer
@@ -8,10 +8,11 @@ Public Class Host(Of THue As Structure)
     Private _texture As Texture2D
     Private _spriteBatch As SpriteBatch
     Private ReadOnly _updatifier As Action(Of IDisplayBuffer(Of THue))
-    Private ReadOnly _commanderator As Action(Of Keys())
     Private _keyboardState As KeyboardState
     Private _displayBuffer As IDisplayBuffer(Of THue)
     Private _bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue))
+    Private _commandTransform As Func(Of Keys, TCommand?)
+    Private _commandHandler As ICommandHandler(Of TCommand)
     Sub New(
            windowWidth As Integer,
            windowHeight As Integer,
@@ -19,15 +20,17 @@ Public Class Host(Of THue As Structure)
            viewHeight As Integer,
            bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue)),
            updatifier As Action(Of IDisplayBuffer(Of THue)),
-           commanderator As Action(Of Keys()))
+           commandTransform As Func(Of Keys, TCommand?),
+           commandHandler As ICommandHandler(Of TCommand))
         _graphics = New GraphicsDeviceManager(Me)
         _windowHeight = windowHeight
         _windowWidth = windowWidth
         _viewWidth = viewWidth
         _viewHeight = viewHeight
         _updatifier = updatifier
-        _commanderator = commanderator
         _bufferCreator = bufferCreator
+        _commandTransform = commandTransform
+        _commandHandler = commandHandler
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub Initialize()
@@ -44,7 +47,13 @@ Public Class Host(Of THue As Structure)
     End Sub
     Protected Overrides Sub Update(gameTime As GameTime)
         Dim newState = Keyboard.GetState()
-        _commanderator(newState.GetPressedKeys().Where(Function(k) _keyboardState.IsKeyUp(k)).ToArray)
+        Dim keysPressed = newState.GetPressedKeys().Where(Function(k) _keyboardState.IsKeyUp(k)).ToArray
+        For Each keyPressed In keysPressed
+            Dim command = _commandTransform(keyPressed)
+            If command.HasValue Then
+                _commandHandler.HandleCommand(command.Value)
+            End If
+        Next
         _keyboardState = newState
         _updatifier(_displayBuffer)
         _displayBuffer.Commit()
