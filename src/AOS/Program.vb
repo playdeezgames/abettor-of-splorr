@@ -1,13 +1,18 @@
 Module Program
     Private x As Integer = 0
     Private y As Integer = 0
-    Private Sub Updatifier(buffer As Color(), width As Integer, height As Integer)
-        buffer(x + y * width) = New Color(0, 0, 0, 255)
-    End Sub
     Sub Main(args As String())
-        Using host As New Host(1280, 720, 160, 90, AddressOf Updatifier, AddressOf Commanderator)
+        Using host As New Host(Of Color)(1280, 720, 160, 90, AddressOf BufferCreatorator, AddressOf Updatifier, AddressOf Commanderator)
             host.Run()
         End Using
+    End Sub
+
+    Private Function BufferCreatorator(texture As Texture2D) As IDisplayBuffer(Of Color)
+        Return New DisplayBuffer(Of Color)(texture)
+    End Function
+
+    Private Sub Updatifier(displayBuffer As IDisplayBuffer(Of Color))
+        displayBuffer.SetPixel(x, y, New Color(0, 0, 0, 255))
     End Sub
 
     Private Sub Commanderator(pressedKeys() As Keys)
