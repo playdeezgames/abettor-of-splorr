@@ -5,7 +5,7 @@
     <RootNamespace>AOS</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
     <OptionStrict>On</OptionStrict>
-    <ImportedNamespaces>AOS.Presentation=False,AOS.UI=False,Microsoft.Xna.Framework=False,Microsoft.Xna.Framework.Graphics=False,Microsoft.Xna.Framework.Input=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,AOS=True</ImportedNamespaces>
+    <ImportedNamespaces>AOS.Application=False,AOS.Presentation=False,AOS.UI=False,Microsoft.Xna.Framework=False,Microsoft.Xna.Framework.Graphics=False,Microsoft.Xna.Framework.Input=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,AOS=True</ImportedNamespaces>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -17,6 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Import Include="AOS.Application" />
     <Import Include="AOS.Presentation" />
     <Import Include="AOS.UI" />
     <Import Include="Microsoft.Xna.Framework" />
@@ -25,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AOS.Application\AOS.Application.vbproj" />
     <ProjectReference Include="..\AOS.Presentation\AOS.Presentation.vbproj" />
   </ItemGroup>
 

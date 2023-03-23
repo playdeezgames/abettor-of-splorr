@@ -1,4 +1,4 @@
-﻿Friend Class CommandHandler
+﻿Public Class GameController
     Implements ICommandHandler(Of Command)
     Implements IRenderer(Of Hue)
     Private x As Integer = 0
