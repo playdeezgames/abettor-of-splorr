@@ -11,6 +11,13 @@ Module Program
             gameController,
             New Dictionary(Of Sfx, String) From
             {
+                {Sfx.EnemyDeath, "Content/EnemyDeath.wav"},
+                {Sfx.EnemyHit, "Content/EnemyHit.wav"},
+                {Sfx.PlayerDeath, "Content/PlayerDeath.wav"},
+                {Sfx.PlayerHit, "Content/PlayerHit.wav"},
+                {Sfx.LevelUp, "Content/LevelUp.wav"},
+                {Sfx.Miss, "Content/Miss.wav"},
+                {Sfx.UnlockDoor, "Content/UnlockDoor.wav"},
                 {Sfx.RollDice, "Content/RollDice.wav"}
             })
             host.Run()

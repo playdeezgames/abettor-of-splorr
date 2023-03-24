@@ -19,6 +19,8 @@
         End Set
     End Property
 
+    Public Property Volume As Single = 1.0F Implements ISfxHandler(Of Sfx).Volume
+
     Public Event OnSfx As ISfxHandler(Of Sfx).OnSfxEventHandler Implements ISfxHandler(Of Sfx).OnSfx
     Public Event OnSizeChange(newSize As (Integer, Integer)) Implements IWindowSizerizer.OnSizeChange
 
@@ -32,6 +34,7 @@
                 x -= 1
             Case Command.Right
                 x += 1
+                RaiseEvent OnSfx(Sfx.UnlockDoor)
         End Select
     End Sub
     Public Sub Render(displayBuffer As IDisplayBuffer(Of Hue)) Implements IRenderer(Of Hue).Render

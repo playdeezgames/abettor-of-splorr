@@ -56,7 +56,7 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
 
     Private Sub OnSfx(sfx As TSfx)
         If _sfxSoundEffects.ContainsKey(sfx) Then
-            _sfxSoundEffects(sfx).Play()
+            _sfxSoundEffects(sfx).Play(_sfxHandler.Volume, 0.0F, 0.0F)
         End If
     End Sub
 
