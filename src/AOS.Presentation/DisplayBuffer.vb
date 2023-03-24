@@ -1,12 +1,22 @@
 ﻿Public Class DisplayBuffer(Of THue)
-    Inherits BaseDisplayBuffer(Of THue, Color)
+    Implements IDisplayBuffer(Of THue)
     Private _texture As Texture2D
     Sub New(texture As Texture2D, transform As Func(Of THue, Color))
-        MyBase.New((texture.Width, texture.Height), transform)
         _texture = texture
+        _transform = transform
+        ReDim _buffer(_texture.Width * _texture.Height - 1)
     End Sub
 
-    Public Overrides Sub Commit()
+    Public Sub Commit() Implements IDisplayBuffer(Of THue).Commit
         _texture.SetData(_buffer)
+    End Sub
+    Private ReadOnly _transform As Func(Of THue, Color)
+    Protected _buffer As Color()
+
+    Public Sub SetPixel(x As Integer, y As Integer, hue As THue) Implements IDisplayBuffer(Of THue).SetPixel
+        If x < 0 OrElse y < 0 OrElse x >= _texture.Width OrElse y >= _texture.Height Then
+            Return
+        End If
+        _buffer(x + y * _texture.Width) = _transform(hue)
     End Sub
 End Class

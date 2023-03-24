@@ -1,4 +1,4 @@
 Public Interface IDisplayBuffer(Of THue)
-    Sub Commit()
-    Sub SetPixel(x As Integer, y As Integer, hue As THue)
+    Inherits IPixelSink(Of THue)
+    Inherits ICommittable
 End Interface
