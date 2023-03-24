@@ -1,7 +1,14 @@
 Module Program
     Sub Main(args As String())
         Dim gameController As New GameController
-        Using host As New Host(Of Hue, Command)(1280, 720, 160, 90, AddressOf BufferCreatorator, gameController, AddressOf CommandTransformerator, gameController)
+        Using host As New Host(Of Hue, Command, Sfx)(
+            1280, 720,
+            160, 90,
+            AddressOf BufferCreatorator,
+            gameController,
+            AddressOf CommandTransformerator,
+            gameController,
+            gameController)
             host.Run()
         End Using
     End Sub

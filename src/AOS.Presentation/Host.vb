@@ -1,4 +1,4 @@
-Public Class Host(Of THue, TCommand As Structure)
+Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Inherits Game
     Private ReadOnly _windowWidth As Integer
     Private ReadOnly _windowHeight As Integer
@@ -13,6 +13,7 @@ Public Class Host(Of THue, TCommand As Structure)
     Private _spriteBatch As SpriteBatch
     Private _keyboardState As KeyboardState
     Private _displayBuffer As IDisplayBuffer(Of THue)
+    Private _sfxHandler As ISfxHandler(Of TSfx)
     Sub New(
            windowWidth As Integer,
            windowHeight As Integer,
@@ -21,7 +22,8 @@ Public Class Host(Of THue, TCommand As Structure)
            bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue)),
            renderer As IRenderer(Of THue),
            commandTransform As Func(Of Keys, TCommand?),
-           commandHandler As ICommandHandler(Of TCommand))
+           commandHandler As ICommandHandler(Of TCommand),
+           sfxHandler As ISfxHandler(Of TSfx))
         _graphics = New GraphicsDeviceManager(Me)
         _windowHeight = windowHeight
         _windowWidth = windowWidth
@@ -31,6 +33,7 @@ Public Class Host(Of THue, TCommand As Structure)
         _bufferCreator = bufferCreator
         _commandTransform = commandTransform
         _commandHandler = commandHandler
+        _sfxHandler = sfxHandler
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub Initialize()
