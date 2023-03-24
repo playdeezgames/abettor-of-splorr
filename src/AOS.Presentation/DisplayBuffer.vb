@@ -19,4 +19,15 @@
         End If
         _buffer(x + y * _texture.Width) = _transform(hue)
     End Sub
+
+    Public Sub Copy(source As IPixelSource(Of THue), fromLocation As (Integer, Integer), toLocation As (Integer, Integer), size As (Integer, Integer), filter As Func(Of THue, Boolean)) Implements IPixelSink(Of THue).Copy
+        For x = 0 To size.Item1 - 1
+            For y = 0 To size.Item2 - 1
+                Dim hue = source.GetPixel(x + fromLocation.Item1, y + fromLocation.Item2)
+                If filter(hue) Then
+                    SetPixel(x + toLocation.Item1, y + toLocation.Item2, hue)
+                End If
+            Next
+        Next
+    End Sub
 End Class
