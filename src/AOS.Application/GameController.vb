@@ -26,10 +26,8 @@
         Select Case command
             Case Command.Up
                 y -= 1
-                Size = (Size.Item1, Size.Item2 - 1)
             Case Command.Down
                 y += 1
-                Size = (Size.Item1, Size.Item2 + 1)
             Case Command.Left
                 x -= 1
             Case Command.Right
