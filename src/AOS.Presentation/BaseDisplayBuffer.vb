@@ -1,9 +1,9 @@
-﻿Public MustInherit Class BaseDisplayBuffer(Of THue)
+﻿Public MustInherit Class BaseDisplayBuffer(Of THue, TStoredHue)
     Implements IDisplayBuffer(Of THue)
-    Private ReadOnly _transform As Func(Of THue, Color)
+    Private ReadOnly _transform As Func(Of THue, TStoredHue)
     Private _size As (Integer, Integer)
-    Protected _buffer As Color()
-    Sub New(size As (Integer, Integer), transform As Func(Of THue, Color))
+    Protected _buffer As TStoredHue()
+    Sub New(size As (Integer, Integer), transform As Func(Of THue, TStoredHue))
         _size = size
         _transform = transform
         ReDim _buffer(size.Item1 * size.Item2 - 1)
