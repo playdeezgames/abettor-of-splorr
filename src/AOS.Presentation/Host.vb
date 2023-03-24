@@ -1,3 +1,5 @@
+Imports Microsoft.Xna.Framework.Audio
+
 Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Inherits Game
     Private ReadOnly _windowWidth As Integer
@@ -13,7 +15,9 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Private _spriteBatch As SpriteBatch
     Private _keyboardState As KeyboardState
     Private _displayBuffer As IDisplayBuffer(Of THue)
-    Private _sfxHandler As ISfxHandler(Of TSfx)
+    Private ReadOnly _sfxHandler As ISfxHandler(Of TSfx)
+    Private _sfxSoundEffects As New Dictionary(Of TSfx, SoundEffect)
+    Private _sfxFilenames As IReadOnlyDictionary(Of TSfx, String)
     Sub New(
            windowWidth As Integer,
            windowHeight As Integer,
@@ -23,7 +27,8 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
            renderer As IRenderer(Of THue),
            commandTransform As Func(Of Keys, TCommand?),
            commandHandler As ICommandHandler(Of TCommand),
-           sfxHandler As ISfxHandler(Of TSfx))
+           sfxHandler As ISfxHandler(Of TSfx),
+           sfxFileNames As IReadOnlyDictionary(Of TSfx, String))
         _graphics = New GraphicsDeviceManager(Me)
         _windowHeight = windowHeight
         _windowWidth = windowWidth
@@ -34,6 +39,7 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
         _commandTransform = commandTransform
         _commandHandler = commandHandler
         _sfxHandler = sfxHandler
+        _sfxFilenames = sfxFileNames
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub Initialize()
@@ -41,8 +47,19 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
         _graphics.PreferredBackBufferHeight = _windowHeight
         _graphics.ApplyChanges()
         _keyboardState = Keyboard.GetState
+        For Each entry In _sfxFilenames
+            _sfxSoundEffects(entry.Key) = SoundEffect.FromFile(entry.Value)
+        Next
+        AddHandler _sfxHandler.OnSfx, AddressOf OnSfx
         MyBase.Initialize()
     End Sub
+
+    Private Sub OnSfx(sfx As TSfx)
+        If _sfxSoundEffects.ContainsKey(sfx) Then
+            _sfxSoundEffects(sfx).Play()
+        End If
+    End Sub
+
     Protected Overrides Sub LoadContent()
         _spriteBatch = New SpriteBatch(GraphicsDevice)
         _texture = New Texture2D(GraphicsDevice, _viewWidth, _viewHeight)

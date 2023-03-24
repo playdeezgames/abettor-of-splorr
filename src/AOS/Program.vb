@@ -8,7 +8,11 @@ Module Program
             gameController,
             AddressOf CommandTransformerator,
             gameController,
-            gameController)
+            gameController,
+            New Dictionary(Of Sfx, String) From
+            {
+                {Sfx.RollDice, "Content/RollDice.wav"}
+            })
             host.Run()
         End Using
     End Sub

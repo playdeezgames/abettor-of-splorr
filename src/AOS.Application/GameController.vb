@@ -4,6 +4,8 @@
     Implements ISfxHandler(Of Sfx)
     Private x As Integer = 0
     Private y As Integer = 0
+    Public Event OnSfx As ISfxHandler(Of Sfx).OnSfxEventHandler Implements ISfxHandler(Of Sfx).OnSfx
+
     Public Sub HandleCommand(command As Command) Implements ICommandHandler(Of Command).HandleCommand
         Select Case command
             Case Command.Up
