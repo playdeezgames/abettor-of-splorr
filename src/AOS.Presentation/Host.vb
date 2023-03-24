@@ -6,15 +6,18 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Private ReadOnly _windowHeight As Integer
     Private ReadOnly _viewWidth As Integer
     Private ReadOnly _viewHeight As Integer
+
     Private ReadOnly _graphics As GraphicsDeviceManager
     Private ReadOnly _renderer As IRenderer(Of THue)
     Private ReadOnly _bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue))
-    Private ReadOnly _commandTransform As Func(Of Keys, TCommand?)
-    Private ReadOnly _commandHandler As ICommandHandler(Of TCommand)
     Private _texture As Texture2D
     Private _spriteBatch As SpriteBatch
-    Private _keyboardState As KeyboardState
     Private _displayBuffer As IDisplayBuffer(Of THue)
+
+    Private ReadOnly _commandTransform As Func(Of Keys, TCommand?)
+    Private ReadOnly _commandHandler As ICommandHandler(Of TCommand)
+    Private _keyboardState As KeyboardState
+
     Private ReadOnly _sfxHandler As ISfxHandler(Of TSfx)
     Private _sfxSoundEffects As New Dictionary(Of TSfx, SoundEffect)
     Private _sfxFilenames As IReadOnlyDictionary(Of TSfx, String)
