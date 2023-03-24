@@ -3,6 +3,10 @@
     Private x As Integer = 0
     Private y As Integer = 0
 
+    Public Sub New(windowSizeSource As Func(Of (Integer, Integer)), volumeSource As Func(Of Single))
+        MyBase.New(windowSizeSource(), volumeSource())
+    End Sub
+
     Public Overrides Sub HandleCommand(command As Command)
         Select Case command
             Case Command.Up

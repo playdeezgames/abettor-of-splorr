@@ -3,7 +3,7 @@
     Implements IRenderer(Of Hue)
     Implements ISfxHandler(Of Sfx)
     Implements IWindowSizerizer
-    Private _windowSize As (Integer, Integer) = (1280, 720)
+    Private _windowSize As (Integer, Integer)
     Public Property Size As (Integer, Integer) Implements IWindowSizerizer.Size
         Get
             Return _windowSize
@@ -15,7 +15,11 @@
             End If
         End Set
     End Property
-    Public Property Volume As Single = 1.0F Implements ISfxHandler(Of Sfx).Volume
+    Public Property Volume As Single Implements ISfxHandler(Of Sfx).Volume
+    Sub New(windowSize As (Integer, Integer), volume As Single)
+        _windowSize = windowSize
+        Me.Volume = volume
+    End Sub
     Public Event OnSfx As ISfxHandler(Of Sfx).OnSfxEventHandler Implements ISfxHandler(Of Sfx).OnSfx
     Public Event OnSizeChange(newSize As (Integer, Integer)) Implements IWindowSizerizer.OnSizeChange
     Public MustOverride Sub HandleCommand(command As Command) Implements ICommandHandler(Of Command).HandleCommand

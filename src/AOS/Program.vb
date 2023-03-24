@@ -1,6 +1,6 @@
 Module Program
     Sub Main(args As String())
-        Dim gameController As New GameController
+        Dim gameController As New GameController(Function() (1280, 720), Function() 1.0F)
         Using host As New Host(Of Hue, Command, Sfx)(
             gameController,
             (160, 90),
