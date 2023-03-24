@@ -13,7 +13,7 @@
                 x -= 1
             Case Command.Right
                 x += 1
-                RaiseEvent OnSfx(Sfx.UnlockDoor)
+                PlaySfx(Sfx.UnlockDoor)
         End Select
     End Sub
 
