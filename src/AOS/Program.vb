@@ -1,6 +1,11 @@
 Module Program
+    Const ConfigFileName = "config.json"
     Sub Main(args As String())
-        Dim gameController As New GameController(Function() (1280, 720), Function() 1.0F)
+        Dim config = LoadConfig()
+        Dim gameController As New GameController(
+            Function() (config.WindowWidth, config.WindowHeight),
+            Function() config.SfxVolume,
+            AddressOf SaveConfig)
         Using host As New Host(Of Hue, Command, Sfx)(
             gameController,
             (160, 90),
@@ -23,6 +28,26 @@ Module Program
             host.Run()
         End Using
     End Sub
+
+    Private Sub SaveConfig(windowSize As (Integer, Integer), volume As Single)
+        File.WriteAllText(ConfigFileName, JsonSerializer.Serialize(New AOSConfig With {.SfxVolume = volume, .WindowHeight = windowSize.Item2, .WindowWidth = windowSize.Item1}))
+    End Sub
+    Const DefaultWindowWidth = 1280
+    Const DefaultWindowHeight = 720
+    Const DefaultSfxVolume = 1.0F
+    Private Function LoadConfig() As AOSConfig
+        Try
+            Return JsonSerializer.Deserialize(Of AOSConfig)(File.ReadAllText(ConfigFileName))
+        Catch ex As Exception
+            Return New AOSConfig With
+            {
+                .WindowWidth = DefaultWindowWidth,
+                .WindowHeight = DefaultWindowHeight,
+                .SfxVolume = DefaultSfxVolume
+            }
+        End Try
+    End Function
+
     Private ReadOnly keyTable As IReadOnlyDictionary(Of Keys, Command) =
         New Dictionary(Of Keys, Command) From
         {

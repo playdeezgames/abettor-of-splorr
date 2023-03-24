@@ -5,7 +5,7 @@
     <RootNamespace>AOS</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
     <OptionStrict>On</OptionStrict>
-    <ImportedNamespaces>AOS.Application=False,AOS.Presentation=False,AOS.UI=False,Microsoft.Xna.Framework=False,Microsoft.Xna.Framework.Graphics=False,Microsoft.Xna.Framework.Input=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,AOS=True</ImportedNamespaces>
+    <ImportedNamespaces>AOS.Application=False,AOS.Presentation=False,AOS.UI=False,Microsoft.Xna.Framework=False,Microsoft.Xna.Framework.Graphics=False,Microsoft.Xna.Framework.Input=False,System.IO=False,System.Text.Json=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,AOS=True</ImportedNamespaces>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -65,6 +65,12 @@
     <Import Include="Microsoft.Xna.Framework" />
     <Import Include="Microsoft.Xna.Framework.Graphics" />
     <Import Include="Microsoft.Xna.Framework.Input" />
+    <Import Include="System.IO" />
+    <Import Include="System.Text.Json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
 
   <ItemGroup>
