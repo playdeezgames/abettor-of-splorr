@@ -2,8 +2,8 @@ Module Program
     Sub Main(args As String())
         Dim gameController As New GameController
         Using host As New Host(Of Hue, Command, Sfx)(
-            1280, 720,
-            160, 90,
+            (1280, 720),
+            (160, 90),
             AddressOf BufferCreatorator,
             gameController,
             AddressOf CommandTransformerator,
@@ -16,7 +16,6 @@ Module Program
             host.Run()
         End Using
     End Sub
-
     Private ReadOnly keyTable As IReadOnlyDictionary(Of Keys, Command) =
         New Dictionary(Of Keys, Command) From
         {
@@ -25,18 +24,15 @@ Module Program
             {Keys.Left, Command.Left},
             {Keys.Down, Command.Down}
         }
-
     Private Function CommandTransformerator(key As Keys) As Command?
         If keyTable.ContainsKey(key) Then
             Return keyTable(key)
         End If
         Return Nothing
     End Function
-
     Private Function BufferCreatorator(texture As Texture2D) As IDisplayBuffer(Of Hue)
         Return New DisplayBuffer(Of Hue)(texture, AddressOf TransformHue)
     End Function
-
     Private ReadOnly hueTable As IReadOnlyDictionary(Of Hue, Color) =
         New Dictionary(Of Hue, Color) From
         {
@@ -57,7 +53,6 @@ Module Program
             {Hue.Yellow, New Color(255, 255, 85, 255)},
             {Hue.White, New Color(255, 255, 255, 255)}
         }
-
     Private Function TransformHue(hue As Hue) As Color
         Return hueTable(hue)
     End Function

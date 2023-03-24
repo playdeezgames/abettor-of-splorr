@@ -1,9 +1,7 @@
 Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Inherits Game
-    Private ReadOnly _windowWidth As Integer
-    Private ReadOnly _windowHeight As Integer
-    Private ReadOnly _viewWidth As Integer
-    Private ReadOnly _viewHeight As Integer
+    Private ReadOnly _windowSize As (Integer, Integer)
+    Private ReadOnly _viewSize As (Integer, Integer)
 
     Private ReadOnly _graphics As GraphicsDeviceManager
     Private ReadOnly _renderer As IRenderer(Of THue)
@@ -20,10 +18,8 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Private _sfxSoundEffects As New Dictionary(Of TSfx, SoundEffect)
     Private _sfxFilenames As IReadOnlyDictionary(Of TSfx, String)
     Sub New(
-           windowWidth As Integer,
-           windowHeight As Integer,
-           viewWidth As Integer,
-           viewHeight As Integer,
+           windowSize As (Integer, Integer),
+           viewSize As (Integer, Integer),
            bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue)),
            renderer As IRenderer(Of THue),
            commandTransform As Func(Of Keys, TCommand?),
@@ -31,10 +27,8 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
            sfxHandler As ISfxHandler(Of TSfx),
            sfxFileNames As IReadOnlyDictionary(Of TSfx, String))
         _graphics = New GraphicsDeviceManager(Me)
-        _windowHeight = windowHeight
-        _windowWidth = windowWidth
-        _viewWidth = viewWidth
-        _viewHeight = viewHeight
+        _windowSize = windowSize
+        _viewSize = viewSize
         _renderer = renderer
         _bufferCreator = bufferCreator
         _commandTransform = commandTransform
@@ -44,8 +38,8 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub Initialize()
-        _graphics.PreferredBackBufferWidth = _windowWidth
-        _graphics.PreferredBackBufferHeight = _windowHeight
+        _graphics.PreferredBackBufferWidth = _windowSize.Item1
+        _graphics.PreferredBackBufferHeight = _windowSize.Item2
         _graphics.ApplyChanges()
         _keyboardState = Keyboard.GetState
         For Each entry In _sfxFilenames
@@ -63,7 +57,7 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
 
     Protected Overrides Sub LoadContent()
         _spriteBatch = New SpriteBatch(GraphicsDevice)
-        _texture = New Texture2D(GraphicsDevice, _viewWidth, _viewHeight)
+        _texture = New Texture2D(GraphicsDevice, _viewSize.Item1, _viewSize.Item2)
         _displayBuffer = _bufferCreator(_texture)
     End Sub
     Protected Overrides Sub Update(gameTime As GameTime)
@@ -83,7 +77,7 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Protected Overrides Sub Draw(gameTime As GameTime)
         _graphics.GraphicsDevice.Clear(Color.Magenta)
         _spriteBatch.Begin(samplerState:=SamplerState.PointClamp)
-        _spriteBatch.Draw(_texture, New Rectangle(0, 0, _windowWidth, _windowHeight), Nothing, Color.White)
+        _spriteBatch.Draw(_texture, New Rectangle(0, 0, _windowSize.Item1, _windowSize.Item2), Nothing, Color.White)
         _spriteBatch.End()
         MyBase.Draw(gameTime)
     End Sub
