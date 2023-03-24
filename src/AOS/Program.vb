@@ -2,7 +2,7 @@ Module Program
     Sub Main(args As String())
         Dim gameController As New GameController
         Using host As New Host(Of Hue, Command, Sfx)(
-            (1280, 720),
+            gameController,
             (160, 90),
             AddressOf BufferCreatorator,
             gameController,

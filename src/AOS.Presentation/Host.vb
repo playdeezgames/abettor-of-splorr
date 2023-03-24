@@ -1,6 +1,6 @@
 Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Inherits Game
-    Private ReadOnly _windowSize As (Integer, Integer)
+    Private ReadOnly _windowSizerizer As IWindowSizerizer
     Private ReadOnly _viewSize As (Integer, Integer)
 
     Private ReadOnly _graphics As GraphicsDeviceManager
@@ -18,7 +18,7 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Private _sfxSoundEffects As New Dictionary(Of TSfx, SoundEffect)
     Private _sfxFilenames As IReadOnlyDictionary(Of TSfx, String)
     Sub New(
-           windowSize As (Integer, Integer),
+           windowSizerizer As IWindowSizerizer,
            viewSize As (Integer, Integer),
            bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue)),
            renderer As IRenderer(Of THue),
@@ -27,7 +27,7 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
            sfxHandler As ISfxHandler(Of TSfx),
            sfxFileNames As IReadOnlyDictionary(Of TSfx, String))
         _graphics = New GraphicsDeviceManager(Me)
-        _windowSize = windowSize
+        _windowSizerizer = windowSizerizer
         _viewSize = viewSize
         _renderer = renderer
         _bufferCreator = bufferCreator
@@ -38,15 +38,20 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub Initialize()
-        _graphics.PreferredBackBufferWidth = _windowSize.Item1
-        _graphics.PreferredBackBufferHeight = _windowSize.Item2
-        _graphics.ApplyChanges()
+        AddHandler _windowSizerizer.OnSizeChange, AddressOf OnWindowSizeChange
+        OnWindowSizeChange(_windowSizerizer.Size)
         _keyboardState = Keyboard.GetState
         For Each entry In _sfxFilenames
             _sfxSoundEffects(entry.Key) = SoundEffect.FromFile(entry.Value)
         Next
         AddHandler _sfxHandler.OnSfx, AddressOf OnSfx
         MyBase.Initialize()
+    End Sub
+
+    Private Sub OnWindowSizeChange(newSize As (Integer, Integer))
+        _graphics.PreferredBackBufferWidth = newSize.Item1
+        _graphics.PreferredBackBufferHeight = newSize.Item2
+        _graphics.ApplyChanges()
     End Sub
 
     Private Sub OnSfx(sfx As TSfx)
@@ -77,7 +82,7 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Protected Overrides Sub Draw(gameTime As GameTime)
         _graphics.GraphicsDevice.Clear(Color.Magenta)
         _spriteBatch.Begin(samplerState:=SamplerState.PointClamp)
-        _spriteBatch.Draw(_texture, New Rectangle(0, 0, _windowSize.Item1, _windowSize.Item2), Nothing, Color.White)
+        _spriteBatch.Draw(_texture, New Rectangle(0, 0, _windowSizerizer.Size.Item1, _windowSizerizer.Size.Item2), Nothing, Color.White)
         _spriteBatch.End()
         MyBase.Draw(gameTime)
     End Sub
