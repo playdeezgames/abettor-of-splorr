@@ -1,5 +1,3 @@
-Imports Microsoft.Xna.Framework.Audio
-
 Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Inherits Game
     Private ReadOnly _windowWidth As Integer
