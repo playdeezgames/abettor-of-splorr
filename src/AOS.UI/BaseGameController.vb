@@ -29,4 +29,6 @@
     Public Sub PlaySfx(sfx As TSfx) Implements ISfxHandler(Of TSfx).PlaySfx
         RaiseEvent OnSfx(sfx)
     End Sub
+
+    Public MustOverride Sub Update(elapsedTime As TimeSpan) Implements IUpdatorator.Update
 End Class

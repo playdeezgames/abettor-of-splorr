@@ -35,4 +35,7 @@
         If x = viewWidth - spriteWidth Then deltaX = -Math.Abs(deltaX)
         If y = viewHeight - spriteHeight Then deltaY = -Math.Abs(deltaY)
     End Sub
+
+    Public Overrides Sub Update(elapsedTime As TimeSpan)
+    End Sub
 End Class

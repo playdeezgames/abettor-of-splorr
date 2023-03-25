@@ -78,7 +78,7 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
             End If
         Next
         _keyboardState = newState
-        'TODO: updaterator
+        _updatatorator.Update(gameTime.ElapsedGameTime)
         _renderer.Render(_displayBuffer)
         _displayBuffer.Commit()
         MyBase.Update(gameTime)
