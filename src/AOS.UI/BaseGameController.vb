@@ -3,6 +3,7 @@
     Implements IRenderer(Of THue)
     Implements ISfxHandler(Of TSfx)
     Implements IWindowSizerizer
+    Implements IUpdatorator
     Private _windowSize As (Integer, Integer)
     Public Property Size As (Integer, Integer) Implements IWindowSizerizer.Size
         Get

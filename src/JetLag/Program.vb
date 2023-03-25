@@ -22,7 +22,8 @@ Module Program
             gameController,
             New Dictionary(Of Sfx, String) From
             {
-            })
+            },
+            gameController)
             host.Run()
         End Using
     End Sub

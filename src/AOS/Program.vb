@@ -24,7 +24,8 @@ Module Program
                 {Sfx.Miss, "Content/Miss.wav"},
                 {Sfx.UnlockDoor, "Content/UnlockDoor.wav"},
                 {Sfx.RollDice, "Content/RollDice.wav"}
-            })
+            },
+            gameController)
             host.Run()
         End Using
     End Sub

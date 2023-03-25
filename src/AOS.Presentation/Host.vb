@@ -15,8 +15,9 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Private _keyboardState As KeyboardState
 
     Private ReadOnly _sfxHandler As ISfxHandler(Of TSfx)
-    Private _sfxSoundEffects As New Dictionary(Of TSfx, SoundEffect)
-    Private _sfxFilenames As IReadOnlyDictionary(Of TSfx, String)
+    Private ReadOnly _sfxSoundEffects As New Dictionary(Of TSfx, SoundEffect)
+    Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of TSfx, String)
+    Private ReadOnly _updatatorator As IUpdatorator
     Sub New(
            windowSizerizer As IWindowSizerizer,
            viewSize As (Integer, Integer),
@@ -25,7 +26,8 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
            commandTransform As Func(Of Keys, TCommand?),
            commandHandler As ICommandHandler(Of TCommand),
            sfxHandler As ISfxHandler(Of TSfx),
-           sfxFileNames As IReadOnlyDictionary(Of TSfx, String))
+           sfxFileNames As IReadOnlyDictionary(Of TSfx, String),
+           updatorator As IUpdatorator)
         _graphics = New GraphicsDeviceManager(Me)
         _windowSizerizer = windowSizerizer
         _viewSize = viewSize
@@ -35,6 +37,7 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
         _commandHandler = commandHandler
         _sfxHandler = sfxHandler
         _sfxFilenames = sfxFileNames
+        _updatatorator = updatorator
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub Initialize()
