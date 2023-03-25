@@ -1,7 +1,7 @@
-﻿Public MustInherit Class BaseGameController
-    Implements ICommandHandler(Of Command)
-    Implements IRenderer(Of Hue)
-    Implements ISfxHandler(Of Sfx)
+﻿Public MustInherit Class BaseGameController(Of THue, TCommand, TSfx)
+    Implements ICommandHandler(Of TCommand)
+    Implements IRenderer(Of THue)
+    Implements ISfxHandler(Of TSfx)
     Implements IWindowSizerizer
     Private _windowSize As (Integer, Integer)
     Public Property Size As (Integer, Integer) Implements IWindowSizerizer.Size
@@ -15,17 +15,17 @@
             End If
         End Set
     End Property
-    Public Property Volume As Single Implements ISfxHandler(Of Sfx).Volume
+    Public Property Volume As Single Implements ISfxHandler(Of TSfx).Volume
     Sub New(windowSize As (Integer, Integer), volume As Single)
         _windowSize = windowSize
         Me.Volume = volume
     End Sub
-    Public Event OnSfx As ISfxHandler(Of Sfx).OnSfxEventHandler Implements ISfxHandler(Of Sfx).OnSfx
+    Public Event OnSfx As ISfxHandler(Of TSfx).OnSfxEventHandler Implements ISfxHandler(Of TSfx).OnSfx
     Public Event OnSizeChange(newSize As (Integer, Integer)) Implements IWindowSizerizer.OnSizeChange
-    Public MustOverride Sub HandleCommand(command As Command) Implements ICommandHandler(Of Command).HandleCommand
-    Public MustOverride Sub Render(displayBuffer As IPixelSink(Of Hue)) Implements IRenderer(Of Hue).Render
+    Public MustOverride Sub HandleCommand(command As TCommand) Implements ICommandHandler(Of TCommand).HandleCommand
+    Public MustOverride Sub Render(displayBuffer As IPixelSink(Of THue)) Implements IRenderer(Of THue).Render
 
-    Public Sub PlaySfx(sfx As Sfx) Implements ISfxHandler(Of Sfx).PlaySfx
+    Public Sub PlaySfx(sfx As TSfx) Implements ISfxHandler(Of TSfx).PlaySfx
         RaiseEvent OnSfx(sfx)
     End Sub
 End Class
