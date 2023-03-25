@@ -30,4 +30,12 @@
             Next
         Next
     End Sub
+
+    Public Sub Fill(location As (Integer, Integer), size As (Integer, Integer), hue As THue) Implements IPixelSink(Of THue).Fill
+        For x = 0 To size.Item1 - 1
+            For y = 0 To size.Item2 - 1
+                SetPixel(location.Item1 + x, location.Item2 + y, hue)
+            Next
+        Next
+    End Sub
 End Class

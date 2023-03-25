@@ -6,4 +6,5 @@
             toLocation As (Integer, Integer),
             size As (Integer, Integer),
             filter As Func(Of THue, Boolean))
+    Sub Fill(location As (Integer, Integer), size As (Integer, Integer), hue As THue)
 End Interface

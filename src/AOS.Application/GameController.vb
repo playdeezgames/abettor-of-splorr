@@ -20,11 +20,10 @@
                 x -= 1
             Case Command.Right
                 x += 1
-                PlaySfx(Sfx.UnlockDoor)
         End Select
     End Sub
 
-    Public Overrides Sub Render(displayBuffer As IDisplayBuffer(Of Hue))
+    Public Overrides Sub Render(displayBuffer As IPixelSink(Of Hue))
         displayBuffer.SetPixel(x, y, Hue.Blue)
     End Sub
 End Class

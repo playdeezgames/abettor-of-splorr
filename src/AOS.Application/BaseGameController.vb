@@ -23,7 +23,7 @@
     Public Event OnSfx As ISfxHandler(Of Sfx).OnSfxEventHandler Implements ISfxHandler(Of Sfx).OnSfx
     Public Event OnSizeChange(newSize As (Integer, Integer)) Implements IWindowSizerizer.OnSizeChange
     Public MustOverride Sub HandleCommand(command As Command) Implements ICommandHandler(Of Command).HandleCommand
-    Public MustOverride Sub Render(displayBuffer As IDisplayBuffer(Of Hue)) Implements IRenderer(Of Hue).Render
+    Public MustOverride Sub Render(displayBuffer As IPixelSink(Of Hue)) Implements IRenderer(Of Hue).Render
 
     Public Sub PlaySfx(sfx As Sfx) Implements ISfxHandler(Of Sfx).PlaySfx
         RaiseEvent OnSfx(sfx)
