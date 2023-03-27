@@ -185,6 +185,6 @@ Public Class GameController
             _tail(row) = _tail(row + 1)
         Next
         _tail(tailRows - 1) += _delta
-        _gameOver = _tail(tailRows - 1) = _blocks(tailRows - 1)
+        _gameOver = _tail(tailRows - 1) = _blocks(tailRows - 1) OrElse _tail(tailRows - 1) <= 0 OrElse _tail(tailRows - 1) >= cellColumns - 1
     End Sub
 End Class
