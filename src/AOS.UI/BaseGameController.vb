@@ -2,6 +2,10 @@
     Implements IGameController(Of THue, TCommand, TSfx)
     Private _windowSize As (Integer, Integer)
     Private _sizeHook As Action(Of (Integer, Integer))
+    Private ReadOnly _states As New Dictionary(Of TState, BaseGameState(Of THue, TCommand, TSfx))
+    Protected Sub SetState(state As TState, handler As BaseGameState(Of THue, TCommand, TSfx))
+        _states(state) = handler
+    End Sub
     Public Property Size As (Integer, Integer) Implements IWindowSizerizer.Size
         Get
             Return _windowSize
