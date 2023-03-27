@@ -1,3 +1,7 @@
+Imports System.IO
+Imports System.Runtime.Serialization.Json
+Imports System.Text.Json
+
 Public Class GameController
     Inherits BaseGameController(Of Hue, Command, Sfx)
     Private ReadOnly _configSink As Action(Of (Integer, Integer), Single)
@@ -18,96 +22,28 @@ Public Class GameController
     Private timer As Double
     Const frameTimer As Double = 0.1
     Private _gameOver As Boolean = True
+    Private _font As FontData
 
     Public Sub New(windowSizeSource As Func(Of (Integer, Integer)), volumeSource As Func(Of Single), configSink As Action(Of (Integer, Integer), Single))
         MyBase.New(windowSizeSource(), volumeSource())
         _configSink = configSink
         _configSink(Size, Volume)
+        _font = JsonSerializer.Deserialize(Of FontData)(File.ReadAllText("CyFont4x6.json"))
         LoadDigits()
         ResetBoard()
     End Sub
 
     Private Sub LoadDigits()
-        _digits(0) = OffscreenBuffer(Of Boolean).Create(
-            AddressOf MapDigitPixel,
-            "XXX.",
-            "X.X.",
-            "X.X.",
-            "X.X.",
-            "XXX.",
-            "....")
-        _digits(1) = OffscreenBuffer(Of Boolean).Create(
-            AddressOf MapDigitPixel,
-            "XX..",
-            ".X..",
-            ".X..",
-            ".X..",
-            "XXX.",
-            "....")
-        _digits(2) = OffscreenBuffer(Of Boolean).Create(
-            AddressOf MapDigitPixel,
-            "XXX.",
-            "..X.",
-            "XXX.",
-            "X...",
-            "XXX.",
-            "....")
-        _digits(3) = OffscreenBuffer(Of Boolean).Create(
-            AddressOf MapDigitPixel,
-            "XXX.",
-            "..X.",
-            "XXX.",
-            "..X.",
-            "XXX.",
-            "....")
-        _digits(4) = OffscreenBuffer(Of Boolean).Create(
-            AddressOf MapDigitPixel,
-            "X.X.",
-            "X.X.",
-            "XXX.",
-            "..X.",
-            "..X.",
-            "....")
-        _digits(5) = OffscreenBuffer(Of Boolean).Create(
-            AddressOf MapDigitPixel,
-            "XXX.",
-            "X...",
-            "XXX.",
-            "..X.",
-            "XXX.",
-            "....")
-        _digits(6) = OffscreenBuffer(Of Boolean).Create(
-            AddressOf MapDigitPixel,
-            "XXX.",
-            "X...",
-            "XXX.",
-            "X.X.",
-            "XXX.",
-            "....")
-        _digits(7) = OffscreenBuffer(Of Boolean).Create(
-            AddressOf MapDigitPixel,
-            "XXX.",
-            "..X.",
-            "..X.",
-            "..X.",
-            "..X.",
-            "....")
-        _digits(8) = OffscreenBuffer(Of Boolean).Create(
-            AddressOf MapDigitPixel,
-            "XXX.",
-            "X.X.",
-            "XXX.",
-            "X.X.",
-            "XXX.",
-            "....")
-        _digits(9) = OffscreenBuffer(Of Boolean).Create(
-            AddressOf MapDigitPixel,
-            "XXX.",
-            "X.X.",
-            "XXX.",
-            "..X.",
-            "XXX.",
-            "....")
+        _digits(0) = _font.ToOffscreenBuffer("0"c)
+        _digits(1) = _font.ToOffscreenBuffer("1"c)
+        _digits(2) = _font.ToOffscreenBuffer("2"c)
+        _digits(3) = _font.ToOffscreenBuffer("3"c)
+        _digits(4) = _font.ToOffscreenBuffer("4"c)
+        _digits(5) = _font.ToOffscreenBuffer("5"c)
+        _digits(6) = _font.ToOffscreenBuffer("6"c)
+        _digits(7) = _font.ToOffscreenBuffer("7"c)
+        _digits(8) = _font.ToOffscreenBuffer("8"c)
+        _digits(9) = _font.ToOffscreenBuffer("9"c)
     End Sub
 
     Private Function MapDigitPixel(character As Char) As Boolean
@@ -179,11 +115,18 @@ Public Class GameController
                 fromBuffer,
                 (0, 0),
                 (x, 0),
-                (4, 6),
-                Function(a) If(a, Hue.Green, Nothing))
-            x += 4
+                (5, 7),
+                AddressOf MapFontHue)
+            x += 5
         Next
     End Sub
+
+    Private Function MapFontHue(pixel As Boolean) As Hue?
+        If pixel Then
+            Return Hue.Green
+        End If
+        Return Nothing
+    End Function
 
     Public Overrides Sub Update(elapsedTime As TimeSpan)
         If _gameOver Then
