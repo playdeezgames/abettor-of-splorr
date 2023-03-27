@@ -1,9 +1,5 @@
 ﻿Public MustInherit Class BaseGameController(Of THue As Structure, TCommand, TSfx)
-    Implements ICommandHandler(Of TCommand)
-    Implements IRenderer(Of THue)
-    Implements ISfxHandler(Of TSfx)
-    Implements IWindowSizerizer
-    Implements IUpdatorator
+    Implements IGameController(Of THue, TCommand, TSfx)
     Private _windowSize As (Integer, Integer)
     Public Property Size As (Integer, Integer) Implements IWindowSizerizer.Size
         Get
