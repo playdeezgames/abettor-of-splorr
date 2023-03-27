@@ -41,13 +41,13 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub Initialize()
-        AddHandler _windowSizerizer.OnSizeChange, AddressOf OnWindowSizeChange
+        _windowSizerizer.SetSizeHook(AddressOf OnWindowSizeChange)
         OnWindowSizeChange(_windowSizerizer.Size)
         _keyboardState = Keyboard.GetState
         For Each entry In _sfxFilenames
             _sfxSoundEffects(entry.Key) = SoundEffect.FromFile(entry.Value)
         Next
-        _sfxHandler.SetHook(AddressOf OnSfx)
+        _sfxHandler.SetSfxHook(AddressOf OnSfx)
         MyBase.Initialize()
     End Sub
 
