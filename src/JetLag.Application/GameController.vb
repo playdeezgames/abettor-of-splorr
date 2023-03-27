@@ -11,7 +11,8 @@ Public Class GameController
     Private ReadOnly _blocks(cellRows) As Integer
     Private ReadOnly _tail(tailRows) As Integer
     Private _score As Integer
-    Private ReadOnly _digits(9) As OffscreenBuffer(Of Hue)
+    Private _runLength As Integer
+    Private ReadOnly _digits(9) As OffscreenBuffer(Of Boolean)
     Private _delta As Integer
     Private ReadOnly _random As New Random
     Private timer As Double
@@ -27,7 +28,7 @@ Public Class GameController
     End Sub
 
     Private Sub LoadDigits()
-        _digits(0) = OffscreenBuffer(Of Hue).Create(
+        _digits(0) = OffscreenBuffer(Of Boolean).Create(
             AddressOf MapDigitPixel,
             "XXX.",
             "X.X.",
@@ -35,7 +36,7 @@ Public Class GameController
             "X.X.",
             "XXX.",
             "....")
-        _digits(1) = OffscreenBuffer(Of Hue).Create(
+        _digits(1) = OffscreenBuffer(Of Boolean).Create(
             AddressOf MapDigitPixel,
             "XX..",
             ".X..",
@@ -43,7 +44,7 @@ Public Class GameController
             ".X..",
             "XXX.",
             "....")
-        _digits(2) = OffscreenBuffer(Of Hue).Create(
+        _digits(2) = OffscreenBuffer(Of Boolean).Create(
             AddressOf MapDigitPixel,
             "XXX.",
             "..X.",
@@ -51,7 +52,7 @@ Public Class GameController
             "X...",
             "XXX.",
             "....")
-        _digits(3) = OffscreenBuffer(Of Hue).Create(
+        _digits(3) = OffscreenBuffer(Of Boolean).Create(
             AddressOf MapDigitPixel,
             "XXX.",
             "..X.",
@@ -59,7 +60,7 @@ Public Class GameController
             "..X.",
             "XXX.",
             "....")
-        _digits(4) = OffscreenBuffer(Of Hue).Create(
+        _digits(4) = OffscreenBuffer(Of Boolean).Create(
             AddressOf MapDigitPixel,
             "X.X.",
             "X.X.",
@@ -67,7 +68,7 @@ Public Class GameController
             "..X.",
             "..X.",
             "....")
-        _digits(5) = OffscreenBuffer(Of Hue).Create(
+        _digits(5) = OffscreenBuffer(Of Boolean).Create(
             AddressOf MapDigitPixel,
             "XXX.",
             "X...",
@@ -75,7 +76,7 @@ Public Class GameController
             "..X.",
             "XXX.",
             "....")
-        _digits(6) = OffscreenBuffer(Of Hue).Create(
+        _digits(6) = OffscreenBuffer(Of Boolean).Create(
             AddressOf MapDigitPixel,
             "XXX.",
             "X...",
@@ -83,7 +84,7 @@ Public Class GameController
             "X.X.",
             "XXX.",
             "....")
-        _digits(7) = OffscreenBuffer(Of Hue).Create(
+        _digits(7) = OffscreenBuffer(Of Boolean).Create(
             AddressOf MapDigitPixel,
             "XXX.",
             "..X.",
@@ -91,7 +92,7 @@ Public Class GameController
             "..X.",
             "..X.",
             "....")
-        _digits(8) = OffscreenBuffer(Of Hue).Create(
+        _digits(8) = OffscreenBuffer(Of Boolean).Create(
             AddressOf MapDigitPixel,
             "XXX.",
             "X.X.",
@@ -99,7 +100,7 @@ Public Class GameController
             "X.X.",
             "XXX.",
             "....")
-        _digits(9) = OffscreenBuffer(Of Hue).Create(
+        _digits(9) = OffscreenBuffer(Of Boolean).Create(
             AddressOf MapDigitPixel,
             "XXX.",
             "X.X.",
@@ -109,8 +110,8 @@ Public Class GameController
             "....")
     End Sub
 
-    Private Function MapDigitPixel(character As Char) As Hue
-        Return If(character = "X"c, Hue.Green, Hue.Black)
+    Private Function MapDigitPixel(character As Char) As Boolean
+        Return character = "X"c
     End Function
 
     Private Sub ResetBoard()
@@ -122,6 +123,7 @@ Public Class GameController
         Next
         _delta = 1
         _score = 0
+        _runLength = 0
     End Sub
 
     Public Overrides Sub HandleCommand(command As Command)
@@ -133,11 +135,22 @@ Public Class GameController
         Else
             Select Case command
                 Case Command.Left
-                    _delta = -1
+                    If _delta <> -1 Then
+                        _delta = -1
+                        CommitScore()
+                    End If
                 Case Command.Right
-                    _delta = 1
+                    If _delta <> 1 Then
+                        _delta = 1
+                        CommitScore()
+                    End If
             End Select
         End If
+    End Sub
+
+    Private Sub CommitScore()
+        _score += ((_runLength) * (_runLength + 1) \ 2)
+        _runLength = 0
     End Sub
 
     Private Function PlotCell(x As Integer, y As Integer) As (Integer, Integer)
@@ -162,7 +175,12 @@ Public Class GameController
         For Each character In scoreString
             Dim digit = AscW(character) - AscW("0"c)
             Dim fromBuffer = _digits(digit)
-            displayBuffer.Copy(fromBuffer, (0, 0), (x, 0), (4, 6), Function(a) True)
+            displayBuffer.Colorize(
+                fromBuffer,
+                (0, 0),
+                (x, 0),
+                (4, 6),
+                Function(a) If(a, Hue.Green, Nothing))
             x += 4
         Next
     End Sub
@@ -175,7 +193,7 @@ Public Class GameController
         If timer < frameTimer Then
             Return
         End If
-        _score += 1
+        _runLength += 1
         timer -= frameTimer
         For row = 0 To cellRows - 2
             _blocks(row) = _blocks(row + 1)

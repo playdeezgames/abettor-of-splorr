@@ -1,4 +1,4 @@
-﻿Public MustInherit Class BaseGameController(Of THue, TCommand, TSfx)
+﻿Public MustInherit Class BaseGameController(Of THue As Structure, TCommand, TSfx)
     Implements ICommandHandler(Of TCommand)
     Implements IRenderer(Of THue)
     Implements ISfxHandler(Of TSfx)

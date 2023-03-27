@@ -1,4 +1,4 @@
-﻿Public Class OffscreenBuffer(Of THue)
+﻿Public Class OffscreenBuffer(Of THue As Structure)
     Inherits BasePixelSink(Of THue)
     Implements IPixelSource(Of THue)
     Private ReadOnly _size As (Integer, Integer)
