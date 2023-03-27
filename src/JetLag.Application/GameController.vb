@@ -147,5 +147,8 @@ Public Class GameController
         Next
         _tail(tailRows - 1) += _delta
         _gameOver = _tail(tailRows - 1) = _blocks(tailRows - 1) OrElse _tail(tailRows - 1) <= 0 OrElse _tail(tailRows - 1) >= cellColumns - 1
+        If _gameOver Then
+            PlaySfx(Sfx.Death)
+        End If
     End Sub
 End Class

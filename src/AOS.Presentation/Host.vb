@@ -47,7 +47,7 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
         For Each entry In _sfxFilenames
             _sfxSoundEffects(entry.Key) = SoundEffect.FromFile(entry.Value)
         Next
-        AddHandler _sfxHandler.OnSfx, AddressOf OnSfx
+        _sfxHandler.SetHook(AddressOf OnSfx)
         MyBase.Initialize()
     End Sub
 

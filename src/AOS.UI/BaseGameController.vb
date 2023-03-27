@@ -17,14 +17,18 @@
         _windowSize = windowSize
         Me.Volume = volume
     End Sub
-    Public Event OnSfx As ISfxHandler(Of TSfx).OnSfxEventHandler Implements ISfxHandler(Of TSfx).OnSfx
+    Private OnSfx As Action(Of TSfx)
     Public Event OnSizeChange(newSize As (Integer, Integer)) Implements IWindowSizerizer.OnSizeChange
     Public MustOverride Sub HandleCommand(command As TCommand) Implements ICommandHandler(Of TCommand).HandleCommand
     Public MustOverride Sub Render(displayBuffer As IPixelSink(Of THue)) Implements IRenderer(Of THue).Render
 
     Public Sub PlaySfx(sfx As TSfx) Implements ISfxHandler(Of TSfx).PlaySfx
-        RaiseEvent OnSfx(sfx)
+        OnSfx(sfx)
     End Sub
 
     Public MustOverride Sub Update(elapsedTime As TimeSpan) Implements IUpdatorator.Update
+
+    Public Sub SetHook(handler As Action(Of TSfx)) Implements ISfxHandler(Of TSfx).SetHook
+        OnSfx = handler
+    End Sub
 End Class

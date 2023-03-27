@@ -22,6 +22,7 @@ Module Program
             gameController,
             New Dictionary(Of Sfx, String) From
             {
+                {Sfx.Death, "PlayerDeath.wav"}
             },
             gameController)
             host.Run()

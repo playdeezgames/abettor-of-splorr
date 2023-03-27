@@ -1,3 +1,3 @@
 ﻿Public Enum Sfx
-    None
+    Death
 End Enum
