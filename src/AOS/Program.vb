@@ -10,10 +10,7 @@ Module Program
             gameController,
             (160, 90),
             AddressOf BufferCreatorator,
-            gameController,
             AddressOf CommandTransformerator,
-            gameController,
-            gameController,
             New Dictionary(Of Sfx, String) From
             {
                 {Sfx.EnemyDeath, "Content/EnemyDeath.wav"},
@@ -24,8 +21,7 @@ Module Program
                 {Sfx.Miss, "Content/Miss.wav"},
                 {Sfx.UnlockDoor, "Content/UnlockDoor.wav"},
                 {Sfx.RollDice, "Content/RollDice.wav"}
-            },
-            gameController)
+            })
             host.Run()
         End Using
     End Sub

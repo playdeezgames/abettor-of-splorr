@@ -16,15 +16,11 @@ Module Program
             gameController,
             (320, 180),
             AddressOf BufferCreatorator,
-            gameController,
             AddressOf CommandTransformerator,
-            gameController,
-            gameController,
             New Dictionary(Of Sfx, String) From
             {
                 {Sfx.Death, "PlayerDeath.wav"}
-            },
-            gameController)
+            })
             host.Run()
         End Using
     End Sub
