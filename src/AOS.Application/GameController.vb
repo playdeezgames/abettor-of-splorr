@@ -1,5 +1,5 @@
 ﻿Public Class GameController
-    Inherits BaseGameController(Of Hue, Command, Sfx)
+    Inherits BaseGameController(Of Hue, Command, Sfx, GameState)
     Private ReadOnly _configSink As Action(Of (Integer, Integer), Single)
     Private ReadOnly sprite As OffscreenBuffer(Of Hue)
     Private x As Integer = 0

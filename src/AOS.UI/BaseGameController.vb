@@ -1,4 +1,4 @@
-﻿Public MustInherit Class BaseGameController(Of THue As Structure, TCommand, TSfx)
+﻿Public MustInherit Class BaseGameController(Of THue As Structure, TCommand, TSfx, TState)
     Implements IGameController(Of THue, TCommand, TSfx)
     Private _windowSize As (Integer, Integer)
     Private _sizeHook As Action(Of (Integer, Integer))

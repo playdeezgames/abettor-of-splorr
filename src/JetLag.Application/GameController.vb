@@ -1,9 +1,8 @@
 Imports System.IO
-Imports System.Runtime.Serialization.Json
 Imports System.Text.Json
 
 Public Class GameController
-    Inherits BaseGameController(Of Hue, Command, Sfx)
+    Inherits BaseGameController(Of Hue, Command, Sfx, GameState)
     Private ReadOnly _configSink As Action(Of (Integer, Integer), Single)
     Const viewWidth = 320
     Const viewHeight = 180
