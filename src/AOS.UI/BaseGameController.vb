@@ -1,4 +1,4 @@
-﻿Public MustInherit Class BaseGameController(Of THue As Structure, TCommand, TSfx, TState)
+﻿Public Class BaseGameController(Of THue As Structure, TCommand, TSfx, TState)
     Implements IGameController(Of THue, TCommand, TSfx)
     Private _windowSize As (Integer, Integer)
     Private _sizeHook As Action(Of (Integer, Integer))
@@ -27,14 +27,20 @@
         Me.Volume = volume
     End Sub
     Private OnSfx As Action(Of TSfx)
-    Public MustOverride Sub HandleCommand(command As TCommand) Implements ICommandHandler(Of TCommand).HandleCommand
-    Public MustOverride Sub Render(displayBuffer As IPixelSink(Of THue)) Implements IRenderer(Of THue).Render
+    Public Sub HandleCommand(command As TCommand) Implements ICommandHandler(Of TCommand).HandleCommand
+        _states(_state).HandleCommand(command)
+    End Sub
+    Public Sub Render(displayBuffer As IPixelSink(Of THue)) Implements IRenderer(Of THue).Render
+        _states(_state).Render(displayBuffer)
+    End Sub
 
     Public Sub PlaySfx(sfx As TSfx) Implements ISfxHandler(Of TSfx).PlaySfx
         OnSfx(sfx)
     End Sub
 
-    Public MustOverride Sub Update(elapsedTime As TimeSpan) Implements IUpdatorator.Update
+    Public Sub Update(elapsedTime As TimeSpan) Implements IUpdatorator.Update
+        _states(_state).Update(elapsedTime)
+    End Sub
 
     Public Sub SetSfxHook(handler As Action(Of TSfx)) Implements ISfxHandler(Of TSfx).SetSfxHook
         OnSfx = handler
