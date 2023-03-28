@@ -1,29 +1,25 @@
 ﻿Imports System.IO
 Imports System.Text.Json
 
-Public Class PlaceHolderState
-    Inherits BaseGameState(Of Hue, Command, Sfx, GameState)
+Friend Module GameContext
     Const viewWidth = 320
     Const viewHeight = 180
     Const cellWidth = 8
-    Const cellColumns = viewWidth \ cellWidth
+    Friend Const cellColumns = viewWidth \ cellWidth
     Const cellHeight = 8
-    Const cellRows = viewHeight \ cellHeight
-    Const tailRows = cellRows \ 4
-    Private ReadOnly _blocks(cellRows) As Integer
-    Private ReadOnly _tail(tailRows) As Integer
+    Friend Const cellRows = viewHeight \ cellHeight
+    Friend Const tailRows = cellRows \ 4
+    Friend ReadOnly _blocks(cellRows) As Integer
+    Friend ReadOnly _tail(tailRows) As Integer
     Private _score As Integer
-    Private _runLength As Integer
+    Friend _runLength As Integer
     Private ReadOnly _digits(9) As OffscreenBuffer(Of Boolean)
-    Private _delta As Integer
-    Private ReadOnly _random As New Random
-    Private timer As Double
-    Const frameTimer As Double = 0.1
-    Private _gameOver As Boolean = True
-    Private _font As FontData
-
-    Public Sub New(parent As IGameController(Of Hue, Command, Sfx), setState As Action(Of GameState))
-        MyBase.New(parent, setState)
+    Friend _delta As Integer
+    Friend ReadOnly _random As New Random
+    Friend timer As Double
+    Friend frameTimer As Double = 0.1
+    Friend _font As FontData
+    Friend Sub Initialize()
         _font = JsonSerializer.Deserialize(Of FontData)(File.ReadAllText("CyFont4x6.json"))
         LoadDigits()
         ResetBoard()
@@ -40,8 +36,12 @@ Public Class PlaceHolderState
         _digits(8) = _font.ToOffscreenBuffer("8"c)
         _digits(9) = _font.ToOffscreenBuffer("9"c)
     End Sub
+    Friend Sub CommitScore()
+        _score += ((_runLength) * (_runLength + 1) \ 2)
+        _runLength = 0
+    End Sub
 
-    Private Sub ResetBoard()
+    Friend Sub ResetBoard()
         For row = 0 To tailRows - 1
             _tail(row) = cellColumns \ 2
         Next
@@ -53,36 +53,11 @@ Public Class PlaceHolderState
         _runLength = 0
     End Sub
 
-    Public Overrides Sub HandleCommand(command As Command)
-        If _gameOver Then
-            If command = Command.Fire Then
-                ResetBoard()
-                _gameOver = False
-            End If
-        Else
-            Select Case command
-                Case Command.Left
-                    If _delta <> -1 Then
-                        _delta = -1
-                        CommitScore()
-                    End If
-                Case Command.Right
-                    If _delta <> 1 Then
-                        _delta = 1
-                        CommitScore()
-                    End If
-            End Select
-        End If
-    End Sub
-    Private Sub CommitScore()
-        _score += ((_runLength) * (_runLength + 1) \ 2)
-        _runLength = 0
-    End Sub
     Private Function PlotCell(x As Integer, y As Integer) As (Integer, Integer)
         Return (x * cellWidth, y * cellHeight)
     End Function
 
-    Public Overrides Sub Render(displayBuffer As IPixelSink(Of Hue))
+    Friend Sub Render(displayBuffer As IPixelSink(Of Hue))
         displayBuffer.Fill(PlotCell(0, 0), (viewWidth, viewHeight), Hue.Black)
         For row = 0 To tailRows - 1
             displayBuffer.Fill(
@@ -115,28 +90,4 @@ Public Class PlaceHolderState
         End If
         Return Nothing
     End Function
-
-    Public Overrides Sub Update(elapsedTime As TimeSpan)
-        If _gameOver Then
-            Return
-        End If
-        timer += elapsedTime.TotalSeconds
-        If timer < frameTimer Then
-            Return
-        End If
-        _runLength += 1
-        timer -= frameTimer
-        For row = 0 To cellRows - 2
-            _blocks(row) = _blocks(row + 1)
-        Next
-        _blocks(cellRows - 1) = _random.Next(1, cellColumns - 1)
-        For row = 0 To tailRows - 2
-            _tail(row) = _tail(row + 1)
-        Next
-        _tail(tailRows - 1) += _delta
-        _gameOver = _tail(tailRows - 1) = _blocks(tailRows - 1) OrElse _tail(tailRows - 1) <= 0 OrElse _tail(tailRows - 1) >= cellColumns - 1
-        If _gameOver Then
-            PlaySfx(Sfx.Death)
-        End If
-    End Sub
-End Class
+End Module

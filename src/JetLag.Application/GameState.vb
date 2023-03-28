@@ -1,3 +1,4 @@
 ﻿Public Enum GameState
-    PlaceHolder
+    InPlay
+    GameOver
 End Enum

@@ -6,7 +6,9 @@ Public Class GameController
         MyBase.New(windowSizeSource(), volumeSource())
         _configSink = configSink
         _configSink(Size, Volume)
-        SetState(GameState.PlaceHolder, New PlaceHolderState(Me, AddressOf SetCurrentState))
-        SetCurrentState(GameState.PlaceHolder)
+        GameContext.Initialize()
+        SetState(GameState.InPlay, New InPlayState(Me, AddressOf SetCurrentState))
+        SetState(GameState.GameOver, New GameOverState(Me, AddressOf SetCurrentState))
+        SetCurrentState(GameState.GameOver)
     End Sub
 End Class
