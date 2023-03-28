@@ -30,6 +30,7 @@ Public Class GameController
         _font = JsonSerializer.Deserialize(Of FontData)(File.ReadAllText("CyFont4x6.json"))
         LoadDigits()
         ResetBoard()
+        SetState(GameState.PlaceHolder, New PlaceHolderState(Me, AddressOf SetCurrentState))
     End Sub
 
     Private Sub LoadDigits()
