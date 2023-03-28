@@ -45,10 +45,6 @@ Public Class GameController
         _digits(9) = _font.ToOffscreenBuffer("9"c)
     End Sub
 
-    Private Function MapDigitPixel(character As Char) As Boolean
-        Return character = "X"c
-    End Function
-
     Private Sub ResetBoard()
         For row = 0 To tailRows - 1
             _tail(row) = cellColumns \ 2
