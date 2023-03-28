@@ -1,9 +1,11 @@
-﻿Public MustInherit Class BaseGameState(Of THue As Structure, TCommand, TSfx)
+﻿Public MustInherit Class BaseGameState(Of THue As Structure, TCommand, TSfx, TState)
     Implements IGameController(Of THue, TCommand, TSfx)
 
-    Private _parent As IGameController(Of THue, TCommand, TSfx)
-    Sub New(parent As IGameController(Of THue, TCommand, TSfx))
+    Private ReadOnly _parent As IGameController(Of THue, TCommand, TSfx)
+    Protected ReadOnly SetState As Action(Of TState)
+    Sub New(parent As IGameController(Of THue, TCommand, TSfx), setState As Action(Of TState))
         _parent = parent
+        Me.SetState = setState
     End Sub
     Public Property Volume As Single Implements ISfxHandler(Of TSfx).Volume
         Get
