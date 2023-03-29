@@ -8,7 +8,7 @@ Module Program
             AddressOf SaveConfig)
         Using host As New Host(Of Hue, Command, Sfx)(
             gameController,
-            (160, 90),
+            (GameContext.ViewWidth, GameContext.ViewHeight),
             AddressOf BufferCreatorator,
             AddressOf CommandTransformerator,
             New Dictionary(Of Sfx, String) From
