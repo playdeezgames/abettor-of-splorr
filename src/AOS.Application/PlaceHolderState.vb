@@ -14,10 +14,10 @@
         drawer.
             MoveTo(GameContext.FrameWidth \ 4, GameContext.FrameHeight \ 4).
             Color(Hue.White).
-            Down(GameContext.FrameHeight \ 2).
-            Right(GameContext.FrameWidth \ 2).
-            Up(GameContext.FrameHeight \ 2).
-            Left(GameContext.FrameWidth \ 2).
+            Down(GameContext.FrameHeight \ 2 - 1).
+            Right(GameContext.FrameWidth \ 2 - 1).
+            Up(GameContext.FrameHeight \ 2 - 1).
+            Left(GameContext.FrameWidth \ 2 - 1).
             MoveTo(0, 0).
             Repeat(20, Function(d) d.Right(1).DownRight(1)).
             MoveTo(0, FrameHeight - 1).
