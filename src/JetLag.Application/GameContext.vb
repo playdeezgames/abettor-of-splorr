@@ -18,23 +18,25 @@ Friend Module GameContext
     Friend ReadOnly _random As New Random
     Friend timer As Double
     Friend frameTimer As Double = 0.1
-    Friend _font As FontData
+    Friend _fontData As FontData
+    Friend _font As Font
     Friend Sub Initialize()
-        _font = JsonSerializer.Deserialize(Of FontData)(File.ReadAllText("CyFont4x6.json"))
+        _fontData = JsonSerializer.Deserialize(Of FontData)(File.ReadAllText("CyFont4x6.json"))
         LoadDigits()
         ResetBoard()
     End Sub
     Private Sub LoadDigits()
-        _digits(0) = New GlyphBuffer(_font, "0"c)
-        _digits(1) = New GlyphBuffer(_font, "1"c)
-        _digits(2) = New GlyphBuffer(_font, "2"c)
-        _digits(3) = New GlyphBuffer(_font, "3"c)
-        _digits(4) = New GlyphBuffer(_font, "4"c)
-        _digits(5) = New GlyphBuffer(_font, "5"c)
-        _digits(6) = New GlyphBuffer(_font, "6"c)
-        _digits(7) = New GlyphBuffer(_font, "7"c)
-        _digits(8) = New GlyphBuffer(_font, "8"c)
-        _digits(9) = New GlyphBuffer(_font, "9"c)
+        _font = New Font(_fontData)
+        _digits(0) = New GlyphBuffer(_fontData, "0"c)
+        _digits(1) = New GlyphBuffer(_fontData, "1"c)
+        _digits(2) = New GlyphBuffer(_fontData, "2"c)
+        _digits(3) = New GlyphBuffer(_fontData, "3"c)
+        _digits(4) = New GlyphBuffer(_fontData, "4"c)
+        _digits(5) = New GlyphBuffer(_fontData, "5"c)
+        _digits(6) = New GlyphBuffer(_fontData, "6"c)
+        _digits(7) = New GlyphBuffer(_fontData, "7"c)
+        _digits(8) = New GlyphBuffer(_fontData, "8"c)
+        _digits(9) = New GlyphBuffer(_fontData, "9"c)
     End Sub
     Friend Sub CommitScore()
         _score += ((_runLength) * (_runLength + 1) \ 2)
