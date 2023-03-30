@@ -1,11 +1,5 @@
 ﻿Public Interface IPixelSink(Of THue As Structure)
     Sub SetPixel(x As Integer, y As Integer, hue As THue)
-    Sub Copy(
-            source As IPixelSource(Of THue),
-            fromLocation As (Integer, Integer),
-            toLocation As (Integer, Integer),
-            size As (Integer, Integer),
-            filter As Func(Of THue, Boolean))
     Sub Stretch(
             source As IPixelSource(Of THue),
             fromLocation As (Integer, Integer),
