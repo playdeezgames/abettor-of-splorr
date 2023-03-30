@@ -13,7 +13,7 @@ Friend Module GameContext
     Friend ReadOnly _tail(tailRows) As Integer
     Private _score As Integer
     Friend _runLength As Integer
-    Private ReadOnly _digits(9) As OffscreenBuffer(Of Boolean)
+    Private ReadOnly _digits(9) As GlyphBuffer
     Friend _delta As Integer
     Friend ReadOnly _random As New Random
     Friend timer As Double
@@ -25,16 +25,16 @@ Friend Module GameContext
         ResetBoard()
     End Sub
     Private Sub LoadDigits()
-        _digits(0) = _font.ToOffscreenBuffer("0"c)
-        _digits(1) = _font.ToOffscreenBuffer("1"c)
-        _digits(2) = _font.ToOffscreenBuffer("2"c)
-        _digits(3) = _font.ToOffscreenBuffer("3"c)
-        _digits(4) = _font.ToOffscreenBuffer("4"c)
-        _digits(5) = _font.ToOffscreenBuffer("5"c)
-        _digits(6) = _font.ToOffscreenBuffer("6"c)
-        _digits(7) = _font.ToOffscreenBuffer("7"c)
-        _digits(8) = _font.ToOffscreenBuffer("8"c)
-        _digits(9) = _font.ToOffscreenBuffer("9"c)
+        _digits(0) = New GlyphBuffer(_font, "0"c)
+        _digits(1) = New GlyphBuffer(_font, "1"c)
+        _digits(2) = New GlyphBuffer(_font, "2"c)
+        _digits(3) = New GlyphBuffer(_font, "3"c)
+        _digits(4) = New GlyphBuffer(_font, "4"c)
+        _digits(5) = New GlyphBuffer(_font, "5"c)
+        _digits(6) = New GlyphBuffer(_font, "6"c)
+        _digits(7) = New GlyphBuffer(_font, "7"c)
+        _digits(8) = New GlyphBuffer(_font, "8"c)
+        _digits(9) = New GlyphBuffer(_font, "9"c)
     End Sub
     Friend Sub CommitScore()
         _score += ((_runLength) * (_runLength + 1) \ 2)
@@ -74,14 +74,8 @@ Friend Module GameContext
         Dim x = cellWidth
         For Each character In scoreString
             Dim digit = AscW(character) - AscW("0"c)
-            Dim fromBuffer = _digits(digit)
-            displayBuffer.Colorize(
-                fromBuffer,
-                (0, 0),
-                (x, 0),
-                (5, 7),
-                AddressOf MapFontHue)
-            x += 5
+            _digits(digit).CopyTo(displayBuffer, (x, 0), Hue.Green)
+            x += _digits(digit).Width
         Next
     End Sub
     Private Function MapFontHue(pixel As Boolean) As Hue?
