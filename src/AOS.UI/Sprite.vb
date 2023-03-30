@@ -16,4 +16,8 @@
             y += 1
         Next line
     End Sub
+
+    Public Sub StretchTo(sink As IPixelSink(Of THue), position As (Integer, Integer), scale As (Integer, Integer), filter As Func(Of THue, Boolean))
+        sink.Stretch(Me, (0, 0), position, (Width, Height), scale, filter)
+    End Sub
 End Class

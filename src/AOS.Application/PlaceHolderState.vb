@@ -74,7 +74,7 @@
             Repeat(20, Function(d) d.Left(1).DownLeft(1)).
             MoveTo(FrameWidth - 1, FrameHeight - 1).
             Repeat(20, Function(d) d.Left(1).UpLeft(1))
-        displayBuffer.Stretch(_sprite, (0, 0), (80 - 24, 70 - 48), (12, 12), (4, 4), Function(x) x <> Hue.LightMagenta)
+        _sprite.StretchTo(displayBuffer, (56, 22), (4, 4), Function(x) x <> Hue.LightMagenta)
     End Sub
 
     Public Overrides Sub Update(elapsedTime As TimeSpan)
