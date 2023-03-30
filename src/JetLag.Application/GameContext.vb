@@ -13,30 +13,14 @@ Friend Module GameContext
     Friend ReadOnly _tail(tailRows) As Integer
     Private _score As Integer
     Friend _runLength As Integer
-    Private ReadOnly _digits(9) As GlyphBuffer
     Friend _delta As Integer
     Friend ReadOnly _random As New Random
     Friend timer As Double
     Friend frameTimer As Double = 0.1
-    Friend _fontData As FontData
     Friend _font As Font
     Friend Sub Initialize()
-        _fontData = JsonSerializer.Deserialize(Of FontData)(File.ReadAllText("CyFont4x6.json"))
-        LoadDigits()
+        _font = New Font(JsonSerializer.Deserialize(Of FontData)(File.ReadAllText("CyFont4x6.json")))
         ResetBoard()
-    End Sub
-    Private Sub LoadDigits()
-        _font = New Font(_fontData)
-        _digits(0) = New GlyphBuffer(_fontData, "0"c)
-        _digits(1) = New GlyphBuffer(_fontData, "1"c)
-        _digits(2) = New GlyphBuffer(_fontData, "2"c)
-        _digits(3) = New GlyphBuffer(_fontData, "3"c)
-        _digits(4) = New GlyphBuffer(_fontData, "4"c)
-        _digits(5) = New GlyphBuffer(_fontData, "5"c)
-        _digits(6) = New GlyphBuffer(_fontData, "6"c)
-        _digits(7) = New GlyphBuffer(_fontData, "7"c)
-        _digits(8) = New GlyphBuffer(_fontData, "8"c)
-        _digits(9) = New GlyphBuffer(_fontData, "9"c)
     End Sub
     Friend Sub CommitScore()
         _score += ((_runLength) * (_runLength + 1) \ 2)
@@ -72,13 +56,8 @@ Friend Module GameContext
         Next
         displayBuffer.Fill(PlotCell(0, 0), (cellWidth, viewHeight), Hue.Blue)
         displayBuffer.Fill(PlotCell(cellColumns - 1, 0), (cellWidth, viewHeight), Hue.Blue)
-        Dim scoreString = _score.ToString
         Dim x = cellWidth
-        For Each character In scoreString
-            Dim digit = AscW(character) - AscW("0"c)
-            _digits(digit).CopyTo(displayBuffer, (x, 0), Hue.Green)
-            x += _digits(digit).Width
-        Next
+        _font.WriteText(displayBuffer, (cellWidth, 0), $"Score: {_score}", Hue.Green)
     End Sub
     Private Function MapFontHue(pixel As Boolean) As Hue?
         If pixel Then

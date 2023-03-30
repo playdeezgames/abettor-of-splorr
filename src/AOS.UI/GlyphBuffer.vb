@@ -16,6 +16,12 @@
                                            sink As IPixelSink(Of THue),
                                            position As (Integer, Integer),
                                            hue As THue)
-        sink.Colorize(Me, (0, 0), position, (Width, Height), Function(x) If(x, hue, Nothing))
+        sink.Colorize(Me, (0, 0), position, (Width, Height), Function(x)
+                                                                 If x Then
+                                                                     Return hue
+                                                                 Else
+                                                                     Return Nothing
+                                                                 End If
+                                                             End Function)
     End Sub
 End Class
