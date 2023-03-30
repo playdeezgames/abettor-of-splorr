@@ -6,6 +6,13 @@
             toLocation As (Integer, Integer),
             size As (Integer, Integer),
             filter As Func(Of THue, Boolean))
+    Sub Stretch(
+            source As IPixelSource(Of THue),
+            fromLocation As (Integer, Integer),
+            toLocation As (Integer, Integer),
+            size As (Integer, Integer),
+            scale As (Integer, Integer),
+            filter As Func(Of THue, Boolean))
     Sub Colorize(Of TSourceHue)(
                                source As IPixelSource(Of TSourceHue),
                                fromLocation As (Integer, Integer),

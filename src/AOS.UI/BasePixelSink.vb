@@ -32,4 +32,15 @@ Public MustInherit Class BasePixelSink(Of THue As Structure)
             Next
         Next
     End Sub
+
+    Public Sub Stretch(source As IPixelSource(Of THue), fromLocation As (Integer, Integer), toLocation As (Integer, Integer), size As (Integer, Integer), scale As (Integer, Integer), filter As Func(Of THue, Boolean)) Implements IPixelSink(Of THue).Stretch
+        For x = 0 To size.Item1 - 1
+            For y = 0 To size.Item2 - 1
+                Dim hue = source.GetPixel(x + fromLocation.Item1, y + fromLocation.Item2)
+                If filter(hue) Then
+                    Fill((x * scale.Item1 + toLocation.Item1, y * scale.Item2 + toLocation.Item2), scale, hue)
+                End If
+            Next
+        Next
+    End Sub
 End Class
