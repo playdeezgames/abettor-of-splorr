@@ -6,6 +6,7 @@
         MyBase.New(windowSizeSource(), volumeSource())
         _configSink = configSink
         _configSink(Size, Volume)
+        Initialize()
         SetState(GameState.PlaceHolder, New TitleState(Me, AddressOf SetCurrentState))
     End Sub
 End Class
