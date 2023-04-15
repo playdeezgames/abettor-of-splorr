@@ -3,4 +3,5 @@
     Right
     Down
     Left
+    Fire
 End Enum

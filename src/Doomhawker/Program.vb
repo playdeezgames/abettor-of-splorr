@@ -11,12 +11,33 @@ Module Program
             (GameContext.ViewWidth, GameContext.ViewHeight),
             AddressOf BufferCreatorator,
             AddressOf CommandTransformerator,
+            AddressOf GamePadTransformer,
             New Dictionary(Of Sfx, String) From
             {
             })
             host.Run()
         End Using
     End Sub
+
+    Private Function GamePadTransformer(newState As GamePadState, oldState As GamePadState) As Command()
+        Dim results As New List(Of Command)
+        If newState.DPad.Up = ButtonState.Pressed AndAlso oldState.DPad.Up = ButtonState.Released Then
+            results.Add(Command.Up)
+        End If
+        If newState.DPad.Down = ButtonState.Pressed AndAlso oldState.DPad.Down = ButtonState.Released Then
+            results.Add(Command.Down)
+        End If
+        If newState.DPad.Left = ButtonState.Pressed AndAlso oldState.DPad.Left = ButtonState.Released Then
+            results.Add(Command.Left)
+        End If
+        If newState.DPad.Right = ButtonState.Pressed AndAlso oldState.DPad.Right = ButtonState.Released Then
+            results.Add(Command.Right)
+        End If
+        If newState.Buttons.A = ButtonState.Pressed AndAlso oldState.Buttons.A = ButtonState.Released Then
+            results.Add(Command.Fire)
+        End If
+        Return results.ToArray
+    End Function
 
     Private Sub SaveConfig(windowSize As (Integer, Integer), volume As Single)
         File.WriteAllText(ConfigFileName, JsonSerializer.Serialize(New DHConfig With {.SfxVolume = volume, .WindowHeight = windowSize.Item2, .WindowWidth = windowSize.Item1}))
@@ -43,7 +64,8 @@ Module Program
             {Keys.Up, Command.Up},
             {Keys.Right, Command.Right},
             {Keys.Left, Command.Left},
-            {Keys.Down, Command.Down}
+            {Keys.Down, Command.Down},
+            {Keys.Space, Command.Fire}
         }
     Private Function CommandTransformerator(key As Keys) As Command?
         If keyTable.ContainsKey(key) Then

@@ -11,6 +11,7 @@ Module Program
             (GameContext.ViewWidth, GameContext.ViewHeight),
             AddressOf BufferCreatorator,
             AddressOf CommandTransformerator,
+            AddressOf GamePadTransformer,
             New Dictionary(Of Sfx, String) From
             {
                 {Sfx.EnemyDeath, "Content/EnemyDeath.wav"},
@@ -25,6 +26,10 @@ Module Program
             host.Run()
         End Using
     End Sub
+
+    Private Function GamePadTransformer(arg1 As GamePadState, arg2 As GamePadState) As Command()
+        Return Array.Empty(Of Command)
+    End Function
 
     Private Sub SaveConfig(windowSize As (Integer, Integer), volume As Single)
         File.WriteAllText(ConfigFileName, JsonSerializer.Serialize(New AOSConfig With {.SfxVolume = volume, .WindowHeight = windowSize.Item2, .WindowWidth = windowSize.Item1}))

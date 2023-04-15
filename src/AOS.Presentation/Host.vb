@@ -12,6 +12,8 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
 
     Private ReadOnly _commandTransform As Func(Of Keys, TCommand?)
     Private _keyboardState As KeyboardState
+    Private ReadOnly _gamePadTransform As Func(Of GamePadState, GamePadState, TCommand())
+    Private _gamePadState As GamePadState
 
     Private ReadOnly _sfxSoundEffects As New Dictionary(Of TSfx, SoundEffect)
     Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of TSfx, String)
@@ -20,12 +22,14 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
            viewSize As (Integer, Integer),
            bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue)),
            commandTransform As Func(Of Keys, TCommand?),
+           gamePadTransform As Func(Of GamePadState, GamePadState, TCommand()),
            sfxFileNames As IReadOnlyDictionary(Of TSfx, String))
         _graphics = New GraphicsDeviceManager(Me)
         _controller = controller
         _viewSize = viewSize
         _bufferCreator = bufferCreator
         _commandTransform = commandTransform
+        _gamePadTransform = gamePadTransform
         _sfxFilenames = sfxFileNames
         Content.RootDirectory = "Content"
     End Sub
@@ -33,6 +37,7 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
         _controller.SetSizeHook(AddressOf OnWindowSizeChange)
         OnWindowSizeChange(_controller.Size)
         _keyboardState = Keyboard.GetState
+        _gamePadState = GamePad.GetState(PlayerIndex.One)
         For Each entry In _sfxFilenames
             _sfxSoundEffects(entry.Key) = SoundEffect.FromFile(entry.Value)
         Next
@@ -58,6 +63,25 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
         _displayBuffer = _bufferCreator(_texture)
     End Sub
     Protected Overrides Sub Update(gameTime As GameTime)
+        UpdateKeyboardState()
+        UpdateGamePadState()
+        _controller.Update(gameTime.ElapsedGameTime)
+        _controller.Render(_displayBuffer)
+        _displayBuffer.Commit()
+        MyBase.Update(gameTime)
+    End Sub
+
+    Private Sub UpdateGamePadState()
+        Dim newState = GamePad.GetState(PlayerIndex.One)
+        If newState.IsConnected Then
+            For Each cmd In _gamePadTransform(newState, _gamePadState)
+                _controller.HandleCommand(cmd)
+            Next
+        End If
+        _gamePadState = newState
+    End Sub
+
+    Private Sub UpdateKeyboardState()
         Dim newState = Keyboard.GetState()
         Dim keysPressed = newState.GetPressedKeys().Where(Function(k) _keyboardState.IsKeyUp(k)).ToArray
         For Each keyPressed In keysPressed
@@ -67,11 +91,8 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
             End If
         Next
         _keyboardState = newState
-        _controller.Update(gameTime.ElapsedGameTime)
-        _controller.Render(_displayBuffer)
-        _displayBuffer.Commit()
-        MyBase.Update(gameTime)
     End Sub
+
     Protected Overrides Sub Draw(gameTime As GameTime)
         _graphics.GraphicsDevice.Clear(Color.Magenta)
         _spriteBatch.Begin(samplerState:=SamplerState.PointClamp)
