@@ -17,13 +17,16 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
 
     Private ReadOnly _sfxSoundEffects As New Dictionary(Of TSfx, SoundEffect)
     Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of TSfx, String)
+    Private ReadOnly _title As String
     Sub New(
+           title As String,
            controller As IGameController(Of THue, TCommand, TSfx),
            viewSize As (Integer, Integer),
            bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue)),
            commandTransform As Func(Of Keys, TCommand?),
            gamePadTransform As Func(Of GamePadState, GamePadState, TCommand()),
            sfxFileNames As IReadOnlyDictionary(Of TSfx, String))
+        _title = title
         _graphics = New GraphicsDeviceManager(Me)
         _controller = controller
         _viewSize = viewSize
@@ -35,6 +38,7 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
     End Sub
     Protected Overrides Sub Initialize()
         _controller.SetSizeHook(AddressOf OnWindowSizeChange)
+        Window.Title = _title
         OnWindowSizeChange(_controller.Size)
         _keyboardState = Keyboard.GetState
         _gamePadState = GamePad.GetState(PlayerIndex.One)
