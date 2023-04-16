@@ -23,6 +23,16 @@
             Parent.Size = value
         End Set
     End Property
+
+    Public Property QuitRequested As Boolean Implements IGameController(Of THue, TCommand, TSfx).QuitRequested
+        Get
+            Return Parent.QuitRequested
+        End Get
+        Set(value As Boolean)
+            Parent.QuitRequested = value
+        End Set
+    End Property
+
     Public MustOverride Sub HandleCommand(command As TCommand) Implements ICommandHandler(Of TCommand).HandleCommand
     Public MustOverride Sub Render(displayBuffer As IPixelSink(Of THue)) Implements IRenderer(Of THue).Render
     Public Sub SetSfxHook(handler As Action(Of TSfx)) Implements ISfxHandler(Of TSfx).SetSfxHook

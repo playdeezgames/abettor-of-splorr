@@ -4,4 +4,5 @@
     Inherits ISfxHandler(Of TSfx)
     Inherits IWindowSizerizer
     Inherits IUpdatorator
+    Property QuitRequested As Boolean
 End Interface

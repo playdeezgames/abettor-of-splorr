@@ -22,6 +22,9 @@
         End Set
     End Property
     Public Property Volume As Single Implements ISfxHandler(Of TSfx).Volume
+
+    Public Property QuitRequested As Boolean Implements IGameController(Of THue, TCommand, TSfx).QuitRequested
+
     Sub New(windowSize As (Integer, Integer), volume As Single)
         _windowSize = windowSize
         Me.Volume = volume
