@@ -14,6 +14,7 @@
             position = (position.Item1 + buffer.Width, position.Item2)
         Next
     End Sub
+
     Public Function TextWidth(text As String) As Integer
         Dim result = 0
         For Each character In text
