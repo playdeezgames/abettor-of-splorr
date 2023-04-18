@@ -14,4 +14,5 @@
                                size As (Integer, Integer),
                                xform As Func(Of TSourceHue, THue?))
     Sub Fill(location As (Integer, Integer), size As (Integer, Integer), hue As THue)
+    Sub Frame(location As (Integer, Integer), size As (Integer, Integer), hue As THue)
 End Interface

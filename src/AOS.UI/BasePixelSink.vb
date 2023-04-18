@@ -33,4 +33,15 @@ Public MustInherit Class BasePixelSink(Of THue As Structure)
             Next
         Next
     End Sub
+
+    Public Sub Frame(location As (Integer, Integer), size As (Integer, Integer), hue As THue) Implements IPixelSink(Of THue).Frame
+        For x = location.Item1 To location.Item1 + size.Item1 - 1
+            SetPixel(x, location.Item2, hue)
+            SetPixel(x, location.Item2 + size.Item2 - 1, hue)
+        Next
+        For y = location.Item2 + 1 To location.Item2 + size.Item2 - 2
+            SetPixel(location.Item1, y, hue)
+            SetPixel(location.Item1 + size.Item1 - 1, y, hue)
+        Next
+    End Sub
 End Class
