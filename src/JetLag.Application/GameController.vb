@@ -9,6 +9,6 @@ Public Class GameController
         GameContext.Initialize()
         SetState(GameState.InPlay, New InPlayState(Me, AddressOf SetCurrentState))
         SetState(GameState.GameOver, New GameOverState(Me, AddressOf SetCurrentState))
-        SetCurrentState(GameState.GameOver)
+        SetCurrentState(GameState.GameOver, True)
     End Sub
 End Class

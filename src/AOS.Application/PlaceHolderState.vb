@@ -18,7 +18,7 @@
             "  ........  "
         }
 
-    Public Sub New(parent As IGameController(Of Hue, Command, Sfx), setState As Action(Of GameState))
+    Public Sub New(parent As IGameController(Of Hue, Command, Sfx), setState As Action(Of GameState?, Boolean))
         MyBase.New(parent, setState)
         thingie = New OffscreenBuffer(Of Hue)((48, 48))
         _sprite = New Sprite(Of Hue)(spriteData, AddressOf BlobColors)

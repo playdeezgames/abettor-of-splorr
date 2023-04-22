@@ -1,7 +1,7 @@
 ﻿Public Class GameOverState
     Inherits BaseGameState(Of Hue, Command, Sfx, GameState)
 
-    Public Sub New(parent As IGameController(Of Hue, Command, Sfx), setState As Action(Of GameState))
+    Public Sub New(parent As IGameController(Of Hue, Command, Sfx), setState As Action(Of GameState?, Boolean))
         MyBase.New(parent, setState)
     End Sub
 
