@@ -7,9 +7,8 @@
         Me.Parent = parent
         Me.SetCurrentState = setState
     End Sub
-    Protected Sub PopToState(state As TState)
+    Protected Sub PopState()
         SetCurrentState(Nothing, False)
-        SetState(state)
     End Sub
     Protected Sub SetState(state As TState)
         SetCurrentState(state, False)
