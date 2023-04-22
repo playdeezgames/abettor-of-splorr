@@ -67,12 +67,12 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
         _displayBuffer = _bufferCreator(_texture)
     End Sub
     Protected Overrides Sub Update(gameTime As GameTime)
+        UpdateKeyboardState()
+        UpdateGamePadState()
         If _controller.QuitRequested Then
             Me.Exit()
             Return
         End If
-        UpdateKeyboardState()
-        UpdateGamePadState()
         _controller.Update(gameTime.ElapsedGameTime)
         _controller.Render(_displayBuffer)
         _displayBuffer.Commit()

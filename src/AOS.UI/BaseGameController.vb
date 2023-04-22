@@ -1,12 +1,29 @@
-﻿Public Class BaseGameController(Of THue As Structure, TCommand, TSfx, TState)
+﻿Public Class BaseGameController(Of THue As Structure, TCommand, TSfx, TState As Structure)
     Implements IGameController(Of THue, TCommand, TSfx)
     Private _windowSize As (Integer, Integer)
     Private _sizeHook As Action(Of (Integer, Integer))
     Private ReadOnly _states As New Dictionary(Of TState, BaseGameState(Of THue, TCommand, TSfx, TState))
-    Private _state As TState
-    Protected Sub SetCurrentState(state As TState)
-        _state = state
+    Private _stateStack As New Stack(Of TState)
+    Protected Sub SetCurrentState(state As TState?, push As Boolean)
+        If Not push Then
+            PopState()
+        End If
+        If state.HasValue Then
+            PushState(state.Value)
+        End If
     End Sub
+
+    Private Sub PushState(state As TState)
+        _stateStack.Push(state)
+    End Sub
+
+    Private Function PopState() As TState?
+        If _stateStack.Any Then
+            Return _stateStack.Pop()
+        End If
+        Return Nothing
+    End Function
+
     Protected Sub SetState(state As TState, handler As BaseGameState(Of THue, TCommand, TSfx, TState))
         _states(state) = handler
     End Sub
@@ -23,7 +40,11 @@
     End Property
     Public Property Volume As Single Implements ISfxHandler(Of TSfx).Volume
 
-    Public Property QuitRequested As Boolean Implements IGameController(Of THue, TCommand, TSfx).QuitRequested
+    Public ReadOnly Property QuitRequested As Boolean Implements IGameController(Of THue, TCommand, TSfx).QuitRequested
+        Get
+            Return Not _stateStack.Any
+        End Get
+    End Property
 
     Sub New(windowSize As (Integer, Integer), volume As Single)
         _windowSize = windowSize
@@ -31,10 +52,10 @@
     End Sub
     Private OnSfx As Action(Of TSfx)
     Public Sub HandleCommand(command As TCommand) Implements ICommandHandler(Of TCommand).HandleCommand
-        _states(_state).HandleCommand(command)
+        _states(_stateStack.Peek).HandleCommand(command)
     End Sub
     Public Sub Render(displayBuffer As IPixelSink(Of THue)) Implements IRenderer(Of THue).Render
-        _states(_state).Render(displayBuffer)
+        _states(_stateStack.Peek).Render(displayBuffer)
     End Sub
 
     Public Sub PlaySfx(sfx As TSfx) Implements ISfxHandler(Of TSfx).PlaySfx
@@ -42,7 +63,7 @@
     End Sub
 
     Public Sub Update(elapsedTime As TimeSpan) Implements IUpdatorator.Update
-        _states(_state).Update(elapsedTime)
+        _states(_stateStack.Peek).Update(elapsedTime)
     End Sub
 
     Public Sub SetSfxHook(handler As Action(Of TSfx)) Implements ISfxHandler(Of TSfx).SetSfxHook

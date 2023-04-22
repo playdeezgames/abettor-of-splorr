@@ -1,11 +1,22 @@
-﻿Public MustInherit Class BaseGameState(Of THue As Structure, TCommand, TSfx, TState)
+﻿Public MustInherit Class BaseGameState(Of THue As Structure, TCommand, TSfx, TState As Structure)
     Implements IGameController(Of THue, TCommand, TSfx)
 
     Protected ReadOnly Property Parent As IGameController(Of THue, TCommand, TSfx)
-    Protected ReadOnly SetState As Action(Of TState)
-    Sub New(parent As IGameController(Of THue, TCommand, TSfx), setState As Action(Of TState))
+    Private ReadOnly SetCurrentState As Action(Of TState?, Boolean)
+    Sub New(parent As IGameController(Of THue, TCommand, TSfx), setState As Action(Of TState?, Boolean))
         Me.Parent = parent
-        Me.SetState = setState
+        Me.SetCurrentState = setState
+    End Sub
+    Protected Sub PopToState(state As TState)
+        SetCurrentState(Nothing, False)
+        SetState(state)
+    End Sub
+    Protected Sub SetState(state As TState)
+        SetCurrentState(state, False)
+    End Sub
+    Protected Sub SetStates(pushedState As TState, nextState As TState)
+        SetCurrentState(nextState, False)
+        SetCurrentState(pushedState, True)
     End Sub
     Public Property Volume As Single Implements ISfxHandler(Of TSfx).Volume
         Get
@@ -24,13 +35,10 @@
         End Set
     End Property
 
-    Public Property QuitRequested As Boolean Implements IGameController(Of THue, TCommand, TSfx).QuitRequested
+    Public ReadOnly Property QuitRequested As Boolean Implements IGameController(Of THue, TCommand, TSfx).QuitRequested
         Get
             Return Parent.QuitRequested
         End Get
-        Set(value As Boolean)
-            Parent.QuitRequested = value
-        End Set
     End Property
 
     Public MustOverride Sub HandleCommand(command As TCommand) Implements ICommandHandler(Of TCommand).HandleCommand
