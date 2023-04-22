@@ -51,5 +51,7 @@
     Public Sub SetSizeHook(hook As Action(Of (Integer, Integer))) Implements IWindowSizerizer.SetSizeHook
         Parent.SetSizeHook(hook)
     End Sub
-    Public MustOverride Sub Update(elapsedTime As TimeSpan) Implements IUpdatorator.Update
+    Public Overridable Sub Update(elapsedTime As TimeSpan) Implements IUpdatorator.Update
+        'default implementation: do nothing!
+    End Sub
 End Class
