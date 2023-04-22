@@ -7,7 +7,7 @@ Module Program
             Function() config.SfxVolume,
             AddressOf SaveConfig)
         Using host As New Host(Of Hue, Command, Sfx)(
-            "",
+            "Give it a title!",
             gameController,
             (GameContext.ViewWidth, GameContext.ViewHeight),
             AddressOf BufferCreatorator,

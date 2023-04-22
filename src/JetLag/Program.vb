@@ -13,7 +13,7 @@ Module Program
             Function() config.SfxVolume,
             AddressOf SaveConfig)
         Using host As New Host(Of Hue, Command, Sfx)(
-            "",
+            "JetLag",
             gameController,
             (320, 180),
             AddressOf BufferCreatorator,
