@@ -10,6 +10,7 @@
         End If
         If state.HasValue Then
             PushState(state.Value)
+            _states(_stateStack.Peek).OnStart()
         End If
     End Sub
 

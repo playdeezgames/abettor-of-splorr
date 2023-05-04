@@ -54,4 +54,7 @@
     Public Overridable Sub Update(elapsedTime As TimeSpan) Implements IUpdatorator.Update
         'default implementation: do nothing!
     End Sub
+    Public Overridable Sub OnStart()
+        'default: do nothing!
+    End Sub
 End Class
