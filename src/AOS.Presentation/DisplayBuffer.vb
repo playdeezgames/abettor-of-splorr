@@ -12,8 +12,9 @@
     Public Sub Commit() Implements IDisplayBuffer(Of THue).Commit
         _texture.SetData(_buffer)
     End Sub
+    Const Zero = 0
     Public Overrides Sub SetPixel(x As Integer, y As Integer, hue As THue) Implements IDisplayBuffer(Of THue).SetPixel
-        If x < 0 OrElse y < 0 OrElse x >= _texture.Width OrElse y >= _texture.Height Then
+        If x < Zero OrElse y < Zero OrElse x >= _texture.Width OrElse y >= _texture.Height Then
             Return
         End If
         _buffer(x + y * _texture.Width) = _transform(hue)

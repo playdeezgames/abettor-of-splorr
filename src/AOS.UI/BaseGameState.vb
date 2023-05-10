@@ -3,6 +3,7 @@
 
     Protected ReadOnly Property Parent As IGameController(Of THue, TCommand, TSfx)
     Private ReadOnly SetCurrentState As Action(Of TState?, Boolean)
+    Protected Const Zero = 0
     Sub New(parent As IGameController(Of THue, TCommand, TSfx), setState As Action(Of TState?, Boolean))
         Me.Parent = parent
         Me.SetCurrentState = setState

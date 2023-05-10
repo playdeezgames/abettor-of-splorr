@@ -14,9 +14,9 @@
             position = (position.Item1 + buffer.Width, position.Item2)
         Next
     End Sub
-
+    Const Zero = 0
     Public Function TextWidth(text As String) As Integer
-        Dim result = 0
+        Dim result = Zero
         For Each character In text
             result += _glyphs(character).Width
         Next

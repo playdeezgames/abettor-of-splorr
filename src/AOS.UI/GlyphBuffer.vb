@@ -12,16 +12,17 @@
             Next
         Next
     End Sub
+    Const Zero = 0
     Public Sub CopyTo(Of THue As Structure)(
                                            sink As IPixelSink(Of THue),
                                            position As (Integer, Integer),
                                            hue As THue)
-        sink.Colorize(Me, (0, 0), position, (Width, Height), Function(x)
-                                                                 If x Then
-                                                                     Return hue
-                                                                 Else
-                                                                     Return Nothing
-                                                                 End If
-                                                             End Function)
+        sink.Colorize(Me, (Zero, Zero), position, (Width, Height), Function(x)
+                                                                       If x Then
+                                                                           Return hue
+                                                                       Else
+                                                                           Return Nothing
+                                                                       End If
+                                                                   End Function)
     End Sub
 End Class
