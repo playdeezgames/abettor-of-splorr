@@ -1,4 +1,4 @@
-﻿Public Class Drawer(Of THue As Structure)
+﻿Public Class Drawer(Of THue)
     Private X As Integer
     Private Y As Integer
     Private Hue As THue

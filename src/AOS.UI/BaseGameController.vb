@@ -1,4 +1,4 @@
-﻿Public Class BaseGameController(Of THue As Structure, TCommand, TSfx, TState As Structure)
+﻿Public Class BaseGameController(Of THue, TCommand, TSfx, TState As Structure)
     Implements IGameController(Of THue, TCommand, TSfx)
     Private _windowSize As (Integer, Integer)
     Private _sizeHook As Action(Of (Integer, Integer))

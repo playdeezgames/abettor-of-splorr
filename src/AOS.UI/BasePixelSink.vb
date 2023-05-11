@@ -1,6 +1,4 @@
-﻿Imports System.Threading
-
-Public MustInherit Class BasePixelSink(Of THue As Structure)
+﻿Public MustInherit Class BasePixelSink(Of THue)
     Implements IPixelSink(Of THue)
     Public MustOverride Sub SetPixel(x As Integer, y As Integer, hue As THue) Implements IPixelSink(Of THue).SetPixel
     Const Zero = 0
@@ -12,13 +10,13 @@ Public MustInherit Class BasePixelSink(Of THue As Structure)
         Next
     End Sub
 
-    Public Sub Colorize(Of TSourceHue)(source As IPixelSource(Of TSourceHue), fromLocation As (Integer, Integer), toLocation As (Integer, Integer), size As (Integer, Integer), xform As Func(Of TSourceHue, THue?)) Implements IPixelSink(Of THue).Colorize
+    Public Sub Colorize(Of TSourceHue)(source As IPixelSource(Of TSourceHue), fromLocation As (Integer, Integer), toLocation As (Integer, Integer), size As (Integer, Integer), xform As Func(Of TSourceHue, THue)) Implements IPixelSink(Of THue).Colorize
         For x = Zero To size.Item1 - 1
             For y = Zero To size.Item2 - 1
                 Dim sourceHue = source.GetPixel(x + fromLocation.Item1, y + fromLocation.Item2)
                 Dim destinationHue = xform(sourceHue)
-                If destinationHue.HasValue Then
-                    SetPixel(x + toLocation.Item1, y + toLocation.Item2, destinationHue.Value)
+                If destinationHue IsNot Nothing Then
+                    SetPixel(x + toLocation.Item1, y + toLocation.Item2, destinationHue)
                 End If
             Next
         Next

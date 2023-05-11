@@ -7,7 +7,7 @@
             _glyphs(glyph) = New GlyphBuffer(fontData, glyph)
         Next
     End Sub
-    Public Sub WriteText(Of THue As Structure)(sink As IPixelSink(Of THue), position As (Integer, Integer), text As String, hue As THue)
+    Public Sub WriteText(Of THue)(sink As IPixelSink(Of THue), position As (Integer, Integer), text As String, hue As THue)
         For Each character In text
             Dim buffer = _glyphs(character)
             buffer.CopyTo(sink, position, hue)

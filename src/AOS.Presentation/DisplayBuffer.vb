@@ -1,4 +1,4 @@
-﻿Public Class DisplayBuffer(Of THue As Structure)
+﻿Public Class DisplayBuffer(Of THue)
     Inherits BasePixelSink(Of THue)
     Implements IDisplayBuffer(Of THue)
     Private ReadOnly _texture As Texture2D

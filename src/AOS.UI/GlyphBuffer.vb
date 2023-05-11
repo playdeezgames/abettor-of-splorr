@@ -13,7 +13,7 @@
         Next
     End Sub
     Const Zero = 0
-    Public Sub CopyTo(Of THue As Structure)(
+    Public Sub CopyTo(Of THue)(
                                            sink As IPixelSink(Of THue),
                                            position As (Integer, Integer),
                                            hue As THue)
