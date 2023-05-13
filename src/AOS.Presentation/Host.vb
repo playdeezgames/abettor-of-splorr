@@ -39,7 +39,7 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Protected Overrides Sub Initialize()
         _controller.SetSizeHook(AddressOf OnWindowSizeChange)
         Window.Title = _title
-        OnWindowSizeChange(_controller.Size)
+        OnWindowSizeChange(_controller.Size, _controller.FullScreen)
         _keyboardState = Keyboard.GetState
         _gamePadState = GamePad.GetState(PlayerIndex.One)
         For Each entry In _sfxFilenames
@@ -49,9 +49,10 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
         MyBase.Initialize()
     End Sub
 
-    Private Sub OnWindowSizeChange(newSize As (Integer, Integer))
+    Private Sub OnWindowSizeChange(newSize As (Integer, Integer), fullScreen As Boolean)
         _graphics.PreferredBackBufferWidth = newSize.Item1
         _graphics.PreferredBackBufferHeight = newSize.Item2
+        _graphics.IsFullScreen = fullScreen
         _graphics.ApplyChanges()
     End Sub
     Const Pitch = 0.0F

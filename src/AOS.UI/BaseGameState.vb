@@ -41,6 +41,15 @@
         End Get
     End Property
 
+    Public Property FullScreen As Boolean Implements IWindowSizerizer.FullScreen
+        Get
+            Return Parent.FullScreen
+        End Get
+        Set(value As Boolean)
+            Parent.FullScreen = value
+        End Set
+    End Property
+
     Public MustOverride Sub HandleCommand(command As TCommand) Implements ICommandHandler(Of TCommand).HandleCommand
     Public MustOverride Sub Render(displayBuffer As IPixelSink(Of THue)) Implements IRenderer(Of THue).Render
     Public Sub SetSfxHook(handler As Action(Of TSfx)) Implements ISfxHandler(Of TSfx).SetSfxHook
@@ -49,7 +58,7 @@
     Public Sub PlaySfx(sfx As TSfx) Implements ISfxHandler(Of TSfx).PlaySfx
         Parent.PlaySfx(sfx)
     End Sub
-    Public Sub SetSizeHook(hook As Action(Of (Integer, Integer))) Implements IWindowSizerizer.SetSizeHook
+    Public Sub SetSizeHook(hook As Action(Of (Integer, Integer), Boolean)) Implements IWindowSizerizer.SetSizeHook
         Parent.SetSizeHook(hook)
     End Sub
     Public Overridable Sub Update(elapsedTime As TimeSpan) Implements IUpdatorator.Update

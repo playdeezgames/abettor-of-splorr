@@ -1,7 +1,8 @@
 ﻿Public Class BaseGameController(Of THue, TCommand, TSfx, TState As Structure)
     Implements IGameController(Of THue, TCommand, TSfx)
     Private _windowSize As (Integer, Integer)
-    Private _sizeHook As Action(Of (Integer, Integer))
+    Private _fullScreen As Boolean
+    Private _sizeHook As Action(Of (Integer, Integer), Boolean)
     Private ReadOnly _states As New Dictionary(Of TState, BaseGameState(Of THue, TCommand, TSfx, TState))
     Private _stateStack As New Stack(Of TState)
     Protected Sub SetCurrentState(state As TState?, push As Boolean)
@@ -35,7 +36,7 @@
         Set(value As (Integer, Integer))
             If value.Item1 <> _windowSize.Item1 OrElse value.Item2 <> _windowSize.Item2 Then
                 _windowSize = value
-                _sizeHook(_windowSize)
+                _sizeHook(_windowSize, _fullScreen)
             End If
         End Set
     End Property
@@ -47,8 +48,21 @@
         End Get
     End Property
 
-    Sub New(windowSize As (Integer, Integer), volume As Single)
+    Public Property FullScreen As Boolean Implements IWindowSizerizer.FullScreen
+        Get
+            Return _fullScreen
+        End Get
+        Set(value As Boolean)
+            If value <> _fullScreen Then
+                _fullScreen = value
+                _sizeHook(_windowSize, _fullScreen)
+            End If
+        End Set
+    End Property
+
+    Sub New(windowSize As (Integer, Integer), fullScreen As Boolean, volume As Single)
         _windowSize = windowSize
+        _fullScreen = fullScreen
         Me.Volume = volume
     End Sub
     Private OnSfx As Action(Of TSfx)
@@ -71,7 +85,7 @@
         OnSfx = handler
     End Sub
 
-    Public Sub SetSizeHook(hook As Action(Of (Integer, Integer))) Implements IWindowSizerizer.SetSizeHook
+    Public Sub SetSizeHook(hook As Action(Of (Integer, Integer), Boolean)) Implements IWindowSizerizer.SetSizeHook
         _sizeHook = hook
     End Sub
 End Class
