@@ -104,7 +104,7 @@ Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     End Sub
     Const Zero = 0
     Protected Overrides Sub Draw(gameTime As GameTime)
-        _graphics.GraphicsDevice.Clear(Color.Magenta)
+        _graphics.GraphicsDevice.Clear(Color.Black)
         _spriteBatch.Begin(samplerState:=SamplerState.PointClamp)
         _spriteBatch.Draw(_texture, New Rectangle(Zero, Zero, _controller.Size.Item1, _controller.Size.Item2), Nothing, Color.White)
         _spriteBatch.End()
