@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>S0W80</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
-    <ImportedNamespaces>S0W80.Presentation=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,S0W80=True</ImportedNamespaces>
+    <ImportedNamespaces>S0W80.Application=False,S0W80.Presentation=False,S0W80.UI=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,S0W80=True</ImportedNamespaces>
     <OptionStrict>On</OptionStrict>
   </PropertyGroup>
 
@@ -17,11 +17,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\S0W80.Application\S0W80.Application.vbproj" />
     <ProjectReference Include="..\S0W80.Presentation\S0W80.Presentation.vbproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Import Include="S0W80.Application" />
     <Import Include="S0W80.Presentation" />
+    <Import Include="S0W80.UI" />
   </ItemGroup>
 
 </Project>

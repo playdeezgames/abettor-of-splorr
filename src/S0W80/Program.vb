@@ -1,6 +1,9 @@
+Imports S0W80.Application
+
 Module Program
     Sub Main(args As String())
-        Using host As New Host()
+        Dim gameController = New GameController
+        Using host As New Host(gameController)
             host.Run()
         End Using
     End Sub

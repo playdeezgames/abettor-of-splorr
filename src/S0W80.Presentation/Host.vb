@@ -15,6 +15,8 @@
     Private _bufferCharacters As Byte()
     Private _bufferAttributes As Byte()
     Private _spriteBatch As SpriteBatch
+    Private _gameController As IGameController
+    Private _frameBuffer As IFrameBuffer
     Private ReadOnly _colors() As Color = {
         New Color(0, 0, 0),
         New Color(0, 0, 170),
@@ -33,8 +35,9 @@
         New Color(255, 255, 85),
         New Color(255, 255, 255)
     }
-    Sub New()
+    Sub New(gameController As IGameController)
         _graphics = New GraphicsDeviceManager(Me)
+        _gameController = gameController
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub LoadContent()
@@ -63,6 +66,7 @@
                 _bufferAttributes(row * _cellColumns + column) = CByte(_random.Next(256))
             Next
         Next
+        _frameBuffer = New FrameBuffer(_cellColumns, _cellRows, _bufferCharacters, _bufferAttributes)
     End Sub
     Protected Overrides Sub Initialize()
         _graphics.PreferredBackBufferWidth = _frameBufferWidth
@@ -72,6 +76,7 @@
     End Sub
     Protected Overrides Sub Update(gameTime As GameTime)
         MyBase.Update(gameTime)
+        _gameController.Update(_frameBuffer)
     End Sub
     Protected Overrides Sub Draw(gameTime As GameTime)
         MyBase.Draw(gameTime)

@@ -4,6 +4,7 @@ Module Program
         Dim config = LoadConfig()
         Dim gameController As New GameController(
             Function() (config.WindowWidth, config.WindowHeight),
+            Function() False,
             Function() config.SfxVolume,
             AddressOf SaveConfig)
         Using host As New Host(Of Hue, Command, Sfx)(
