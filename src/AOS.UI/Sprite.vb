@@ -1,14 +1,15 @@
-﻿Public Class Sprite(Of THue As Structure)
+﻿Public Class Sprite(Of THue)
     Inherits OffscreenBuffer(Of THue)
     Public ReadOnly Property Width As Integer
     Public ReadOnly Property Height As Integer
+    Const Zero = 0
     Public Sub New(lines As IReadOnlyList(Of String), transform As Func(Of Char, THue))
-        MyBase.New((lines(0).Length, lines.Count))
-        Width = lines(0).Length
+        MyBase.New((lines.First.Length, lines.Count))
+        Width = lines.First.Length
         Height = lines.Count
-        Dim y = 0
+        Dim y = Zero
         For Each line In lines
-            Dim x = 0
+            Dim x = Zero
             For Each character In line
                 SetPixel(x, y, transform(character))
                 x += 1
@@ -18,6 +19,6 @@
     End Sub
 
     Public Sub StretchTo(sink As IPixelSink(Of THue), position As (Integer, Integer), scale As (Integer, Integer), filter As Func(Of THue, Boolean))
-        sink.Stretch(Me, (0, 0), position, (Width, Height), scale, filter)
+        sink.Stretch(Me, (Zero, Zero), position, (Width, Height), scale, filter)
     End Sub
 End Class

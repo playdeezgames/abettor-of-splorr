@@ -1,8 +1,9 @@
-﻿Public MustInherit Class BaseGameState(Of THue As Structure, TCommand, TSfx, TState As Structure)
+﻿Public MustInherit Class BaseGameState(Of THue, TCommand, TSfx, TState As Structure)
     Implements IGameController(Of THue, TCommand, TSfx)
 
     Protected ReadOnly Property Parent As IGameController(Of THue, TCommand, TSfx)
     Private ReadOnly SetCurrentState As Action(Of TState?, Boolean)
+    Protected Const Zero = 0
     Sub New(parent As IGameController(Of THue, TCommand, TSfx), setState As Action(Of TState?, Boolean))
         Me.Parent = parent
         Me.SetCurrentState = setState
@@ -40,6 +41,15 @@
         End Get
     End Property
 
+    Public Property FullScreen As Boolean Implements IWindowSizerizer.FullScreen
+        Get
+            Return Parent.FullScreen
+        End Get
+        Set(value As Boolean)
+            Parent.FullScreen = value
+        End Set
+    End Property
+
     Public MustOverride Sub HandleCommand(command As TCommand) Implements ICommandHandler(Of TCommand).HandleCommand
     Public MustOverride Sub Render(displayBuffer As IPixelSink(Of THue)) Implements IRenderer(Of THue).Render
     Public Sub SetSfxHook(handler As Action(Of TSfx)) Implements ISfxHandler(Of TSfx).SetSfxHook
@@ -48,10 +58,13 @@
     Public Sub PlaySfx(sfx As TSfx) Implements ISfxHandler(Of TSfx).PlaySfx
         Parent.PlaySfx(sfx)
     End Sub
-    Public Sub SetSizeHook(hook As Action(Of (Integer, Integer))) Implements IWindowSizerizer.SetSizeHook
+    Public Sub SetSizeHook(hook As Action(Of (Integer, Integer), Boolean)) Implements IWindowSizerizer.SetSizeHook
         Parent.SetSizeHook(hook)
     End Sub
     Public Overridable Sub Update(elapsedTime As TimeSpan) Implements IUpdatorator.Update
         'default implementation: do nothing!
+    End Sub
+    Public Overridable Sub OnStart()
+        'default: do nothing!
     End Sub
 End Class

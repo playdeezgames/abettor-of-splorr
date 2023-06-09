@@ -7,16 +7,16 @@
             _glyphs(glyph) = New GlyphBuffer(fontData, glyph)
         Next
     End Sub
-    Public Sub WriteText(Of THue As Structure)(sink As IPixelSink(Of THue), position As (Integer, Integer), text As String, hue As THue)
+    Public Sub WriteText(Of THue)(sink As IPixelSink(Of THue), position As (Integer, Integer), text As String, hue As THue)
         For Each character In text
             Dim buffer = _glyphs(character)
             buffer.CopyTo(sink, position, hue)
             position = (position.Item1 + buffer.Width, position.Item2)
         Next
     End Sub
-
+    Const Zero = 0
     Public Function TextWidth(text As String) As Integer
-        Dim result = 0
+        Dim result = Zero
         For Each character In text
             result += _glyphs(character).Width
         Next

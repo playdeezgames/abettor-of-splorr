@@ -1,4 +1,4 @@
-Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure)
+Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
     Inherits Game
     Private ReadOnly _controller As IGameController(Of THue, TCommand, TSfx)
 
@@ -39,7 +39,7 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
     Protected Overrides Sub Initialize()
         _controller.SetSizeHook(AddressOf OnWindowSizeChange)
         Window.Title = _title
-        OnWindowSizeChange(_controller.Size)
+        OnWindowSizeChange(_controller.Size, _controller.FullScreen)
         _keyboardState = Keyboard.GetState
         _gamePadState = GamePad.GetState(PlayerIndex.One)
         For Each entry In _sfxFilenames
@@ -49,15 +49,17 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
         MyBase.Initialize()
     End Sub
 
-    Private Sub OnWindowSizeChange(newSize As (Integer, Integer))
+    Private Sub OnWindowSizeChange(newSize As (Integer, Integer), fullScreen As Boolean)
         _graphics.PreferredBackBufferWidth = newSize.Item1
         _graphics.PreferredBackBufferHeight = newSize.Item2
+        _graphics.IsFullScreen = fullScreen
         _graphics.ApplyChanges()
     End Sub
-
+    Const Pitch = 0.0F
+    Const Pan = 0.0F
     Private Sub OnSfx(sfx As TSfx)
         If _sfxSoundEffects.ContainsKey(sfx) Then
-            _sfxSoundEffects(sfx).Play(_controller.Volume, 0.0F, 0.0F)
+            _sfxSoundEffects(sfx).Play(_controller.Volume, Pitch, Pan)
         End If
     End Sub
 
@@ -100,11 +102,11 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
         Next
         _keyboardState = newState
     End Sub
-
+    Const Zero = 0
     Protected Overrides Sub Draw(gameTime As GameTime)
-        _graphics.GraphicsDevice.Clear(Color.Magenta)
+        _graphics.GraphicsDevice.Clear(Color.Black)
         _spriteBatch.Begin(samplerState:=SamplerState.PointClamp)
-        _spriteBatch.Draw(_texture, New Rectangle(0, 0, _controller.Size.Item1, _controller.Size.Item2), Nothing, Color.White)
+        _spriteBatch.Draw(_texture, New Rectangle(Zero, Zero, _controller.Size.Item1, _controller.Size.Item2), Nothing, Color.White)
         _spriteBatch.End()
         MyBase.Draw(gameTime)
     End Sub
