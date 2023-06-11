@@ -1,3 +1,3 @@
 ﻿Public Interface IGameController
-    Sub Update(frameBuffer As IFrameBuffer)
+    Sub Update(frameBuffer As IOldFrameBuffer)
 End Interface

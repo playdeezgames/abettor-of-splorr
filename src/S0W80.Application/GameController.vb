@@ -1,7 +1,7 @@
 Public Class GameController
     Implements IGameController
 
-    Public Sub Update(frameBuffer As IFrameBuffer) Implements IGameController.Update
+    Public Sub Update(frameBuffer As IOldFrameBuffer) Implements IGameController.Update
         frameBuffer.Fill(0, 0, 80, 25, 0, 0)
         frameBuffer.WriteText(0, 0, "Hello, world!", 15)
         frameBuffer.WriteText(0, 1, "This is a test of color!", 4)

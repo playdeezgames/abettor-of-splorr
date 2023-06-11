@@ -1,22 +1,12 @@
 ﻿Public Class Host
     Inherits Game
     Private ReadOnly _graphics As GraphicsDeviceManager
-    Private ReadOnly _random As New Random
-    Const _frameBufferWidth = 640
-    Const _frameBufferHeight = 400
-    Private _cellWidth As Integer
-    Private _cellHeight As Integer
-    Private _cellColumns As Integer
-    Private _cellRows As Integer
-    Private _texture As Texture2D
-    Private _fillTexture As Texture2D
-    Private ReadOnly _sourceRectangles(255) As Rectangle
-    Private _destinationRectangles As Rectangle()
-    Private _bufferCharacters As Byte()
-    Private _bufferAttributes As Byte()
     Private _spriteBatch As SpriteBatch
-    Private _gameController As IGameController
-    Private _frameBuffer As IFrameBuffer
+    Private _backBuffer As RenderTarget2D
+    Private ReadOnly _frameBuffer As IFrameBuffer
+    Private _solidTexture As Texture2D
+    Private _fontTexture As Texture2D
+    Private _sourceRectangles(256) As Rectangle
     Private ReadOnly _colors() As Color = {
         New Color(0, 0, 0),
         New Color(0, 0, 170),
@@ -35,56 +25,56 @@
         New Color(255, 255, 85),
         New Color(255, 255, 255)
     }
-    Sub New(gameController As IGameController)
+    Sub New(frameBuffer As IFrameBuffer)
         _graphics = New GraphicsDeviceManager(Me)
-        _gameController = gameController
+        _frameBuffer = frameBuffer
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub LoadContent()
         MyBase.LoadContent()
         _spriteBatch = New SpriteBatch(GraphicsDevice)
-        _texture = Texture2D.FromFile(GraphicsDevice, "Font8x16.png")
-        _fillTexture = New Texture2D(GraphicsDevice, 1, 1)
-        Dim data() As Color = {Color.White}
-        _fillTexture.SetData(data)
-        _cellWidth = _texture.Width \ 16
-        _cellHeight = _texture.Height \ 16
-        _cellColumns = _frameBufferWidth \ _cellWidth
-        _cellRows = _frameBufferHeight \ _cellHeight
+        _backBuffer = New RenderTarget2D(GraphicsDevice, ScreenWidth, ScreenHeight)
+        _solidTexture = New Texture2D(GraphicsDevice, 1, 1)
+        _solidTexture.SetData(New List(Of Color) From {Color.White}.ToArray)
+        _fontTexture = Texture2D.FromFile(GraphicsDevice, FontFilename)
+        Dim cellWidth = _fontTexture.Width \ 16
+        Dim cellHeight = _fontTexture.Height \ 16
         For row = 0 To 15
             For column = 0 To 15
-                _sourceRectangles(column + row * 16) = New Rectangle(column * _cellWidth, row * _cellHeight, _cellWidth, _cellHeight)
+                _sourceRectangles(column + row * 16) = New Rectangle(cellWidth * column, cellHeight * row, cellWidth, cellHeight)
             Next
         Next
-        ReDim _destinationRectangles(_cellColumns * _cellRows - 1)
-        ReDim _bufferAttributes(_cellColumns * _cellRows - 1)
-        ReDim _bufferCharacters(_cellColumns * _cellRows - 1)
-        For row = 0 To _cellRows - 1
-            For column = 0 To _cellColumns - 1
-                _destinationRectangles(row * _cellColumns + column) = New Rectangle(column * _cellWidth, row * _cellHeight, _cellWidth, _cellHeight)
-                _bufferCharacters(row * _cellColumns + column) = CByte(_random.Next(256))
-                _bufferAttributes(row * _cellColumns + column) = CByte(_random.Next(256))
-            Next
-        Next
-        _frameBuffer = New FrameBuffer(_cellColumns, _cellRows, _bufferCharacters, _bufferAttributes)
     End Sub
     Protected Overrides Sub Initialize()
-        _graphics.PreferredBackBufferWidth = _frameBufferWidth
-        _graphics.PreferredBackBufferHeight = _frameBufferHeight
+        _graphics.PreferredBackBufferWidth = ScreenWidth
+        _graphics.PreferredBackBufferHeight = ScreenHeight
         _graphics.ApplyChanges()
         MyBase.Initialize()
     End Sub
     Protected Overrides Sub Update(gameTime As GameTime)
         MyBase.Update(gameTime)
-        _gameController.Update(_frameBuffer)
     End Sub
     Protected Overrides Sub Draw(gameTime As GameTime)
+        UpdateBackBuffer()
+        _spriteBatch.Begin()
+        _spriteBatch.Draw(_backBuffer, New Rectangle(0, 0, ScreenWidth, ScreenHeight), Color.White)
+        _spriteBatch.End()
         MyBase.Draw(gameTime)
-        _spriteBatch.Begin(samplerState:=SamplerState.PointClamp)
-        For index = 0 To _cellColumns * _cellRows - 1
-            _spriteBatch.Draw(_fillTexture, _destinationRectangles(index), _colors(_bufferAttributes(index) \ 16))
-            _spriteBatch.Draw(_texture, _destinationRectangles(index), _sourceRectangles(_bufferCharacters(index)), _colors(_bufferAttributes(index) And 15))
+    End Sub
+    Private Sub UpdateBackBuffer()
+        GraphicsDevice.SetRenderTarget(_backBuffer)
+        Dim cellWidth = _backBuffer.Width \ _frameBuffer.Columns
+        Dim cellHeight = _backBuffer.Height \ _frameBuffer.Rows
+        _spriteBatch.Begin()
+        For row = 0 To _frameBuffer.Rows - 1
+            For column = 0 To _frameBuffer.Columns - 1
+                Dim cell = _frameBuffer.GetCell(column, row)
+                Dim destinationRect = New Rectangle(cellWidth * column, cellHeight * row, cellWidth, cellHeight)
+                _spriteBatch.Draw(_solidTexture, destinationRect, _colors(cell.BackgroundColor))
+                _spriteBatch.Draw(_fontTexture, destinationRect, _sourceRectangles(Asc(cell.Character) Mod _sourceRectangles.Length), _colors(cell.ForegroundColor))
+            Next
         Next
         _spriteBatch.End()
+        GraphicsDevice.SetRenderTarget(Nothing)
     End Sub
 End Class
