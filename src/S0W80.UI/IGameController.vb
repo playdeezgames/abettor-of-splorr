@@ -1,3 +1,3 @@
 ﻿Public Interface IGameController
-    Sub Update(frameBuffer As IFrameBuffer, ticks As Long)
+    Sub Update(frameBuffer As IFrameBuffer, keyBuffer As IKeyBuffer, ticks As Long)
 End Interface

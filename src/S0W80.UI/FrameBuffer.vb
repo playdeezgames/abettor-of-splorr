@@ -15,7 +15,6 @@
     End Sub
     Public ReadOnly Property Rows As Integer Implements IFrameBuffer.Rows
     Public ReadOnly Property Columns As Integer Implements IFrameBuffer.Columns
-
     Public Property CursorRow As Integer Implements IFrameBuffer.CursorRow
         Get
             Return _cursorRow
@@ -24,7 +23,6 @@
             _cursorRow = Math.Clamp(value, 0, Rows - 1)
         End Set
     End Property
-
     Public Property CursorColumn As Integer Implements IFrameBuffer.CursorColumn
         Get
             Return _cursorColumn
@@ -33,7 +31,6 @@
             _cursorColumn = Math.Clamp(value, 0, Columns - 1)
         End Set
     End Property
-
     Public Property ForegroundColor As Integer Implements IFrameBuffer.ForegroundColor
         Get
             Return _foregroundColor
@@ -42,7 +39,6 @@
             _foregroundColor = value And 15
         End Set
     End Property
-
     Public Property BackgroundColor As Integer Implements IFrameBuffer.BackgroundColor
         Get
             Return _backgroundColor
@@ -51,13 +47,11 @@
             _backgroundColor = value And 15
         End Set
     End Property
-
     Public Sub Write(text As String) Implements IFrameBuffer.Write
         For Each character In text
             Write(character)
         Next
     End Sub
-
     Public Sub Write(character As Char) Implements IFrameBuffer.Write
         With GetCell(CursorColumn, CursorRow)
             .BackgroundColor = BackgroundColor
@@ -75,7 +69,6 @@
         End If
         ScrollBuffer()
     End Sub
-
     Private Sub ScrollBuffer()
         For row = 0 To Rows - 2
             For column = 0 To Columns - 1
@@ -95,14 +88,12 @@
             End With
         Next
     End Sub
-
     Public Sub WriteLine(text As String) Implements IFrameBuffer.WriteLine
         Write(text)
-        While CursorColumn <> 0
+        Do
             Write(" "c)
-        End While
+        Loop Until CursorColumn = 0
     End Sub
-
     Public Function GetCell(column As Integer, row As Integer) As IFrameBufferCell Implements IFrameBuffer.GetCell
         If column < 0 OrElse column >= Columns OrElse row < 0 OrElse row >= Rows Then
             Return Nothing

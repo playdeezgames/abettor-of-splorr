@@ -1,6 +1,7 @@
 ﻿Public Class Host
     Inherits Game
-    Private _gameController As IGameController
+    Private _keyboardState As KeyboardState
+    Private ReadOnly _gameController As IGameController
     Private ReadOnly _graphics As GraphicsDeviceManager
     Private _spriteBatch As SpriteBatch
     Private _backBuffer As RenderTarget2D
@@ -8,6 +9,7 @@
     Private _solidTexture As Texture2D
     Private _fontTexture As Texture2D
     Private ReadOnly _sourceRectangles(256) As Rectangle
+    Private ReadOnly _keyBuffer As IKeyBuffer = New KeyBuffer()
     Private ReadOnly _colors() As Color = {
         New Color(0, 0, 0),
         New Color(0, 0, 170),
@@ -50,14 +52,105 @@
     Protected Overrides Sub Initialize()
         _graphics.PreferredBackBufferWidth = ScreenWidth
         _graphics.PreferredBackBufferHeight = ScreenHeight
-        _graphics.IsFullScreen = True
         _graphics.ApplyChanges()
         MyBase.Initialize()
     End Sub
     Protected Overrides Sub Update(gameTime As GameTime)
         MyBase.Update(gameTime)
-        _gameController.Update(_frameBuffer, gameTime.ElapsedGameTime.Ticks)
+        UpdateKeyState()
+        _gameController.Update(_frameBuffer, _keyBuffer, gameTime.ElapsedGameTime.Ticks)
     End Sub
+
+    Private ReadOnly _letters As IReadOnlyDictionary(Of Boolean, IReadOnlyDictionary(Of Keys, Char)) =
+        New Dictionary(Of Boolean, IReadOnlyDictionary(Of Keys, Char)) From
+        {
+            {
+                False,
+                New Dictionary(Of Keys, Char) From
+                {
+                    {Keys.A, "a"c},
+                    {Keys.B, "b"c},
+                    {Keys.C, "c"c},
+                    {Keys.D, "d"c},
+                    {Keys.E, "e"c},
+                    {Keys.F, "f"c},
+                    {Keys.G, "g"c},
+                    {Keys.H, "h"c},
+                    {Keys.I, "i"c},
+                    {Keys.J, "j"c},
+                    {Keys.K, "k"c},
+                    {Keys.L, "l"c},
+                    {Keys.M, "m"c},
+                    {Keys.N, "n"c},
+                    {Keys.O, "o"c},
+                    {Keys.P, "p"c},
+                    {Keys.Q, "q"c},
+                    {Keys.R, "r"c},
+                    {Keys.S, "s"c},
+                    {Keys.T, "t"c},
+                    {Keys.U, "u"c},
+                    {Keys.V, "v"c},
+                    {Keys.W, "w"c},
+                    {Keys.X, "x"c},
+                    {Keys.Y, "y"c},
+                    {Keys.Z, "z"c}
+                }
+            },
+            {
+                True,
+                New Dictionary(Of Keys, Char) From
+                {
+                    {Keys.A, "A"c},
+                    {Keys.B, "B"c},
+                    {Keys.C, "C"c},
+                    {Keys.D, "E"c},
+                    {Keys.E, "D"c},
+                    {Keys.F, "F"c},
+                    {Keys.G, "G"c},
+                    {Keys.H, "H"c},
+                    {Keys.I, "I"c},
+                    {Keys.J, "J"c},
+                    {Keys.K, "K"c},
+                    {Keys.L, "L"c},
+                    {Keys.M, "M"c},
+                    {Keys.N, "N"c},
+                    {Keys.O, "O"c},
+                    {Keys.P, "P"c},
+                    {Keys.Q, "Q"c},
+                    {Keys.R, "R"c},
+                    {Keys.S, "S"c},
+                    {Keys.T, "T"c},
+                    {Keys.U, "U"c},
+                    {Keys.V, "V"c},
+                    {Keys.W, "W"c},
+                    {Keys.X, "X"c},
+                    {Keys.Y, "Y"c},
+                    {Keys.Z, "Z"c}
+                }
+            }
+        }
+
+    Private Sub UpdateKeyState()
+        Dim keyboardState = Keyboard.GetState()
+        Dim numLock = keyboardState.NumLock
+        Dim shift = (keyboardState.IsKeyDown(Keys.LeftShift) OrElse keyboardState.IsKeyDown(Keys.RightShift)) Xor keyboardState.CapsLock
+        For Each pressedKey In keyboardState.GetPressedKeys().Where(Function(x) _keyboardState.IsKeyUp(x))
+            Select Case pressedKey
+                Case Keys.Back
+                    _keyBuffer.Add(Chr(8))
+                Case Keys.Enter
+                    _keyBuffer.Add(Chr(13))
+                Case Keys.A, Keys.B, Keys.C, Keys.D, Keys.E, Keys.F, Keys.G, Keys.H, Keys.I, Keys.J, Keys.K, Keys.L, Keys.M, Keys.N, Keys.O, Keys.P, Keys.Q, Keys.R, Keys.S, Keys.T, Keys.U, Keys.V, Keys.W, Keys.X, Keys.Y, Keys.Z
+                    _keyBuffer.Add(_letters(shift)(pressedKey))
+                Case Keys.LeftShift, Keys.RightShift, Keys.CapsLock, Keys.NumLock
+                    'ignore!
+                Case Else
+                    _keyBuffer.Add(pressedKey.ToString)
+            End Select
+        Next
+        _keyboardState = keyboardState
+    End Sub
+
     Protected Overrides Sub Draw(gameTime As GameTime)
         UpdateBackBuffer()
         _spriteBatch.Begin()
