@@ -4,12 +4,9 @@ Module Program
     Sub Main(args As String())
         Dim gameController = New GameController
         Dim frameBuffer = New FrameBuffer(ScreenColumns, ScreenRows)
-        With frameBuffer.GetCell(0, 0)
-            .BackgroundColor = 4
-            .ForegroundColor = 0
-            .Character = "H"c
-        End With
-        Using host As New Host(frameBuffer)
+        frameBuffer.ForegroundColor = 0
+        frameBuffer.BackgroundColor = 4
+        Using host As New Host(frameBuffer, gameController)
             host.Run()
         End Using
         'Using host As New OldHost(gameController)

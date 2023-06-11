@@ -1,12 +1,13 @@
 ﻿Public Class Host
     Inherits Game
+    Private _gameController As IGameController
     Private ReadOnly _graphics As GraphicsDeviceManager
     Private _spriteBatch As SpriteBatch
     Private _backBuffer As RenderTarget2D
     Private ReadOnly _frameBuffer As IFrameBuffer
     Private _solidTexture As Texture2D
     Private _fontTexture As Texture2D
-    Private _sourceRectangles(256) As Rectangle
+    Private ReadOnly _sourceRectangles(256) As Rectangle
     Private ReadOnly _colors() As Color = {
         New Color(0, 0, 0),
         New Color(0, 0, 170),
@@ -25,9 +26,10 @@
         New Color(255, 255, 85),
         New Color(255, 255, 255)
     }
-    Sub New(frameBuffer As IFrameBuffer)
+    Sub New(frameBuffer As IFrameBuffer, gameController As IGameController)
         _graphics = New GraphicsDeviceManager(Me)
         _frameBuffer = frameBuffer
+        _gameController = gameController
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub LoadContent()
@@ -48,11 +50,13 @@
     Protected Overrides Sub Initialize()
         _graphics.PreferredBackBufferWidth = ScreenWidth
         _graphics.PreferredBackBufferHeight = ScreenHeight
+        _graphics.IsFullScreen = True
         _graphics.ApplyChanges()
         MyBase.Initialize()
     End Sub
     Protected Overrides Sub Update(gameTime As GameTime)
         MyBase.Update(gameTime)
+        _gameController.Update(_frameBuffer, gameTime.ElapsedGameTime.Ticks)
     End Sub
     Protected Overrides Sub Draw(gameTime As GameTime)
         UpdateBackBuffer()
