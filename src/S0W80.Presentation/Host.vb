@@ -61,7 +61,7 @@
         _gameController.Update(_frameBuffer, _keyBuffer, gameTime.ElapsedGameTime.Ticks)
     End Sub
 
-    Private ReadOnly _letters As IReadOnlyDictionary(Of Boolean, IReadOnlyDictionary(Of Keys, Char)) =
+    Private ReadOnly _characters As IReadOnlyDictionary(Of Boolean, IReadOnlyDictionary(Of Keys, Char)) =
         New Dictionary(Of Boolean, IReadOnlyDictionary(Of Keys, Char)) From
         {
             {
@@ -93,7 +93,28 @@
                     {Keys.W, "w"c},
                     {Keys.X, "x"c},
                     {Keys.Y, "y"c},
-                    {Keys.Z, "z"c}
+                    {Keys.Z, "z"c},
+                    {Keys.D0, "0"c},
+                    {Keys.D1, "1"c},
+                    {Keys.D2, "2"c},
+                    {Keys.D3, "3"c},
+                    {Keys.D4, "4"c},
+                    {Keys.D5, "5"c},
+                    {Keys.D6, "6"c},
+                    {Keys.D7, "7"c},
+                    {Keys.D8, "8"c},
+                    {Keys.D9, "9"c},
+                    {Keys.OemMinus, "-"c},
+                    {Keys.OemPlus, "="c},
+                    {Keys.OemOpenBrackets, "["c},
+                    {Keys.OemCloseBrackets, "]"c},
+                    {Keys.OemPipe, "\"c},
+                    {Keys.OemSemicolon, ";"c},
+                    {Keys.OemQuotes, "'"c},
+                    {Keys.OemComma, ","c},
+                    {Keys.OemPeriod, "."c},
+                    {Keys.OemQuestion, "/"c},
+                    {Keys.OemTilde, "`"c}
                 }
             },
             {
@@ -103,8 +124,8 @@
                     {Keys.A, "A"c},
                     {Keys.B, "B"c},
                     {Keys.C, "C"c},
-                    {Keys.D, "E"c},
-                    {Keys.E, "D"c},
+                    {Keys.D, "D"c},
+                    {Keys.E, "E"c},
                     {Keys.F, "F"c},
                     {Keys.G, "G"c},
                     {Keys.H, "H"c},
@@ -125,23 +146,51 @@
                     {Keys.W, "W"c},
                     {Keys.X, "X"c},
                     {Keys.Y, "Y"c},
-                    {Keys.Z, "Z"c}
+                    {Keys.Z, "Z"c},
+                    {Keys.D0, ")"c},
+                    {Keys.D1, "!"c},
+                    {Keys.D2, "@"c},
+                    {Keys.D3, "#"c},
+                    {Keys.D4, "$"c},
+                    {Keys.D5, "%"c},
+                    {Keys.D6, "^"c},
+                    {Keys.D7, "&"c},
+                    {Keys.D8, "*"c},
+                    {Keys.D9, "("c},
+                    {Keys.OemMinus, "_"c},
+                    {Keys.OemPlus, "+"c},
+                    {Keys.OemOpenBrackets, "{"c},
+                    {Keys.OemCloseBrackets, "}"c},
+                    {Keys.OemPipe, "|"c},
+                    {Keys.OemSemicolon, ":"c},
+                    {Keys.OemQuotes, """"c},
+                    {Keys.OemComma, "<"c},
+                    {Keys.OemPeriod, ">"c},
+                    {Keys.OemQuestion, "?"c},
+                    {Keys.OemTilde, "~"c}
                 }
             }
         }
 
     Private Sub UpdateKeyState()
         Dim keyboardState = Keyboard.GetState()
+        Dim capsLock = keyboardState.CapsLock
         Dim numLock = keyboardState.NumLock
-        Dim shift = (keyboardState.IsKeyDown(Keys.LeftShift) OrElse keyboardState.IsKeyDown(Keys.RightShift)) Xor keyboardState.CapsLock
+        Dim shift = keyboardState.IsKeyDown(Keys.LeftShift) OrElse keyboardState.IsKeyDown(Keys.RightShift)
         For Each pressedKey In keyboardState.GetPressedKeys().Where(Function(x) _keyboardState.IsKeyUp(x))
             Select Case pressedKey
+                Case Keys.Space
+                    _keyBuffer.Add(" "c)
+                Case Keys.Tab
+                    _keyBuffer.Add(Chr(9))
                 Case Keys.Back
                     _keyBuffer.Add(Chr(8))
                 Case Keys.Enter
                     _keyBuffer.Add(Chr(13))
                 Case Keys.A, Keys.B, Keys.C, Keys.D, Keys.E, Keys.F, Keys.G, Keys.H, Keys.I, Keys.J, Keys.K, Keys.L, Keys.M, Keys.N, Keys.O, Keys.P, Keys.Q, Keys.R, Keys.S, Keys.T, Keys.U, Keys.V, Keys.W, Keys.X, Keys.Y, Keys.Z
-                    _keyBuffer.Add(_letters(shift)(pressedKey))
+                    _keyBuffer.Add(_characters(shift Xor capsLock)(pressedKey))
+                Case Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9, Keys.OemMinus, Keys.OemPlus
+                    _keyBuffer.Add(_characters(shift)(pressedKey))
                 Case Keys.LeftShift, Keys.RightShift, Keys.CapsLock, Keys.NumLock
                     'ignore!
                 Case Else
