@@ -1,6 +1,4 @@
-﻿Imports System.Net.Http.Headers
-
-Public Class FrameBuffer
+﻿Public Class FrameBuffer
     Implements IFrameBuffer
     Private ReadOnly _cells As List(Of IFrameBufferCell)
     Private _cursorRow As Integer
@@ -127,4 +125,14 @@ Public Class FrameBuffer
         End If
         Return _cells(column + row * Columns)
     End Function
+
+    Public Sub Clear() Implements IFrameBuffer.Clear
+        For Each cell In _cells
+            With cell
+                .BackgroundColor = BackgroundColor
+                .ForegroundColor = ForegroundColor
+                .Character = " "c
+            End With
+        Next
+    End Sub
 End Class

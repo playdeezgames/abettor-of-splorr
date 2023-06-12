@@ -11,4 +11,5 @@
     Sub Write(chracter As Char)
     Sub Write(text As String)
     Sub WriteLine(text As String)
+    Sub Clear()
 End Interface
