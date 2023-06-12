@@ -32,9 +32,11 @@ Public Class Host
         New Color(255, 255, 85),
         New Color(255, 255, 255)
     }
-    Private _volume As Single
-    Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of String, String)
-    Private ReadOnly _sfx As New Dictionary(Of String, SoundEffect)
+    Private ReadOnly _title As String
+    Sub New(title As String, frameBuffer As IFrameBuffer, engine As IEngine, presenter As IPresenter, Optional scale As Integer = 2, Optional fullScreen As Boolean = False)
+        Private _volume As Single
+        Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of String, String)
+        Private ReadOnly _sfx As New Dictionary(Of String, SoundEffect)
     Sub New(
            frameBuffer As IFrameBuffer,
            engine As IEngine,
@@ -46,6 +48,7 @@ Public Class Host
         _volume = volume
         _sfxFilenames = sfxFilenames
         _graphics = New GraphicsDeviceManager(Me)
+        _title = title
         _frameBuffer = frameBuffer
         _engine = engine
         _scale = scale
@@ -78,6 +81,7 @@ Public Class Host
         _graphics.ApplyChanges()
     End Sub
     Protected Overrides Sub Initialize()
+        Window.Title = _title
         UpdateWindow()
         AddHandler _presenter.OnQuit, AddressOf HandleQuit
         AddHandler _presenter.OnResize, AddressOf HandleResize
