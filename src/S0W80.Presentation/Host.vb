@@ -10,6 +10,7 @@ Public Class Host
     Private ReadOnly _frameBuffer As IFrameBuffer
     Private _solidTexture As Texture2D
     Private _fontTexture As Texture2D
+    Private _scale As Integer
     Private ReadOnly _sourceRectangles(256) As Rectangle
     Private ReadOnly _colors() As Color = {
         New Color(0, 0, 0),
@@ -29,10 +30,11 @@ Public Class Host
         New Color(255, 255, 85),
         New Color(255, 255, 255)
     }
-    Sub New(frameBuffer As IFrameBuffer, gameController As IGameController)
+    Sub New(frameBuffer As IFrameBuffer, gameController As IGameController, Optional scale As Integer = 2)
         _graphics = New GraphicsDeviceManager(Me)
         _frameBuffer = frameBuffer
         _gameController = gameController
+        _scale = scale
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub LoadContent()
@@ -51,8 +53,9 @@ Public Class Host
         Next
     End Sub
     Protected Overrides Sub Initialize()
-        _graphics.PreferredBackBufferWidth = ScreenWidth
-        _graphics.PreferredBackBufferHeight = ScreenHeight
+        _graphics.PreferredBackBufferWidth = ScreenWidth * _scale
+        _graphics.PreferredBackBufferHeight = ScreenHeight * _scale
+        _graphics.IsFullScreen = False
         _graphics.ApplyChanges()
         MyBase.Initialize()
     End Sub
@@ -204,8 +207,8 @@ Public Class Host
 
     Protected Overrides Sub Draw(gameTime As GameTime)
         UpdateBackBuffer()
-        _spriteBatch.Begin()
-        _spriteBatch.Draw(_backBuffer, New Rectangle(0, 0, ScreenWidth, ScreenHeight), Color.White)
+        _spriteBatch.Begin(samplerState:=SamplerState.PointClamp)
+        _spriteBatch.Draw(_backBuffer, New Rectangle(0, 0, ScreenWidth * _scale, ScreenHeight * _scale), Color.White)
         _spriteBatch.End()
         MyBase.Draw(gameTime)
     End Sub
