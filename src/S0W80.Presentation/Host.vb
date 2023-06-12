@@ -32,7 +32,7 @@ Public Class Host
         New Color(255, 255, 85),
         New Color(255, 255, 255)
     }
-    Sub New(frameBuffer As IFrameBuffer, engine As IEngine, presenter As IPresenter, Optional scale As Integer = 2, Optional fullScreen As Boolean = False)
+    Sub New(frameBuffer As IFrameBuffer, engine As IEngine, presenter As IPresenter, Optional scale As Integer = 1, Optional fullScreen As Boolean = False)
         _graphics = New GraphicsDeviceManager(Me)
         _frameBuffer = frameBuffer
         _engine = engine
@@ -65,11 +65,12 @@ Public Class Host
     Protected Overrides Sub Initialize()
         UpdateWindow()
         AddHandler _presenter.Quit, AddressOf HandleQuit
-        AddHandler _presenter.FullScreen, AddressOf HandleFullScreen
+        AddHandler _presenter.Resize, AddressOf HandleFullScreen
         MyBase.Initialize()
     End Sub
 
-    Private Sub HandleFullScreen(flag As Boolean)
+    Private Sub HandleFullScreen(scale As Integer, flag As Boolean)
+        _scale = scale
         _fullScreen = flag
         UpdateWindow()
     End Sub

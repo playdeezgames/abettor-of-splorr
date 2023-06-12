@@ -1,4 +1,4 @@
 ﻿Public Interface IPresenter
     Event Quit()
-    Event FullScreen(flag As Boolean)
+    Event Resize(scale As Integer, flag As Boolean)
 End Interface
