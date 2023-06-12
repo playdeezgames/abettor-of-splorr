@@ -1,8 +1,6 @@
-Imports S0W80.Application
-
 Module Program
     Sub Main(args As String())
-        Dim frameBuffer = New FrameBuffer(ScreenColumns, ScreenRows)
+        Dim frameBuffer = New FrameBuffer(ScreenColumns, ScreenRows, 4)
         Dim gameController = New GameController(frameBuffer)
         Using host As New Host(frameBuffer, gameController)
             host.Run()
