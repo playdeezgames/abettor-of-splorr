@@ -1,11 +1,12 @@
-Public Class GameController
-    Implements IGameController
+Public Class Engine
+    Inherits BasePresenter
+    Implements IEngine
     Private ReadOnly _frameBuffer As IFrameBuffer
     Private _lineBuffer As String = String.Empty
     Sub New(frameBuffer As IFrameBuffer)
         _frameBuffer = frameBuffer
     End Sub
-    Public Sub Update(commands As IEnumerable(Of String), ticks As Long) Implements IGameController.Update
+    Public Sub Update(commands As IEnumerable(Of String), ticks As Long) Implements IEngine.Update
         For Each command In commands
             If command.Length = 1 Then
                 Select Case command
@@ -27,9 +28,9 @@ Public Class GameController
     End Sub
 
     Private Sub DoStuff(lineBuffer As String)
-        Dim oldColor = _frameBuffer.ForegroundColor
-        _frameBuffer.ForegroundColor = 15
-        _frameBuffer.WriteLine(lineBuffer)
-        _frameBuffer.ForegroundColor = oldColor
+        Select Case lineBuffer.ToLowerInvariant()
+            Case QuitText
+                DoQuit()
+        End Select
     End Sub
 End Class

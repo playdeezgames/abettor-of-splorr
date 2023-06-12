@@ -3,7 +3,8 @@
 Public Class Host
     Inherits Game
     Private _keyboardState As KeyboardState
-    Private ReadOnly _gameController As IGameController
+    Private ReadOnly _engine As IEngine
+    Private ReadOnly _presenter As IPresenter
     Private ReadOnly _graphics As GraphicsDeviceManager
     Private _spriteBatch As SpriteBatch
     Private _backBuffer As RenderTarget2D
@@ -30,11 +31,12 @@ Public Class Host
         New Color(255, 255, 85),
         New Color(255, 255, 255)
     }
-    Sub New(frameBuffer As IFrameBuffer, gameController As IGameController, Optional scale As Integer = 2)
+    Sub New(frameBuffer As IFrameBuffer, engine As IEngine, presenter As IPresenter, Optional scale As Integer = 2)
         _graphics = New GraphicsDeviceManager(Me)
         _frameBuffer = frameBuffer
-        _gameController = gameController
+        _engine = engine
         _scale = scale
+        _presenter = presenter
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub LoadContent()
@@ -57,11 +59,17 @@ Public Class Host
         _graphics.PreferredBackBufferHeight = ScreenHeight * _scale
         _graphics.IsFullScreen = False
         _graphics.ApplyChanges()
+        AddHandler _presenter.Quit, AddressOf HandleQuit
         MyBase.Initialize()
     End Sub
+
+    Private Sub HandleQuit()
+        Me.Exit()
+    End Sub
+
     Protected Overrides Sub Update(gameTime As GameTime)
         MyBase.Update(gameTime)
-        _gameController.Update(UpdateKeyState(), gameTime.ElapsedGameTime.Ticks)
+        _engine.Update(UpdateKeyState(), gameTime.ElapsedGameTime.Ticks)
     End Sub
 
     Private ReadOnly _characters As IReadOnlyDictionary(Of Boolean, IReadOnlyDictionary(Of Keys, Char)) =
