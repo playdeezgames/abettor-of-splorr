@@ -6,7 +6,11 @@ Public Class Engine
     Private _fullScreen As Boolean
     Private _scale As Integer
     Private _volume As Single
-    Sub New(frameBuffer As IFrameBuffer, scale As Integer, fullScreen As Boolean, volume As Single)
+    Sub New(
+           frameBuffer As IFrameBuffer,
+           scale As Integer,
+           fullScreen As Boolean,
+           volume As Single)
         _frameBuffer = frameBuffer
         _fullScreen = fullScreen
         _scale = scale
