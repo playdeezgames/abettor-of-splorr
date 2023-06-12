@@ -1,7 +1,7 @@
 Module Program
     Sub Main(args As String())
         Dim frameBuffer = New FrameBuffer(ScreenColumns, ScreenRows, 4)
-        Dim engine = New Engine(frameBuffer)
+        Dim engine = New Engine(frameBuffer, False)
         Using host As New Host(frameBuffer, engine, engine)
             host.Run()
         End Using

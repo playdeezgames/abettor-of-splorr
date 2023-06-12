@@ -12,6 +12,7 @@ Public Class Host
     Private _solidTexture As Texture2D
     Private _fontTexture As Texture2D
     Private _scale As Integer
+    Private _fullScreen As Boolean
     Private ReadOnly _sourceRectangles(256) As Rectangle
     Private ReadOnly _colors() As Color = {
         New Color(0, 0, 0),
@@ -31,11 +32,12 @@ Public Class Host
         New Color(255, 255, 85),
         New Color(255, 255, 255)
     }
-    Sub New(frameBuffer As IFrameBuffer, engine As IEngine, presenter As IPresenter, Optional scale As Integer = 2)
+    Sub New(frameBuffer As IFrameBuffer, engine As IEngine, presenter As IPresenter, Optional scale As Integer = 2, Optional fullScreen As Boolean = False)
         _graphics = New GraphicsDeviceManager(Me)
         _frameBuffer = frameBuffer
         _engine = engine
         _scale = scale
+        _fullScreen = fullScreen
         _presenter = presenter
         Content.RootDirectory = "Content"
     End Sub
@@ -54,13 +56,22 @@ Public Class Host
             Next
         Next
     End Sub
-    Protected Overrides Sub Initialize()
+    Private Sub UpdateWindow()
         _graphics.PreferredBackBufferWidth = ScreenWidth * _scale
         _graphics.PreferredBackBufferHeight = ScreenHeight * _scale
-        _graphics.IsFullScreen = False
+        _graphics.IsFullScreen = _fullScreen
         _graphics.ApplyChanges()
+    End Sub
+    Protected Overrides Sub Initialize()
+        UpdateWindow()
         AddHandler _presenter.Quit, AddressOf HandleQuit
+        AddHandler _presenter.FullScreen, AddressOf HandleFullScreen
         MyBase.Initialize()
+    End Sub
+
+    Private Sub HandleFullScreen(flag As Boolean)
+        _fullScreen = flag
+        UpdateWindow()
     End Sub
 
     Private Sub HandleQuit()

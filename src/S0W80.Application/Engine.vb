@@ -3,8 +3,10 @@ Public Class Engine
     Implements IEngine
     Private ReadOnly _frameBuffer As IFrameBuffer
     Private _lineBuffer As String = String.Empty
-    Sub New(frameBuffer As IFrameBuffer)
+    Private _fullScreen As Boolean
+    Sub New(frameBuffer As IFrameBuffer, fullScreen As Boolean)
         _frameBuffer = frameBuffer
+        _fullScreen = fullScreen
     End Sub
     Public Sub Update(commands As IEnumerable(Of String), ticks As Long) Implements IEngine.Update
         For Each command In commands
@@ -31,6 +33,9 @@ Public Class Engine
         Select Case lineBuffer.ToLowerInvariant()
             Case QuitText
                 DoQuit()
+            Case FullSceenText
+                _fullScreen = Not _fullScreen
+                DoFullScreen(_fullScreen)
         End Select
     End Sub
 End Class
