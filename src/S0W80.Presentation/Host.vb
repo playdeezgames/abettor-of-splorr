@@ -32,7 +32,19 @@ Public Class Host
         New Color(255, 255, 85),
         New Color(255, 255, 255)
     }
-    Sub New(frameBuffer As IFrameBuffer, engine As IEngine, presenter As IPresenter, Optional scale As Integer = 1, Optional fullScreen As Boolean = False)
+    Private _volume As Single
+    Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of String, String)
+    Private ReadOnly _sfx As New Dictionary(Of String, SoundEffect)
+    Sub New(
+           frameBuffer As IFrameBuffer,
+           engine As IEngine,
+           presenter As IPresenter,
+           scale As Integer,
+           fullScreen As Boolean,
+           volume As Single,
+           sfxFilenames As IReadOnlyDictionary(Of String, String))
+        _volume = volume
+        _sfxFilenames = sfxFilenames
         _graphics = New GraphicsDeviceManager(Me)
         _frameBuffer = frameBuffer
         _engine = engine
@@ -55,6 +67,9 @@ Public Class Host
                 _sourceRectangles(column + row * 16) = New Rectangle(cellWidth * column, cellHeight * row, cellWidth, cellHeight)
             Next
         Next
+        For Each entry In _sfxFilenames
+            _sfx(entry.Key) = SoundEffect.FromFile(entry.Value)
+        Next
     End Sub
     Private Sub UpdateWindow()
         _graphics.PreferredBackBufferWidth = ScreenWidth * _scale
@@ -64,12 +79,24 @@ Public Class Host
     End Sub
     Protected Overrides Sub Initialize()
         UpdateWindow()
-        AddHandler _presenter.Quit, AddressOf HandleQuit
-        AddHandler _presenter.Resize, AddressOf HandleFullScreen
+        AddHandler _presenter.OnQuit, AddressOf HandleQuit
+        AddHandler _presenter.OnResize, AddressOf HandleResize
+        AddHandler _presenter.OnVolume, AddressOf HandleVolume
+        AddHandler _presenter.OnSfx, AddressOf HandleSfx
         MyBase.Initialize()
     End Sub
 
-    Private Sub HandleFullScreen(scale As Integer, flag As Boolean)
+    Private Sub HandleSfx(sfx As String)
+        If _volume > 0.0F AndAlso _sfx.ContainsKey(sfx) Then
+            _sfx(sfx).Play(_volume, 0.0F, 0.0F)
+        End If
+    End Sub
+
+    Private Sub HandleVolume(volume As Single)
+        _volume = volume
+    End Sub
+
+    Private Sub HandleResize(scale As Integer, flag As Boolean)
         _scale = scale
         _fullScreen = flag
         UpdateWindow()

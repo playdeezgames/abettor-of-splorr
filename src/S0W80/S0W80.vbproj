@@ -17,6 +17,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="RollDice.wav" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="RollDice.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\S0W80.Application\S0W80.Application.vbproj" />
     <ProjectReference Include="..\S0W80.Presentation\S0W80.Presentation.vbproj" />
   </ItemGroup>
