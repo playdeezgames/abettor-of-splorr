@@ -1,13 +1,21 @@
-﻿Public Class FrameBuffer
+﻿Imports System.Net.Http.Headers
+
+Public Class FrameBuffer
     Implements IFrameBuffer
     Private ReadOnly _cells As List(Of IFrameBufferCell)
     Private _cursorRow As Integer
     Private _cursorColumn As Integer
     Private _foregroundColor As Integer
     Private _backgroundColor As Integer
-    Sub New(columns As Integer, rows As Integer)
+    Private _cursorStart As Integer
+    Private _cursorEnd As Integer
+    Sub New(columns As Integer, rows As Integer, Optional foregroundColor As Integer = 7, Optional backgroundColor As Integer = 0, Optional cursorStart As Integer = 14, Optional cursorEnd As Integer = 15)
         Me.Columns = columns
         Me.Rows = rows
+        Me.ForegroundColor = foregroundColor
+        Me.BackgroundColor = backgroundColor
+        Me.CursorStart = cursorStart
+        Me.CursorEnd = cursorEnd
         _cells = New List(Of IFrameBufferCell)
         While _cells.Count < columns * rows
             _cells.Add(New FrameBufferCell)
@@ -47,6 +55,25 @@
             _backgroundColor = value And 15
         End Set
     End Property
+
+    Public Property CursorStart As Integer Implements IFrameBuffer.CursorStart
+        Get
+            Return _cursorStart
+        End Get
+        Set(value As Integer)
+            _cursorStart = Math.Clamp(value, 0, 15)
+        End Set
+    End Property
+
+    Public Property CursorEnd As Integer Implements IFrameBuffer.CursorEnd
+        Get
+            Return _cursorEnd
+        End Get
+        Set(value As Integer)
+            _cursorEnd = Math.Clamp(value, 0, 15)
+        End Set
+    End Property
+
     Public Sub Write(text As String) Implements IFrameBuffer.Write
         For Each character In text
             Write(character)

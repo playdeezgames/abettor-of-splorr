@@ -1,4 +1,6 @@
-﻿Public Class Host
+﻿Imports System.Data.Common
+
+Public Class Host
     Inherits Game
     Private _keyboardState As KeyboardState
     Private ReadOnly _gameController As IGameController
@@ -58,7 +60,7 @@
     Protected Overrides Sub Update(gameTime As GameTime)
         MyBase.Update(gameTime)
         UpdateKeyState()
-        _gameController.Update(_frameBuffer, _keyBuffer, gameTime.ElapsedGameTime.Ticks)
+        _gameController.Update(_keyBuffer, gameTime.ElapsedGameTime.Ticks)
     End Sub
 
     Private ReadOnly _characters As IReadOnlyDictionary(Of Boolean, IReadOnlyDictionary(Of Keys, Char)) =
@@ -189,7 +191,7 @@
                     _keyBuffer.Add(Chr(13))
                 Case Keys.A, Keys.B, Keys.C, Keys.D, Keys.E, Keys.F, Keys.G, Keys.H, Keys.I, Keys.J, Keys.K, Keys.L, Keys.M, Keys.N, Keys.O, Keys.P, Keys.Q, Keys.R, Keys.S, Keys.T, Keys.U, Keys.V, Keys.W, Keys.X, Keys.Y, Keys.Z
                     _keyBuffer.Add(_characters(shift Xor capsLock)(pressedKey))
-                Case Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9, Keys.OemMinus, Keys.OemPlus
+                Case Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9, Keys.OemMinus, Keys.OemPlus, Keys.OemOpenBrackets, Keys.OemCloseBrackets, Keys.OemPipe, Keys.OemSemicolon, Keys.OemQuotes, Keys.OemComma, Keys.OemPeriod, Keys.OemQuestion, Keys.OemTilde
                     _keyBuffer.Add(_characters(shift)(pressedKey))
                 Case Keys.LeftShift, Keys.RightShift, Keys.CapsLock, Keys.NumLock
                     'ignore!
@@ -220,6 +222,10 @@
                 _spriteBatch.Draw(_fontTexture, destinationRect, _sourceRectangles(Asc(cell.Character) Mod _sourceRectangles.Length), _colors(cell.ForegroundColor))
             Next
         Next
+        If _frameBuffer.CursorStart <= _frameBuffer.CursorEnd Then
+            Dim destinationRect = New Rectangle(cellWidth * _frameBuffer.CursorColumn, cellHeight * _frameBuffer.CursorRow + _frameBuffer.CursorStart, cellWidth, _frameBuffer.CursorEnd - _frameBuffer.CursorStart + 1)
+            _spriteBatch.Draw(_solidTexture, destinationRect, _colors(_frameBuffer.ForegroundColor))
+        End If
         _spriteBatch.End()
         GraphicsDevice.SetRenderTarget(Nothing)
     End Sub

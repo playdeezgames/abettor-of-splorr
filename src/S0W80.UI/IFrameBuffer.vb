@@ -6,6 +6,8 @@
     Property CursorColumn As Integer
     Property ForegroundColor As Integer
     Property BackgroundColor As Integer
+    Property CursorStart As Integer
+    Property CursorEnd As Integer
     Sub Write(chracter As Char)
     Sub Write(text As String)
     Sub WriteLine(text As String)
