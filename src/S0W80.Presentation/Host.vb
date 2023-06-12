@@ -1,6 +1,4 @@
-﻿Imports System.Data.Common
-
-Public Class Host
+﻿Public Class Host
     Inherits Game
     Private _keyboardState As KeyboardState
     Private ReadOnly _engine As IEngine
@@ -35,7 +33,7 @@ Public Class Host
     Private ReadOnly _title As String
     Private _volume As Single
     Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of String, String)
-        Private ReadOnly _sfx As New Dictionary(Of String, SoundEffect)
+    Private ReadOnly _sfx As New Dictionary(Of String, SoundEffect)
     Sub New(
            title As String,
            frameBuffer As IFrameBuffer,
