@@ -32,8 +32,10 @@ Public Class Host
         New Color(255, 255, 85),
         New Color(255, 255, 255)
     }
-    Sub New(frameBuffer As IFrameBuffer, engine As IEngine, presenter As IPresenter, Optional scale As Integer = 2, Optional fullScreen As Boolean = False)
+    Private ReadOnly _title As String
+    Sub New(title As String, frameBuffer As IFrameBuffer, engine As IEngine, presenter As IPresenter, Optional scale As Integer = 2, Optional fullScreen As Boolean = False)
         _graphics = New GraphicsDeviceManager(Me)
+        _title = title
         _frameBuffer = frameBuffer
         _engine = engine
         _scale = scale
@@ -63,6 +65,7 @@ Public Class Host
         _graphics.ApplyChanges()
     End Sub
     Protected Overrides Sub Initialize()
+        Window.Title = _title
         UpdateWindow()
         AddHandler _presenter.Quit, AddressOf HandleQuit
         AddHandler _presenter.FullScreen, AddressOf HandleFullScreen
