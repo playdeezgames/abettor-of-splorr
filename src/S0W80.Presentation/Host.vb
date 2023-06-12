@@ -11,7 +11,6 @@ Public Class Host
     Private _solidTexture As Texture2D
     Private _fontTexture As Texture2D
     Private ReadOnly _sourceRectangles(256) As Rectangle
-    Private ReadOnly _keyBuffer As IKeyBuffer = New KeyBuffer()
     Private ReadOnly _colors() As Color = {
         New Color(0, 0, 0),
         New Color(0, 0, 170),
@@ -59,8 +58,7 @@ Public Class Host
     End Sub
     Protected Overrides Sub Update(gameTime As GameTime)
         MyBase.Update(gameTime)
-        UpdateKeyState()
-        _gameController.Update(_keyBuffer, gameTime.ElapsedGameTime.Ticks)
+        _gameController.Update(UpdateKeyState(), gameTime.ElapsedGameTime.Ticks)
     End Sub
 
     Private ReadOnly _characters As IReadOnlyDictionary(Of Boolean, IReadOnlyDictionary(Of Keys, Char)) =
@@ -174,7 +172,8 @@ Public Class Host
             }
         }
 
-    Private Sub UpdateKeyState()
+    Private Function UpdateKeyState() As IEnumerable(Of String)
+        Dim result As New List(Of String)
         Dim keyboardState = Keyboard.GetState()
         Dim capsLock = keyboardState.CapsLock
         Dim numLock = keyboardState.NumLock
@@ -182,25 +181,26 @@ Public Class Host
         For Each pressedKey In keyboardState.GetPressedKeys().Where(Function(x) _keyboardState.IsKeyUp(x))
             Select Case pressedKey
                 Case Keys.Space
-                    _keyBuffer.Add(" "c)
+                    result.Add(" "c)
                 Case Keys.Tab
-                    _keyBuffer.Add(Chr(9))
+                    result.Add(Chr(9))
                 Case Keys.Back
-                    _keyBuffer.Add(Chr(8))
+                    result.Add(Chr(8))
                 Case Keys.Enter
-                    _keyBuffer.Add(Chr(13))
+                    result.Add(Chr(13))
                 Case Keys.A, Keys.B, Keys.C, Keys.D, Keys.E, Keys.F, Keys.G, Keys.H, Keys.I, Keys.J, Keys.K, Keys.L, Keys.M, Keys.N, Keys.O, Keys.P, Keys.Q, Keys.R, Keys.S, Keys.T, Keys.U, Keys.V, Keys.W, Keys.X, Keys.Y, Keys.Z
-                    _keyBuffer.Add(_characters(shift Xor capsLock)(pressedKey))
+                    result.Add(_characters(shift Xor capsLock)(pressedKey))
                 Case Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9, Keys.OemMinus, Keys.OemPlus, Keys.OemOpenBrackets, Keys.OemCloseBrackets, Keys.OemPipe, Keys.OemSemicolon, Keys.OemQuotes, Keys.OemComma, Keys.OemPeriod, Keys.OemQuestion, Keys.OemTilde
-                    _keyBuffer.Add(_characters(shift)(pressedKey))
+                    result.Add(_characters(shift)(pressedKey))
                 Case Keys.LeftShift, Keys.RightShift, Keys.CapsLock, Keys.NumLock
                     'ignore!
                 Case Else
-                    _keyBuffer.Add(pressedKey.ToString)
+                    result.Add(pressedKey.ToString)
             End Select
         Next
         _keyboardState = keyboardState
-    End Sub
+        Return result
+    End Function
 
     Protected Overrides Sub Draw(gameTime As GameTime)
         UpdateBackBuffer()

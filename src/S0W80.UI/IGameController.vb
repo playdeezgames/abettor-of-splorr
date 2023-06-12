@@ -1,3 +1,3 @@
 ﻿Public Interface IGameController
-    Sub Update(keyBuffer As IKeyBuffer, ticks As Long)
+    Sub Update(commands As IEnumerable(Of String), ticks As Long)
 End Interface

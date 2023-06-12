@@ -4,10 +4,8 @@ Public Class GameController
     Sub New(frameBuffer As IFrameBuffer)
         _frameBuffer = frameBuffer
     End Sub
-
-    Public Sub Update(keyBuffer As IKeyBuffer, ticks As Long) Implements IGameController.Update
-        While keyBuffer.HasAny
-            Dim command = keyBuffer.ReadNext()
+    Public Sub Update(commands As IEnumerable(Of String), ticks As Long) Implements IGameController.Update
+        For Each command In commands
             If command.Length = 1 Then
                 Select Case command
                     Case ChrW(8)
@@ -20,6 +18,6 @@ Public Class GameController
                         _frameBuffer.Write(command)
                 End Select
             End If
-        End While
+        Next
     End Sub
 End Class
