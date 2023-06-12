@@ -3,6 +3,7 @@ Module Program
         Dim frameBuffer = New FrameBuffer(ScreenColumns, ScreenRows)
         Dim engine = New Engine(frameBuffer, 1, False, 0.0F)
         Using host As New Host(
+            "This is a title!",
             frameBuffer,
             engine,
             engine,
