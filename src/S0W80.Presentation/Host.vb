@@ -85,6 +85,7 @@
         AddHandler _presenter.OnResize, AddressOf HandleResize
         AddHandler _presenter.OnVolume, AddressOf HandleVolume
         AddHandler _presenter.OnSfx, AddressOf HandleSfx
+        _engine.Initialize()
         MyBase.Initialize()
     End Sub
 

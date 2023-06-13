@@ -113,7 +113,7 @@
             End With
         Next
     End Sub
-    Public Sub WriteLine(text As String) Implements IFrameBuffer.WriteLine
+    Public Sub WriteLine(Optional text As String = "") Implements IFrameBuffer.WriteLine
         Write(text)
         Do
             Write(" "c)
