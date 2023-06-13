@@ -224,7 +224,40 @@
                 }
             }
         }
-
+    Private ReadOnly _numpadCharacters As IReadOnlyDictionary(Of Boolean, IReadOnlyDictionary(Of Keys, String)) =
+        New Dictionary(Of Boolean, IReadOnlyDictionary(Of Keys, String)) From
+        {
+            {
+                False,
+                New Dictionary(Of Keys, String) From
+                {
+                    {Keys.NumPad0, Keys.Insert.ToString},
+                    {Keys.NumPad1, Keys.End.ToString},
+                    {Keys.NumPad2, Keys.Down.ToString},
+                    {Keys.NumPad3, Keys.PageDown.ToString},
+                    {Keys.NumPad4, Keys.Left.ToString},
+                    {Keys.NumPad6, Keys.Right.ToString},
+                    {Keys.NumPad7, Keys.Home.ToString},
+                    {Keys.NumPad8, Keys.Up.ToString},
+                    {Keys.NumPad9, Keys.PageUp.ToString}
+                }
+            },
+            {
+                True,
+                New Dictionary(Of Keys, String) From
+                {
+                    {Keys.NumPad0, "0"},
+                    {Keys.NumPad1, "1"},
+                    {Keys.NumPad2, "2"},
+                    {Keys.NumPad3, "3"},
+                    {Keys.NumPad4, "4"},
+                    {Keys.NumPad6, "6"},
+                    {Keys.NumPad7, "7"},
+                    {Keys.NumPad8, "8"},
+                    {Keys.NumPad9, "9"}
+                }
+            }
+        }
     Private Function UpdateKeyState() As IEnumerable(Of String)
         Dim result As New List(Of String)
         Dim keyboardState = Keyboard.GetState()
@@ -247,6 +280,12 @@
                     result.Add(_characters(shift)(pressedKey))
                 Case Keys.LeftShift, Keys.RightShift, Keys.CapsLock, Keys.NumLock
                     'ignore!
+                Case Keys.NumPad0, Keys.NumPad1, Keys.NumPad2, Keys.NumPad3, Keys.NumPad4, Keys.NumPad6, Keys.NumPad7, Keys.NumPad8, Keys.NumPad9
+                    result.Add(_numpadCharacters(numLock)(pressedKey))
+                Case Keys.NumPad5
+                    If numLock Then
+                        result.Add("5")
+                    End If
                 Case Else
                     result.Add(pressedKey.ToString)
             End Select
