@@ -89,7 +89,7 @@
         MyBase.Initialize()
     End Sub
 
-    Private Sub HandleSfx(sfx As String)
+    Public Sub HandleSfx(sfx As String)
         If _volume > 0.0F AndAlso _sfx.ContainsKey(sfx) Then
             _sfx(sfx).Play(_volume, 0.0F, 0.0F)
         End If

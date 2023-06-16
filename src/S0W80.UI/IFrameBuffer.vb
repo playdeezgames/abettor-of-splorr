@@ -8,8 +8,8 @@
     Property BackgroundColor As Integer
     Property CursorStart As Integer
     Property CursorEnd As Integer
-    Sub Write(chracter As Char)
-    Sub Write(text As String)
-    Sub WriteLine(Optional text As String = "")
+    Sub Write(character As Char, Optional foreground As Integer? = Nothing, Optional background As Integer? = Nothing)
+    Sub Write(text As String, Optional foreground As Integer? = Nothing, Optional background As Integer? = Nothing)
+    Sub WriteLine(Optional text As String = "", Optional foreground As Integer? = Nothing, Optional background As Integer? = Nothing)
     Sub Clear()
 End Interface

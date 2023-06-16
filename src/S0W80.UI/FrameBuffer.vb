@@ -72,12 +72,14 @@
         End Set
     End Property
 
-    Public Sub Write(text As String) Implements IFrameBuffer.Write
+    Public Sub Write(text As String, Optional foreground As Integer? = Nothing, Optional background As Integer? = Nothing) Implements IFrameBuffer.Write
         For Each character In text
-            Write(character)
+            Write(character, foreground, background)
         Next
     End Sub
-    Public Sub Write(character As Char) Implements IFrameBuffer.Write
+    Public Sub Write(character As Char, Optional foreground As Integer? = Nothing, Optional background As Integer? = Nothing) Implements IFrameBuffer.Write
+        ForegroundColor = If(foreground, ForegroundColor)
+        BackgroundColor = If(background, BackgroundColor)
         With GetCell(CursorColumn, CursorRow)
             .BackgroundColor = BackgroundColor
             .ForegroundColor = ForegroundColor
@@ -113,8 +115,10 @@
             End With
         Next
     End Sub
-    Public Sub WriteLine(Optional text As String = "") Implements IFrameBuffer.WriteLine
-        Write(text)
+    Public Sub WriteLine(Optional text As String = "", Optional foreground As Integer? = Nothing, Optional background As Integer? = Nothing) Implements IFrameBuffer.WriteLine
+        ForegroundColor = If(foreground, ForegroundColor)
+        BackgroundColor = If(background, BackgroundColor)
+        Write(text, foreground, background)
         Do
             Write(" "c)
         Loop Until CursorColumn = 0
