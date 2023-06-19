@@ -1,4 +1,4 @@
-﻿Public Class Sprite(Of THue)
+﻿Public Class Sprite(Of THue As Structure)
     Inherits OffscreenBuffer(Of THue)
     Public ReadOnly Property Width As Integer
     Public ReadOnly Property Height As Integer

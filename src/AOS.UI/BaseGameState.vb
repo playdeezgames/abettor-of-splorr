@@ -1,4 +1,4 @@
-﻿Public MustInherit Class BaseGameState(Of THue, TCommand, TSfx, TState As Structure)
+﻿Public MustInherit Class BaseGameState(Of THue As Structure, TCommand, TSfx, TState As Structure)
     Implements IGameController(Of THue, TCommand, TSfx)
 
     Protected ReadOnly Property Parent As IGameController(Of THue, TCommand, TSfx)

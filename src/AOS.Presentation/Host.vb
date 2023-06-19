@@ -1,4 +1,4 @@
-Public Class Host(Of THue, TCommand As Structure, TSfx As Structure)
+Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure)
     Inherits Game
     Private ReadOnly _controller As IGameController(Of THue, TCommand, TSfx)
 
