@@ -10,10 +10,8 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
     Private _spriteBatch As SpriteBatch
     Private _displayBuffer As IDisplayBuffer(Of THue)
 
-    Private ReadOnly _commandTransform As Func(Of Keys, TCommand?)
-    Private _keyboardState As KeyboardState
-    Private ReadOnly _gamePadTransform As Func(Of GamePadState, GamePadState, TCommand())
-    Private _gamePadState As GamePadState
+    Private ReadOnly _keyboardTransform As Func(Of KeyboardState, TCommand())
+    Private ReadOnly _gamePadTransform As Func(Of GamePadState, TCommand())
 
     Private ReadOnly _sfxSoundEffects As New Dictionary(Of TSfx, SoundEffect)
     Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of TSfx, String)
@@ -23,16 +21,16 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
            controller As IGameController(Of THue, TCommand, TSfx),
            viewSize As (Integer, Integer),
            bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue)),
-           commandTransform As Func(Of Keys, TCommand?),
-           gamePadTransform As Func(Of GamePadState, GamePadState, TCommand()),
+           keyboardTransform As Func(Of KeyboardState, TCommand()),
+           gamePadTransform As Func(Of GamePadState, TCommand()),
            sfxFileNames As IReadOnlyDictionary(Of TSfx, String))
         _title = title
         _graphics = New GraphicsDeviceManager(Me)
         _controller = controller
         _viewSize = viewSize
         _bufferCreator = bufferCreator
-        _commandTransform = commandTransform
         _gamePadTransform = gamePadTransform
+        _keyboardTransform = keyboardTransform
         _sfxFilenames = sfxFileNames
         Content.RootDirectory = "Content"
     End Sub
@@ -40,8 +38,6 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
         _controller.SetSizeHook(AddressOf OnWindowSizeChange)
         Window.Title = _title
         OnWindowSizeChange(_controller.Size, _controller.FullScreen)
-        _keyboardState = Keyboard.GetState
-        _gamePadState = GamePad.GetState(PlayerIndex.One)
         For Each entry In _sfxFilenames
             _sfxSoundEffects(entry.Key) = SoundEffect.FromFile(entry.Value)
         Next
@@ -84,23 +80,17 @@ Public Class Host(Of THue As Structure, TCommand As Structure, TSfx As Structure
     Private Sub UpdateGamePadState()
         Dim newState = GamePad.GetState(PlayerIndex.One)
         If newState.IsConnected Then
-            For Each cmd In _gamePadTransform(newState, _gamePadState)
+            For Each cmd In _gamePadTransform(newState)
                 _controller.HandleCommand(cmd)
             Next
         End If
-        _gamePadState = newState
     End Sub
 
     Private Sub UpdateKeyboardState()
         Dim newState = Keyboard.GetState()
-        Dim keysPressed = newState.GetPressedKeys().Where(Function(k) _keyboardState.IsKeyUp(k)).ToArray
-        For Each keyPressed In keysPressed
-            Dim command = _commandTransform(keyPressed)
-            If command.HasValue Then
-                _controller.HandleCommand(command.Value)
-            End If
+        For Each cmd In _keyboardTransform(newState)
+            _controller.HandleCommand(cmd)
         Next
-        _keyboardState = newState
     End Sub
     Const Zero = 0
     Protected Overrides Sub Draw(gameTime As GameTime)
