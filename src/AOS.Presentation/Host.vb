@@ -1,17 +1,14 @@
 Public Class Host
     Inherits Game
     Private ReadOnly _controller As IGameController
-
     Private ReadOnly _viewSize As (Integer, Integer)
-
     Private ReadOnly _graphics As GraphicsDeviceManager
     Private ReadOnly _hueTable As IReadOnlyDictionary(Of Integer, Color)
     Private _texture As Texture2D
     Private _spriteBatch As SpriteBatch
     Private _displayBuffer As IDisplayBuffer
-
     Private ReadOnly _commandTransform As Func(Of KeyboardState, GamePadState, String())
-
+    Private ReadOnly _commandTable As IReadOnlyDictionary(Of String, Func(Of KeyboardState, GamePadState, Boolean))
     Private ReadOnly _sfxSoundEffects As New Dictionary(Of String, SoundEffect)
     Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of String, String)
     Private ReadOnly _title As String
@@ -21,12 +18,14 @@ Public Class Host
            viewSize As (Integer, Integer),
            hueTable As IReadOnlyDictionary(Of Integer, Color),
            commandTransform As Func(Of KeyboardState, GamePadState, String()),
+           commandTable As IReadOnlyDictionary(Of String, Func(Of KeyboardState, GamePadState, Boolean)),
            sfxFileNames As IReadOnlyDictionary(Of String, String))
         _title = title
         _graphics = New GraphicsDeviceManager(Me)
         _controller = controller
         _viewSize = viewSize
         _commandTransform = commandTransform
+        _commandTable = commandTable
         _sfxFilenames = sfxFileNames
         _hueTable = hueTable
         Content.RootDirectory = "Content"
@@ -41,7 +40,6 @@ Public Class Host
         _controller.SetSfxHook(AddressOf OnSfx)
         MyBase.Initialize()
     End Sub
-
     Private Sub OnWindowSizeChange(newSize As (Integer, Integer), fullScreen As Boolean)
         _graphics.PreferredBackBufferWidth = newSize.Item1
         _graphics.PreferredBackBufferHeight = newSize.Item2
@@ -55,7 +53,6 @@ Public Class Host
             _sfxSoundEffects(sfx).Play(_controller.Volume, Pitch, Pan)
         End If
     End Sub
-
     Protected Overrides Sub LoadContent()
         _spriteBatch = New SpriteBatch(GraphicsDevice)
         _texture = New Texture2D(GraphicsDevice, _viewSize.Item1, _viewSize.Item2)
