@@ -20,7 +20,8 @@ Public Class Host
            title As String,
            controller As IGameController,
            viewSize As (Integer, Integer),
-           bufferCreator As Func(Of Texture2D, IDisplayBuffer),
+           bufferCreator As Func(Of Texture2D, IDisplayBuffer), 'TODO: get rid of me
+           hueTransformer As Func(Of Integer, Color),
            keyboardTransform As Func(Of KeyboardState, String()),
            gamePadTransform As Func(Of GamePadState, String()),
            sfxFileNames As IReadOnlyDictionary(Of String, String))
