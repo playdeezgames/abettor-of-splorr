@@ -1,10 +1,11 @@
 ﻿Public Class BaseGameController
     Implements IGameController
+    Private _settings As ISettings
     Private _windowSize As (Integer, Integer)
     Private _fullScreen As Boolean
     Private _sizeHook As Action(Of (Integer, Integer), Boolean)
     Private ReadOnly _states As New Dictionary(Of String, BaseGameState)
-    Private _stateStack As New Stack(Of String)
+    Private ReadOnly _stateStack As New Stack(Of String)
     Protected Sub SetCurrentState(state As String, push As Boolean)
         If Not push Then
             PopState()
@@ -41,13 +42,11 @@
         End Set
     End Property
     Public Property Volume As Single Implements ISfxHandler.Volume
-
     Public ReadOnly Property QuitRequested As Boolean Implements IGameController.QuitRequested
         Get
             Return Not _stateStack.Any
         End Get
     End Property
-
     Public Property FullScreen As Boolean Implements IWindowSizerizer.FullScreen
         Get
             Return _fullScreen
@@ -59,8 +58,8 @@
             End If
         End Set
     End Property
-
-    Sub New(windowSize As (Integer, Integer), fullScreen As Boolean, volume As Single)
+    Sub New(settings As ISettings, windowSize As (Integer, Integer), fullScreen As Boolean, volume As Single)
+        _settings = settings
         _windowSize = windowSize
         _fullScreen = fullScreen
         Me.Volume = volume
