@@ -6,6 +6,7 @@ Public Class Host
 
     Private ReadOnly _graphics As GraphicsDeviceManager
     Private ReadOnly _hueTransformer As Func(Of Integer, Color)
+    Private ReadOnly _hueTable As IReadOnlyDictionary(Of Integer, Color)
     Private _texture As Texture2D
     Private _spriteBatch As SpriteBatch
     Private _displayBuffer As IDisplayBuffer
@@ -33,6 +34,7 @@ Public Class Host
         _gamePadTransform = gamePadTransform
         _keyboardTransform = keyboardTransform
         _sfxFilenames = sfxFileNames
+        _hueTable = hueTable
         Content.RootDirectory = "Content"
     End Sub
     Protected Overrides Sub Initialize()
