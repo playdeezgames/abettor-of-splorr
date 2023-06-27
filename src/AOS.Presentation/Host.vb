@@ -10,7 +10,7 @@ Public Class Host
     Private _spriteBatch As SpriteBatch
     Private _displayBuffer As IDisplayBuffer
 
-    Private ReadOnly _keyboardTransform As Func(Of KeyboardState, String())
+    Private ReadOnly _commandTransform As Func(Of KeyboardState, GamePadState, String())
     Private ReadOnly _gamePadTransform As Func(Of GamePadState, String())
 
     Private ReadOnly _sfxSoundEffects As New Dictionary(Of String, SoundEffect)
@@ -21,7 +21,7 @@ Public Class Host
            controller As IGameController,
            viewSize As (Integer, Integer),
            hueTable As IReadOnlyDictionary(Of Integer, Color),
-           keyboardTransform As Func(Of KeyboardState, String()),
+           commandTransform As Func(Of KeyboardState, GamePadState, String()),
            gamePadTransform As Func(Of GamePadState, String()),
            sfxFileNames As IReadOnlyDictionary(Of String, String))
         _title = title
@@ -29,7 +29,7 @@ Public Class Host
         _controller = controller
         _viewSize = viewSize
         _gamePadTransform = gamePadTransform
-        _keyboardTransform = keyboardTransform
+        _commandTransform = commandTransform
         _sfxFilenames = sfxFileNames
         _hueTable = hueTable
         Content.RootDirectory = "Content"
@@ -88,7 +88,7 @@ Public Class Host
 
     Private Sub UpdateKeyboardState()
         Dim newState = Keyboard.GetState()
-        For Each cmd In _keyboardTransform(newState)
+        For Each cmd In _commandTransform(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One))
             _controller.HandleCommand(cmd)
         Next
     End Sub
