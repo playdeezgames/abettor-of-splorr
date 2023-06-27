@@ -3,10 +3,12 @@
 
     Protected ReadOnly Property Parent As IGameController
     Private ReadOnly SetCurrentState As Action(Of String, Boolean)
+    Protected FontSource As IFontSource
     Protected Const Zero = 0
-    Sub New(parent As IGameController, setState As Action(Of String, Boolean))
+    Sub New(parent As IGameController, setState As Action(Of String, Boolean), fontSource As IFontSource)
         Me.Parent = parent
         Me.SetCurrentState = setState
+        Me.FontSource = fontSource
     End Sub
     Protected Sub PopState()
         SetCurrentState(Nothing, False)
