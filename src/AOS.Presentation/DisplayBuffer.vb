@@ -1,4 +1,4 @@
-﻿Public Class DisplayBuffer
+﻿Friend Class DisplayBuffer
     Inherits BasePixelSink
     Implements IDisplayBuffer
     Private ReadOnly _texture As Texture2D

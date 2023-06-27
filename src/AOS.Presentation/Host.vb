@@ -5,7 +5,7 @@ Public Class Host
     Private ReadOnly _viewSize As (Integer, Integer)
 
     Private ReadOnly _graphics As GraphicsDeviceManager
-    Private ReadOnly _bufferCreator As Func(Of Texture2D, IDisplayBuffer)
+    Private ReadOnly _hueTransformer As Func(Of Integer, Color)
     Private _texture As Texture2D
     Private _spriteBatch As SpriteBatch
     Private _displayBuffer As IDisplayBuffer
@@ -20,7 +20,6 @@ Public Class Host
            title As String,
            controller As IGameController,
            viewSize As (Integer, Integer),
-           bufferCreator As Func(Of Texture2D, IDisplayBuffer), 'TODO: get rid of me
            hueTransformer As Func(Of Integer, Color),
            keyboardTransform As Func(Of KeyboardState, String()),
            gamePadTransform As Func(Of GamePadState, String()),
@@ -29,7 +28,7 @@ Public Class Host
         _graphics = New GraphicsDeviceManager(Me)
         _controller = controller
         _viewSize = viewSize
-        _bufferCreator = bufferCreator
+        _hueTransformer = hueTransformer
         _gamePadTransform = gamePadTransform
         _keyboardTransform = keyboardTransform
         _sfxFilenames = sfxFileNames
@@ -63,7 +62,7 @@ Public Class Host
     Protected Overrides Sub LoadContent()
         _spriteBatch = New SpriteBatch(GraphicsDevice)
         _texture = New Texture2D(GraphicsDevice, _viewSize.Item1, _viewSize.Item2)
-        _displayBuffer = _bufferCreator(_texture)
+        _displayBuffer = New DisplayBuffer(_texture, _hueTransformer)
     End Sub
     Protected Overrides Sub Update(gameTime As GameTime)
         UpdateKeyboardState()
