@@ -1,20 +1,20 @@
-﻿Public MustInherit Class BaseGameState(Of THue As Structure, TState As Structure)
+﻿Public MustInherit Class BaseGameState(Of THue As Structure)
     Implements IGameController(Of THue)
 
     Protected ReadOnly Property Parent As IGameController(Of THue)
-    Private ReadOnly SetCurrentState As Action(Of TState?, Boolean)
+    Private ReadOnly SetCurrentState As Action(Of String, Boolean)
     Protected Const Zero = 0
-    Sub New(parent As IGameController(Of THue), setState As Action(Of TState?, Boolean))
+    Sub New(parent As IGameController(Of THue), setState As Action(Of String, Boolean))
         Me.Parent = parent
         Me.SetCurrentState = setState
     End Sub
     Protected Sub PopState()
         SetCurrentState(Nothing, False)
     End Sub
-    Protected Sub SetState(state As TState)
+    Protected Sub SetState(state As String)
         SetCurrentState(state, False)
     End Sub
-    Protected Sub SetStates(pushedState As TState, nextState As TState)
+    Protected Sub SetStates(pushedState As String, nextState As String)
         SetCurrentState(nextState, False)
         SetCurrentState(pushedState, True)
     End Sub
