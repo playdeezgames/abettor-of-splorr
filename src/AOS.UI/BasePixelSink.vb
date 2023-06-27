@@ -1,8 +1,8 @@
-﻿Public MustInherit Class BasePixelSink(Of THue As Structure)
-    Implements IPixelSink(Of THue)
-    Public MustOverride Sub SetPixel(x As Integer, y As Integer, hue As THue) Implements IPixelSink(Of THue).SetPixel
+﻿Public MustInherit Class BasePixelSink
+    Implements IPixelSink
+    Public MustOverride Sub SetPixel(x As Integer, y As Integer, hue As Integer) Implements IPixelSink.SetPixel
     Const Zero = 0
-    Public Sub Fill(location As (Integer, Integer), size As (Integer, Integer), hue As THue) Implements IPixelSink(Of THue).Fill
+    Public Sub Fill(location As (Integer, Integer), size As (Integer, Integer), hue As Integer) Implements IPixelSink.Fill
         For x = Zero To size.Item1 - 1
             For y = Zero To size.Item2 - 1
                 SetPixel(location.Item1 + x, location.Item2 + y, hue)
@@ -10,11 +10,11 @@
         Next
     End Sub
 
-    Public Sub Colorize(Of TSourceHue)(source As IPixelSource(Of TSourceHue), fromLocation As (Integer, Integer), toLocation As (Integer, Integer), size As (Integer, Integer), xform As Func(Of TSourceHue, THue?)) Implements IPixelSink(Of THue).Colorize
+    Public Sub Colorize(source As IPixelSource, fromLocation As (Integer, Integer), toLocation As (Integer, Integer), size As (Integer, Integer), xform As Func(Of Integer, Integer?)) Implements IPixelSink.Colorize
         For x = Zero To size.Item1 - 1
             For y = Zero To size.Item2 - 1
                 Dim sourceHue = source.GetPixel(x + fromLocation.Item1, y + fromLocation.Item2)
-                Dim destinationHue As THue? = xform(sourceHue)
+                Dim destinationHue As Integer? = xform(sourceHue)
                 If destinationHue IsNot Nothing Then
                     SetPixel(x + toLocation.Item1, y + toLocation.Item2, destinationHue.Value)
                 End If
@@ -22,7 +22,7 @@
         Next
     End Sub
 
-    Public Sub Stretch(source As IPixelSource(Of THue), fromLocation As (Integer, Integer), toLocation As (Integer, Integer), size As (Integer, Integer), scale As (Integer, Integer), filter As Func(Of THue, Boolean)) Implements IPixelSink(Of THue).Stretch
+    Public Sub Stretch(source As IPixelSource, fromLocation As (Integer, Integer), toLocation As (Integer, Integer), size As (Integer, Integer), scale As (Integer, Integer), filter As Func(Of Integer, Boolean)) Implements IPixelSink.Stretch
         For x = Zero To size.Item1 - 1
             For y = Zero To size.Item2 - 1
                 Dim hue = source.GetPixel(x + fromLocation.Item1, y + fromLocation.Item2)
@@ -33,7 +33,7 @@
         Next
     End Sub
 
-    Public Sub Frame(location As (Integer, Integer), size As (Integer, Integer), hue As THue) Implements IPixelSink(Of THue).Frame
+    Public Sub Frame(location As (Integer, Integer), size As (Integer, Integer), hue As Integer) Implements IPixelSink.Frame
         For x = location.Item1 To location.Item1 + size.Item1 - 1
             SetPixel(x, location.Item2, hue)
             SetPixel(x, location.Item2 + size.Item2 - 1, hue)

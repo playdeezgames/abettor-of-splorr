@@ -1,9 +1,9 @@
-﻿Public Class BaseGameController(Of THue As Structure)
-    Implements IGameController(Of THue)
+﻿Public Class BaseGameController
+    Implements IGameController
     Private _windowSize As (Integer, Integer)
     Private _fullScreen As Boolean
     Private _sizeHook As Action(Of (Integer, Integer), Boolean)
-    Private ReadOnly _states As New Dictionary(Of String, BaseGameState(Of THue))
+    Private ReadOnly _states As New Dictionary(Of String, BaseGameState)
     Private _stateStack As New Stack(Of String)
     Protected Sub SetCurrentState(state As String, push As Boolean)
         If Not push Then
@@ -26,7 +26,7 @@
         Return Nothing
     End Function
 
-    Protected Sub SetState(state As String, handler As BaseGameState(Of THue))
+    Protected Sub SetState(state As String, handler As BaseGameState)
         _states(state) = handler
     End Sub
     Public Property Size As (Integer, Integer) Implements IWindowSizerizer.Size
@@ -42,7 +42,7 @@
     End Property
     Public Property Volume As Single Implements ISfxHandler.Volume
 
-    Public ReadOnly Property QuitRequested As Boolean Implements IGameController(Of THue).QuitRequested
+    Public ReadOnly Property QuitRequested As Boolean Implements IGameController.QuitRequested
         Get
             Return Not _stateStack.Any
         End Get
@@ -69,7 +69,7 @@
     Public Sub HandleCommand(command As String) Implements ICommandHandler.HandleCommand
         _states(_stateStack.Peek).HandleCommand(command)
     End Sub
-    Public Sub Render(displayBuffer As IPixelSink(Of THue)) Implements IRenderer(Of THue).Render
+    Public Sub Render(displayBuffer As IPixelSink) Implements IRenderer.Render
         _states(_stateStack.Peek).Render(displayBuffer)
     End Sub
 

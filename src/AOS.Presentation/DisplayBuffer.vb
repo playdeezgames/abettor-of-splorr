@@ -1,19 +1,19 @@
-﻿Public Class DisplayBuffer(Of THue As Structure)
-    Inherits BasePixelSink(Of THue)
-    Implements IDisplayBuffer(Of THue)
+﻿Public Class DisplayBuffer
+    Inherits BasePixelSink
+    Implements IDisplayBuffer
     Private ReadOnly _texture As Texture2D
-    Private ReadOnly _transform As Func(Of THue, Color)
+    Private ReadOnly _transform As Func(Of Integer, Color)
     Protected _buffer As Color()
-    Sub New(texture As Texture2D, transform As Func(Of THue, Color))
+    Sub New(texture As Texture2D, transform As Func(Of Integer, Color))
         _texture = texture
         _transform = transform
         ReDim _buffer(_texture.Width * _texture.Height - 1)
     End Sub
-    Public Sub Commit() Implements IDisplayBuffer(Of THue).Commit
+    Public Sub Commit() Implements IDisplayBuffer.Commit
         _texture.SetData(_buffer)
     End Sub
     Const Zero = 0
-    Public Overrides Sub SetPixel(x As Integer, y As Integer, hue As THue) Implements IDisplayBuffer(Of THue).SetPixel
+    Public Overrides Sub SetPixel(x As Integer, y As Integer, hue As Integer) Implements IDisplayBuffer.SetPixel
         If x < Zero OrElse y < Zero OrElse x >= _texture.Width OrElse y >= _texture.Height Then
             Return
         End If

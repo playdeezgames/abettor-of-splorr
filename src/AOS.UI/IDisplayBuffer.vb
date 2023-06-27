@@ -1,4 +1,4 @@
-Public Interface IDisplayBuffer(Of THue As Structure)
-    Inherits IPixelSink(Of THue)
+Public Interface IDisplayBuffer
+    Inherits IPixelSink
     Inherits ICommittable
 End Interface

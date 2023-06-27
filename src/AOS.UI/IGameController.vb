@@ -1,6 +1,6 @@
-﻿Public Interface IGameController(Of THue As Structure)
+﻿Public Interface IGameController
     Inherits ICommandHandler
-    Inherits IRenderer(Of THue)
+    Inherits IRenderer
     Inherits ISfxHandler
     Inherits IWindowSizerizer
     Inherits IUpdatorator

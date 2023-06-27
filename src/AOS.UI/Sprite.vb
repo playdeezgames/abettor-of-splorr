@@ -1,9 +1,9 @@
-﻿Public Class Sprite(Of THue As Structure)
-    Inherits OffscreenBuffer(Of THue)
+﻿Public Class Sprite
+    Inherits OffscreenBuffer
     Public ReadOnly Property Width As Integer
     Public ReadOnly Property Height As Integer
     Const Zero = 0
-    Public Sub New(lines As IReadOnlyList(Of String), transform As Func(Of Char, THue))
+    Public Sub New(lines As IReadOnlyList(Of String), transform As Func(Of Char, Integer))
         MyBase.New((lines.First.Length, lines.Count))
         Width = lines.First.Length
         Height = lines.Count
@@ -18,7 +18,7 @@
         Next line
     End Sub
 
-    Public Sub StretchTo(sink As IPixelSink(Of THue), position As (Integer, Integer), scale As (Integer, Integer), filter As Func(Of THue, Boolean))
+    Public Sub StretchTo(sink As IPixelSink, position As (Integer, Integer), scale As (Integer, Integer), filter As Func(Of Integer, Boolean))
         sink.Stretch(Me, (Zero, Zero), position, (Width, Height), scale, filter)
     End Sub
 End Class

@@ -1,14 +1,14 @@
-Public Class Host(Of THue As Structure)
+Public Class Host
     Inherits Game
-    Private ReadOnly _controller As IGameController(Of THue)
+    Private ReadOnly _controller As IGameController
 
     Private ReadOnly _viewSize As (Integer, Integer)
 
     Private ReadOnly _graphics As GraphicsDeviceManager
-    Private ReadOnly _bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue))
+    Private ReadOnly _bufferCreator As Func(Of Texture2D, IDisplayBuffer)
     Private _texture As Texture2D
     Private _spriteBatch As SpriteBatch
-    Private _displayBuffer As IDisplayBuffer(Of THue)
+    Private _displayBuffer As IDisplayBuffer
 
     Private ReadOnly _keyboardTransform As Func(Of KeyboardState, String())
     Private ReadOnly _gamePadTransform As Func(Of GamePadState, String())
@@ -18,9 +18,9 @@ Public Class Host(Of THue As Structure)
     Private ReadOnly _title As String
     Sub New(
            title As String,
-           controller As IGameController(Of THue),
+           controller As IGameController,
            viewSize As (Integer, Integer),
-           bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue)),
+           bufferCreator As Func(Of Texture2D, IDisplayBuffer),
            keyboardTransform As Func(Of KeyboardState, String()),
            gamePadTransform As Func(Of GamePadState, String()),
            sfxFileNames As IReadOnlyDictionary(Of String, String))

@@ -1,3 +1,3 @@
-﻿Public Interface IPixelSource(Of THue)
-    Function GetPixel(x As Integer, y As Integer) As THue
+﻿Public Interface IPixelSource
+    Function GetPixel(x As Integer, y As Integer) As Integer
 End Interface
