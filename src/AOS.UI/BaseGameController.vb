@@ -1,8 +1,6 @@
 ﻿Public Class BaseGameController
     Implements IGameController
     Protected ReadOnly Settings As ISettings
-    Private _windowSize As (Integer, Integer)
-    Private _fullScreen As Boolean
     Private _sizeHook As Action(Of (Integer, Integer), Boolean)
     Private ReadOnly _states As New Dictionary(Of String, BaseGameState)
     Private ReadOnly _stateStack As New Stack(Of String)
@@ -32,12 +30,12 @@
     End Sub
     Public Property Size As (Integer, Integer) Implements IWindowSizerizer.Size
         Get
-            Return _windowSize
+            Return Settings.WindowSize
         End Get
         Set(value As (Integer, Integer))
-            If value.Item1 <> _windowSize.Item1 OrElse value.Item2 <> _windowSize.Item2 Then
-                _windowSize = value
-                _sizeHook(_windowSize, _fullScreen)
+            If value.Item1 <> Settings.WindowSize.Item1 OrElse value.Item2 <> Settings.WindowSize.Item2 Then
+                Settings.WindowSize = value
+                _sizeHook(Settings.WindowSize, Settings.FullScreen)
             End If
         End Set
     End Property
@@ -49,21 +47,19 @@
     End Property
     Public Property FullScreen As Boolean Implements IWindowSizerizer.FullScreen
         Get
-            Return _fullScreen
+            Return Settings.FullScreen
         End Get
         Set(value As Boolean)
-            If value <> _fullScreen Then
-                _fullScreen = value
-                _sizeHook(_windowSize, _fullScreen)
+            If value <> Settings.FullScreen Then
+                Settings.FullScreen = value
+                _sizeHook(Settings.WindowSize, Settings.FullScreen)
             End If
         End Set
     End Property
-    Sub New(settings As ISettings, windowSize As (Integer, Integer), fullScreen As Boolean, volume As Single)
+    Sub New(settings As ISettings)
         Me.Settings = settings
         Me.Settings.Save()
-        _windowSize = windowSize
-        _fullScreen = fullScreen
-        Me.Volume = volume
+        Me.Volume = Volume
     End Sub
     Private OnSfx As Action(Of String)
     Public Sub HandleCommand(command As String) Implements ICommandHandler.HandleCommand
