@@ -7,7 +7,6 @@ Public Class Host
     Private _texture As Texture2D
     Private _spriteBatch As SpriteBatch
     Private _displayBuffer As IDisplayBuffer
-    Private ReadOnly _commandTransform As Func(Of KeyboardState, GamePadState, String())
     Private ReadOnly _commandTable As IReadOnlyDictionary(Of String, Func(Of KeyboardState, GamePadState, Boolean))
     Private ReadOnly _sfxSoundEffects As New Dictionary(Of String, SoundEffect)
     Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of String, String)
@@ -17,14 +16,12 @@ Public Class Host
            controller As IGameController,
            viewSize As (Integer, Integer),
            hueTable As IReadOnlyDictionary(Of Integer, Color),
-           commandTransform As Func(Of KeyboardState, GamePadState, String()),
            commandTable As IReadOnlyDictionary(Of String, Func(Of KeyboardState, GamePadState, Boolean)),
            sfxFileNames As IReadOnlyDictionary(Of String, String))
         _title = title
         _graphics = New GraphicsDeviceManager(Me)
         _controller = controller
         _viewSize = viewSize
-        _commandTransform = commandTransform
         _commandTable = commandTable
         _sfxFilenames = sfxFileNames
         _hueTable = hueTable
@@ -71,9 +68,32 @@ Public Class Host
     End Sub
     Private Sub UpdateKeyboardState()
         Dim newState = Keyboard.GetState()
-        For Each cmd In _commandTransform(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One))
+        For Each cmd In CommandTransformer(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One))
             _controller.HandleCommand(cmd)
         Next
+    End Sub
+    Private Function CommandTransformer(keyboard As KeyboardState, gamePad As GamePadState) As String()
+        Dim result As New HashSet(Of String)
+        For Each entry In _commandTable
+            CheckForCommands(result, entry.Value(keyboard, gamePad), entry.Key)
+        Next
+        Return result.ToArray
+    End Function
+    Private ReadOnly _nextCommandTimes As New Dictionary(Of String, DateTimeOffset)
+    Private Sub CheckForCommands(commands As HashSet(Of String), isPressed As Boolean, command As String)
+        If isPressed Then
+            If _nextCommandTimes.ContainsKey(command) Then
+                If DateTimeOffset.Now > _nextCommandTimes(command) Then
+                    commands.Add(command)
+                    _nextCommandTimes(command) = DateTimeOffset.Now.AddSeconds(0.3)
+                End If
+            Else
+                commands.Add(command)
+                _nextCommandTimes(command) = DateTimeOffset.Now.AddSeconds(1.0)
+            End If
+        Else
+            _nextCommandTimes.Remove(command)
+        End If
     End Sub
     Const Zero = 0
     Protected Overrides Sub Draw(gameTime As GameTime)
