@@ -1,3 +1,3 @@
-﻿Public Interface ICommandHandler(Of TCommand)
-    Sub HandleCommand(command As TCommand)
+﻿Public Interface ICommandHandler
+    Sub HandleCommand(cmd As String)
 End Interface

@@ -1,5 +1,5 @@
-﻿Public Interface IGameController(Of THue As Structure, TCommand, TSfx)
-    Inherits ICommandHandler(Of TCommand)
+﻿Public Interface IGameController(Of THue As Structure, TSfx)
+    Inherits ICommandHandler
     Inherits IRenderer(Of THue)
     Inherits ISfxHandler(Of TSfx)
     Inherits IWindowSizerizer

@@ -1,9 +1,9 @@
-﻿Public Class BaseGameController(Of THue As Structure, TCommand, TSfx, TState As Structure)
-    Implements IGameController(Of THue, TCommand, TSfx)
+﻿Public Class BaseGameController(Of THue As Structure, TSfx, TState As Structure)
+    Implements IGameController(Of THue, TSfx)
     Private _windowSize As (Integer, Integer)
     Private _fullScreen As Boolean
     Private _sizeHook As Action(Of (Integer, Integer), Boolean)
-    Private ReadOnly _states As New Dictionary(Of TState, BaseGameState(Of THue, TCommand, TSfx, TState))
+    Private ReadOnly _states As New Dictionary(Of TState, BaseGameState(Of THue, TSfx, TState))
     Private _stateStack As New Stack(Of TState)
     Protected Sub SetCurrentState(state As TState?, push As Boolean)
         If Not push Then
@@ -26,7 +26,7 @@
         Return Nothing
     End Function
 
-    Protected Sub SetState(state As TState, handler As BaseGameState(Of THue, TCommand, TSfx, TState))
+    Protected Sub SetState(state As TState, handler As BaseGameState(Of THue, TSfx, TState))
         _states(state) = handler
     End Sub
     Public Property Size As (Integer, Integer) Implements IWindowSizerizer.Size
@@ -42,7 +42,7 @@
     End Property
     Public Property Volume As Single Implements ISfxHandler(Of TSfx).Volume
 
-    Public ReadOnly Property QuitRequested As Boolean Implements IGameController(Of THue, TCommand, TSfx).QuitRequested
+    Public ReadOnly Property QuitRequested As Boolean Implements IGameController(Of THue, TSfx).QuitRequested
         Get
             Return Not _stateStack.Any
         End Get
@@ -66,7 +66,7 @@
         Me.Volume = volume
     End Sub
     Private OnSfx As Action(Of TSfx)
-    Public Sub HandleCommand(command As TCommand) Implements ICommandHandler(Of TCommand).HandleCommand
+    Public Sub HandleCommand(command As String) Implements ICommandHandler.HandleCommand
         _states(_stateStack.Peek).HandleCommand(command)
     End Sub
     Public Sub Render(displayBuffer As IPixelSink(Of THue)) Implements IRenderer(Of THue).Render

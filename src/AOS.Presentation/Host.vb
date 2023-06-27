@@ -1,6 +1,6 @@
-Public Class Host(Of THue As Structure, TCommand, TSfx)
+Public Class Host(Of THue As Structure, TSfx)
     Inherits Game
-    Private ReadOnly _controller As IGameController(Of THue, TCommand, TSfx)
+    Private ReadOnly _controller As IGameController(Of THue, TSfx)
 
     Private ReadOnly _viewSize As (Integer, Integer)
 
@@ -10,19 +10,19 @@ Public Class Host(Of THue As Structure, TCommand, TSfx)
     Private _spriteBatch As SpriteBatch
     Private _displayBuffer As IDisplayBuffer(Of THue)
 
-    Private ReadOnly _keyboardTransform As Func(Of KeyboardState, TCommand())
-    Private ReadOnly _gamePadTransform As Func(Of GamePadState, TCommand())
+    Private ReadOnly _keyboardTransform As Func(Of KeyboardState, String())
+    Private ReadOnly _gamePadTransform As Func(Of GamePadState, String())
 
     Private ReadOnly _sfxSoundEffects As New Dictionary(Of TSfx, SoundEffect)
     Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of TSfx, String)
     Private ReadOnly _title As String
     Sub New(
            title As String,
-           controller As IGameController(Of THue, TCommand, TSfx),
+           controller As IGameController(Of THue, TSfx),
            viewSize As (Integer, Integer),
            bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue)),
-           keyboardTransform As Func(Of KeyboardState, TCommand()),
-           gamePadTransform As Func(Of GamePadState, TCommand()),
+           keyboardTransform As Func(Of KeyboardState, String()),
+           gamePadTransform As Func(Of GamePadState, String()),
            sfxFileNames As IReadOnlyDictionary(Of TSfx, String))
         _title = title
         _graphics = New GraphicsDeviceManager(Me)

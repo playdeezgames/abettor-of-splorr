@@ -1,10 +1,10 @@
-﻿Public MustInherit Class BaseGameState(Of THue As Structure, TCommand, TSfx, TState As Structure)
-    Implements IGameController(Of THue, TCommand, TSfx)
+﻿Public MustInherit Class BaseGameState(Of THue As Structure, TSfx, TState As Structure)
+    Implements IGameController(Of THue, TSfx)
 
-    Protected ReadOnly Property Parent As IGameController(Of THue, TCommand, TSfx)
+    Protected ReadOnly Property Parent As IGameController(Of THue, TSfx)
     Private ReadOnly SetCurrentState As Action(Of TState?, Boolean)
     Protected Const Zero = 0
-    Sub New(parent As IGameController(Of THue, TCommand, TSfx), setState As Action(Of TState?, Boolean))
+    Sub New(parent As IGameController(Of THue, TSfx), setState As Action(Of TState?, Boolean))
         Me.Parent = parent
         Me.SetCurrentState = setState
     End Sub
@@ -35,7 +35,7 @@
         End Set
     End Property
 
-    Public ReadOnly Property QuitRequested As Boolean Implements IGameController(Of THue, TCommand, TSfx).QuitRequested
+    Public ReadOnly Property QuitRequested As Boolean Implements IGameController(Of THue, TSfx).QuitRequested
         Get
             Return Parent.QuitRequested
         End Get
@@ -50,7 +50,7 @@
         End Set
     End Property
 
-    Public MustOverride Sub HandleCommand(command As TCommand) Implements ICommandHandler(Of TCommand).HandleCommand
+    Public MustOverride Sub HandleCommand(cmd As String) Implements ICommandHandler.HandleCommand
     Public MustOverride Sub Render(displayBuffer As IPixelSink(Of THue)) Implements IRenderer(Of THue).Render
     Public Sub SetSfxHook(handler As Action(Of TSfx)) Implements ISfxHandler(Of TSfx).SetSfxHook
         Parent.SetSfxHook(handler)
