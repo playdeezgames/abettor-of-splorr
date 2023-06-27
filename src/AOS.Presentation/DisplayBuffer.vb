@@ -4,7 +4,7 @@
     Private ReadOnly _texture As Texture2D
     Private ReadOnly _hueTable As IReadOnlyDictionary(Of Integer, Color)
     Protected _buffer As Color()
-    Sub New(texture As Texture2D, transform As Func(Of Integer, Color), hueTable As IReadOnlyDictionary(Of Integer, Color))
+    Sub New(texture As Texture2D, hueTable As IReadOnlyDictionary(Of Integer, Color))
         _texture = texture
         _hueTable = hueTable
         ReDim _buffer(_texture.Width * _texture.Height - 1)
