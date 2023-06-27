@@ -1,9 +1,9 @@
-﻿Public Class BaseGameController(Of THue As Structure, TSfx, TState As Structure)
-    Implements IGameController(Of THue, TSfx)
+﻿Public Class BaseGameController(Of THue As Structure, TState As Structure)
+    Implements IGameController(Of THue)
     Private _windowSize As (Integer, Integer)
     Private _fullScreen As Boolean
     Private _sizeHook As Action(Of (Integer, Integer), Boolean)
-    Private ReadOnly _states As New Dictionary(Of TState, BaseGameState(Of THue, TSfx, TState))
+    Private ReadOnly _states As New Dictionary(Of TState, BaseGameState(Of THue, TState))
     Private _stateStack As New Stack(Of TState)
     Protected Sub SetCurrentState(state As TState?, push As Boolean)
         If Not push Then
@@ -26,7 +26,7 @@
         Return Nothing
     End Function
 
-    Protected Sub SetState(state As TState, handler As BaseGameState(Of THue, TSfx, TState))
+    Protected Sub SetState(state As TState, handler As BaseGameState(Of THue, TState))
         _states(state) = handler
     End Sub
     Public Property Size As (Integer, Integer) Implements IWindowSizerizer.Size
@@ -40,9 +40,9 @@
             End If
         End Set
     End Property
-    Public Property Volume As Single Implements ISfxHandler(Of TSfx).Volume
+    Public Property Volume As Single Implements ISfxHandler.Volume
 
-    Public ReadOnly Property QuitRequested As Boolean Implements IGameController(Of THue, TSfx).QuitRequested
+    Public ReadOnly Property QuitRequested As Boolean Implements IGameController(Of THue).QuitRequested
         Get
             Return Not _stateStack.Any
         End Get
@@ -65,7 +65,7 @@
         _fullScreen = fullScreen
         Me.Volume = volume
     End Sub
-    Private OnSfx As Action(Of TSfx)
+    Private OnSfx As Action(Of String)
     Public Sub HandleCommand(command As String) Implements ICommandHandler.HandleCommand
         _states(_stateStack.Peek).HandleCommand(command)
     End Sub
@@ -73,7 +73,7 @@
         _states(_stateStack.Peek).Render(displayBuffer)
     End Sub
 
-    Public Sub PlaySfx(sfx As TSfx) Implements ISfxHandler(Of TSfx).PlaySfx
+    Public Sub PlaySfx(sfx As String) Implements ISfxHandler.PlaySfx
         OnSfx(sfx)
     End Sub
 
@@ -81,7 +81,7 @@
         _states(_stateStack.Peek).Update(elapsedTime)
     End Sub
 
-    Public Sub SetSfxHook(handler As Action(Of TSfx)) Implements ISfxHandler(Of TSfx).SetSfxHook
+    Public Sub SetSfxHook(handler As Action(Of String)) Implements ISfxHandler.SetSfxHook
         OnSfx = handler
     End Sub
 

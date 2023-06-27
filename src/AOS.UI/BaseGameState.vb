@@ -1,10 +1,10 @@
-﻿Public MustInherit Class BaseGameState(Of THue As Structure, TSfx, TState As Structure)
-    Implements IGameController(Of THue, TSfx)
+﻿Public MustInherit Class BaseGameState(Of THue As Structure, TState As Structure)
+    Implements IGameController(Of THue)
 
-    Protected ReadOnly Property Parent As IGameController(Of THue, TSfx)
+    Protected ReadOnly Property Parent As IGameController(Of THue)
     Private ReadOnly SetCurrentState As Action(Of TState?, Boolean)
     Protected Const Zero = 0
-    Sub New(parent As IGameController(Of THue, TSfx), setState As Action(Of TState?, Boolean))
+    Sub New(parent As IGameController(Of THue), setState As Action(Of TState?, Boolean))
         Me.Parent = parent
         Me.SetCurrentState = setState
     End Sub
@@ -18,7 +18,7 @@
         SetCurrentState(nextState, False)
         SetCurrentState(pushedState, True)
     End Sub
-    Public Property Volume As Single Implements ISfxHandler(Of TSfx).Volume
+    Public Property Volume As Single Implements ISfxHandler.Volume
         Get
             Return Parent.Volume
         End Get
@@ -35,7 +35,7 @@
         End Set
     End Property
 
-    Public ReadOnly Property QuitRequested As Boolean Implements IGameController(Of THue, TSfx).QuitRequested
+    Public ReadOnly Property QuitRequested As Boolean Implements IGameController(Of THue).QuitRequested
         Get
             Return Parent.QuitRequested
         End Get
@@ -52,10 +52,10 @@
 
     Public MustOverride Sub HandleCommand(cmd As String) Implements ICommandHandler.HandleCommand
     Public MustOverride Sub Render(displayBuffer As IPixelSink(Of THue)) Implements IRenderer(Of THue).Render
-    Public Sub SetSfxHook(handler As Action(Of TSfx)) Implements ISfxHandler(Of TSfx).SetSfxHook
+    Public Sub SetSfxHook(handler As Action(Of String)) Implements ISfxHandler.SetSfxHook
         Parent.SetSfxHook(handler)
     End Sub
-    Public Sub PlaySfx(sfx As TSfx) Implements ISfxHandler(Of TSfx).PlaySfx
+    Public Sub PlaySfx(sfx As String) Implements ISfxHandler.PlaySfx
         Parent.PlaySfx(sfx)
     End Sub
     Public Sub SetSizeHook(hook As Action(Of (Integer, Integer), Boolean)) Implements IWindowSizerizer.SetSizeHook

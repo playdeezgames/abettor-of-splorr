@@ -1,6 +1,6 @@
-Public Class Host(Of THue As Structure, TSfx)
+Public Class Host(Of THue As Structure)
     Inherits Game
-    Private ReadOnly _controller As IGameController(Of THue, TSfx)
+    Private ReadOnly _controller As IGameController(Of THue)
 
     Private ReadOnly _viewSize As (Integer, Integer)
 
@@ -13,17 +13,17 @@ Public Class Host(Of THue As Structure, TSfx)
     Private ReadOnly _keyboardTransform As Func(Of KeyboardState, String())
     Private ReadOnly _gamePadTransform As Func(Of GamePadState, String())
 
-    Private ReadOnly _sfxSoundEffects As New Dictionary(Of TSfx, SoundEffect)
-    Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of TSfx, String)
+    Private ReadOnly _sfxSoundEffects As New Dictionary(Of String, SoundEffect)
+    Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of String, String)
     Private ReadOnly _title As String
     Sub New(
            title As String,
-           controller As IGameController(Of THue, TSfx),
+           controller As IGameController(Of THue),
            viewSize As (Integer, Integer),
            bufferCreator As Func(Of Texture2D, IDisplayBuffer(Of THue)),
            keyboardTransform As Func(Of KeyboardState, String()),
            gamePadTransform As Func(Of GamePadState, String()),
-           sfxFileNames As IReadOnlyDictionary(Of TSfx, String))
+           sfxFileNames As IReadOnlyDictionary(Of String, String))
         _title = title
         _graphics = New GraphicsDeviceManager(Me)
         _controller = controller
@@ -53,7 +53,7 @@ Public Class Host(Of THue As Structure, TSfx)
     End Sub
     Const Pitch = 0.0F
     Const Pan = 0.0F
-    Private Sub OnSfx(sfx As TSfx)
+    Private Sub OnSfx(sfx As String)
         If _sfxSoundEffects.ContainsKey(sfx) Then
             _sfxSoundEffects(sfx).Play(_controller.Volume, Pitch, Pan)
         End If
