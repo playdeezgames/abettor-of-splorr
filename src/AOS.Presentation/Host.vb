@@ -21,6 +21,7 @@ Public Class Host
            controller As IGameController,
            viewSize As (Integer, Integer),
            hueTransformer As Func(Of Integer, Color),
+           hueTable As IReadOnlyDictionary(Of Integer, Color),
            keyboardTransform As Func(Of KeyboardState, String()),
            gamePadTransform As Func(Of GamePadState, String()),
            sfxFileNames As IReadOnlyDictionary(Of String, String))
