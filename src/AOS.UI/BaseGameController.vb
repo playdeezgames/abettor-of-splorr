@@ -1,6 +1,6 @@
 ﻿Public Class BaseGameController
     Implements IGameController
-    Private _settings As ISettings
+    Protected ReadOnly Settings As ISettings
     Private _windowSize As (Integer, Integer)
     Private _fullScreen As Boolean
     Private _sizeHook As Action(Of (Integer, Integer), Boolean)
@@ -59,7 +59,8 @@
         End Set
     End Property
     Sub New(settings As ISettings, windowSize As (Integer, Integer), fullScreen As Boolean, volume As Single)
-        _settings = settings
+        Me.Settings = settings
+        Me.Settings.Save()
         _windowSize = windowSize
         _fullScreen = fullScreen
         Me.Volume = volume
