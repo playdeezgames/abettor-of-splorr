@@ -65,7 +65,7 @@ Public Class Host
     Protected Overrides Sub LoadContent()
         _spriteBatch = New SpriteBatch(GraphicsDevice)
         _texture = New Texture2D(GraphicsDevice, _viewSize.Item1, _viewSize.Item2)
-        _displayBuffer = New DisplayBuffer(_texture, _hueTransformer)
+        _displayBuffer = New DisplayBuffer(_texture, _hueTransformer, _hueTable)
     End Sub
     Protected Overrides Sub Update(gameTime As GameTime)
         UpdateKeyboardState()
