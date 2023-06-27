@@ -11,7 +11,6 @@ Public Class Host
     Private _displayBuffer As IDisplayBuffer
 
     Private ReadOnly _commandTransform As Func(Of KeyboardState, GamePadState, String())
-    Private ReadOnly _gamePadTransform As Func(Of GamePadState, String())
 
     Private ReadOnly _sfxSoundEffects As New Dictionary(Of String, SoundEffect)
     Private ReadOnly _sfxFilenames As IReadOnlyDictionary(Of String, String)
@@ -22,13 +21,11 @@ Public Class Host
            viewSize As (Integer, Integer),
            hueTable As IReadOnlyDictionary(Of Integer, Color),
            commandTransform As Func(Of KeyboardState, GamePadState, String()),
-           gamePadTransform As Func(Of GamePadState, String()),
            sfxFileNames As IReadOnlyDictionary(Of String, String))
         _title = title
         _graphics = New GraphicsDeviceManager(Me)
         _controller = controller
         _viewSize = viewSize
-        _gamePadTransform = gamePadTransform
         _commandTransform = commandTransform
         _sfxFilenames = sfxFileNames
         _hueTable = hueTable
@@ -66,7 +63,6 @@ Public Class Host
     End Sub
     Protected Overrides Sub Update(gameTime As GameTime)
         UpdateKeyboardState()
-        UpdateGamePadState()
         If _controller.QuitRequested Then
             Me.Exit()
             Return
@@ -76,16 +72,6 @@ Public Class Host
         _displayBuffer.Commit()
         MyBase.Update(gameTime)
     End Sub
-
-    Private Sub UpdateGamePadState()
-        Dim newState = GamePad.GetState(PlayerIndex.One)
-        If newState.IsConnected Then
-            For Each cmd In _gamePadTransform(newState)
-                _controller.HandleCommand(cmd)
-            Next
-        End If
-    End Sub
-
     Private Sub UpdateKeyboardState()
         Dim newState = Keyboard.GetState()
         For Each cmd In _commandTransform(Keyboard.GetState(), GamePad.GetState(PlayerIndex.One))
