@@ -40,6 +40,13 @@
         End Set
     End Property
     Public Property Volume As Single Implements ISfxHandler.Volume
+        Get
+            Return Settings.Volume
+        End Get
+        Set(value As Single)
+            Settings.Volume = Math.Clamp(value, 0.0F, 1.0F)
+        End Set
+    End Property
     Public ReadOnly Property QuitRequested As Boolean Implements IGameController.QuitRequested
         Get
             Return Not _stateStack.Any
@@ -59,7 +66,7 @@
     Sub New(settings As ISettings)
         Me.Settings = settings
         Me.Settings.Save()
-        Me.Volume = Volume
+        Me.Volume = settings.Volume
     End Sub
     Private OnSfx As Action(Of String)
     Public Sub HandleCommand(command As String) Implements ICommandHandler.HandleCommand
