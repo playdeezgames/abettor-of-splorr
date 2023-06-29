@@ -72,7 +72,7 @@
     Public Sub HandleCommand(command As String) Implements IGameController.HandleCommand
         _states(_stateStack.Peek).HandleCommand(command)
     End Sub
-    Public Sub Render(displayBuffer As IPixelSink) Implements IRenderer.Render
+    Public Sub Render(displayBuffer As IPixelSink) Implements IGameController.Render
         _states(_stateStack.Peek).Render(displayBuffer)
     End Sub
 
