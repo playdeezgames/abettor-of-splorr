@@ -19,7 +19,7 @@
         SetCurrentState(nextState, False)
         SetCurrentState(pushedState, True)
     End Sub
-    Public Property Volume As Single Implements ISfxHandler.Volume
+    Public Property Volume As Single Implements IGameController.Volume
         Get
             Return Parent.Volume
         End Get
@@ -53,10 +53,10 @@
 
     Public MustOverride Sub HandleCommand(cmd As String) Implements IGameController.HandleCommand
     Public MustOverride Sub Render(displayBuffer As IPixelSink) Implements IGameController.Render
-    Public Sub SetSfxHook(handler As Action(Of String)) Implements ISfxHandler.SetSfxHook
+    Public Sub SetSfxHook(handler As Action(Of String)) Implements IGameController.SetSfxHook
         Parent.SetSfxHook(handler)
     End Sub
-    Public Sub PlaySfx(sfx As String) Implements ISfxHandler.PlaySfx
+    Public Sub PlaySfx(sfx As String) Implements IGameController.PlaySfx
         Parent.PlaySfx(sfx)
     End Sub
     Public Sub SetSizeHook(hook As Action(Of (Integer, Integer), Boolean)) Implements IWindowSizerizer.SetSizeHook

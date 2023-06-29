@@ -39,7 +39,7 @@
             End If
         End Set
     End Property
-    Public Property Volume As Single Implements ISfxHandler.Volume
+    Public Property Volume As Single Implements IGameController.Volume
         Get
             Return Settings.Volume
         End Get
@@ -76,7 +76,7 @@
         _states(_stateStack.Peek).Render(displayBuffer)
     End Sub
 
-    Public Sub PlaySfx(sfx As String) Implements ISfxHandler.PlaySfx
+    Public Sub PlaySfx(sfx As String) Implements IGameController.PlaySfx
         OnSfx(sfx)
     End Sub
 
@@ -84,7 +84,7 @@
         _states(_stateStack.Peek).Update(elapsedTime)
     End Sub
 
-    Public Sub SetSfxHook(handler As Action(Of String)) Implements ISfxHandler.SetSfxHook
+    Public Sub SetSfxHook(handler As Action(Of String)) Implements IGameController.SetSfxHook
         OnSfx = handler
     End Sub
 
