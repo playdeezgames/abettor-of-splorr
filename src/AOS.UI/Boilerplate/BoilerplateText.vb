@@ -44,14 +44,14 @@
     'Friend Const Scale10Text = "6400x3600"
     'Friend Const Scale11Text = "7040x3960"
     'Friend Const Scale12Text = "7680x4320"
-    'Friend Const SetVolumeText = "Volume..."
-    'Friend Const SetWindowSizeText = "Window Size..."
+    Friend Const SetVolumeText = "Volume..."
+    Friend Const SetWindowSizeText = "Window Size..."
     'Friend Const Slot1Text = "Slot 1"
     'Friend Const Slot2Text = "Slot 2"
     'Friend Const Slot3Text = "Slot 3"
     'Friend Const Slot4Text = "Slot 4"
     'Friend Const Slot5Text = "Slot 5"
-    'Friend Const ToggleFullScreenText = "Toggle Full Screen"
+    Friend Const ToggleFullScreenText = "Toggle Full Screen"
     'Public Const ViewHeight = 180
     'Public Const ViewWidth = 320
     'Friend Const Volume0Text = "0%"

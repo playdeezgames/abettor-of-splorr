@@ -4,6 +4,8 @@ Public MustInherit Class UIContext
     Implements IUIContext
     Private ReadOnly fonts As New Dictionary(Of String, Font)
     ReadOnly Property ViewSize As (Integer, Integer) Implements IUIContext.ViewSize
+    Public MustOverride ReadOnly Property AvailableWindowSizes As IEnumerable(Of (Integer, Integer)) Implements IUIContext.AvailableWindowSizes
+
     Sub New(fontFilenames As IReadOnlyDictionary(Of String, String), viewSize As (Integer, Integer))
         Me.ViewSize = viewSize
         For Each entry In fontFilenames

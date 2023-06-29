@@ -6,4 +6,5 @@
     Sub ShowSplashContent(displayBuffer As IPixelSink, font As Font)
     Sub ShowAboutContent(displayBuffer As IPixelSink, font As Font)
     Function ControlsText(aButtonText As String, bButtonText As String) As String
+    ReadOnly Property AvailableWindowSizes As IEnumerable(Of (Integer, Integer))
 End Interface

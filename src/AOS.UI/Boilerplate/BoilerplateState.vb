@@ -6,4 +6,6 @@
     Public Const About = "About"
     Public Const Embark = "Embark"
     Public Const Load = "Load"
+    Public Const WindowSize = "WindowSize"
+    Public Const Volume = "Volume"
 End Module

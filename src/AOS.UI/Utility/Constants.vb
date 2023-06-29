@@ -1,3 +1,3 @@
-﻿Public Module Contants
+﻿Public Module Constants
     Public Const UIFont = "UIFont"
 End Module
