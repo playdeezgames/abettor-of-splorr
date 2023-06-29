@@ -77,6 +77,7 @@
         SetState(BoilerplateState.Load, New LoadState(Me, AddressOf SetCurrentState, context))
         SetState(BoilerplateState.Save, New SaveState(Me, AddressOf SetCurrentState, context))
         SetState(BoilerplateState.Abandon, New ConfirmAbandonState(Me, AddressOf SetCurrentState, context))
+        SetState(BoilerplateState.GameMenu, New GameMenuState(Me, AddressOf SetCurrentState, context))
     End Sub
     Private OnSfx As Action(Of String)
     Public Sub HandleCommand(command As String) Implements IGameController.HandleCommand
