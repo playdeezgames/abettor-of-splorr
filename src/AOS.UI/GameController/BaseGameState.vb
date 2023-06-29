@@ -51,7 +51,7 @@
         End Set
     End Property
 
-    Public MustOverride Sub HandleCommand(cmd As String) Implements ICommandHandler.HandleCommand
+    Public MustOverride Sub HandleCommand(cmd As String) Implements IGameController.HandleCommand
     Public MustOverride Sub Render(displayBuffer As IPixelSink) Implements IRenderer.Render
     Public Sub SetSfxHook(handler As Action(Of String)) Implements ISfxHandler.SetSfxHook
         Parent.SetSfxHook(handler)

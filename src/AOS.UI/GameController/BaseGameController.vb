@@ -69,7 +69,7 @@
         Me.Volume = settings.Volume
     End Sub
     Private OnSfx As Action(Of String)
-    Public Sub HandleCommand(command As String) Implements ICommandHandler.HandleCommand
+    Public Sub HandleCommand(command As String) Implements IGameController.HandleCommand
         _states(_stateStack.Peek).HandleCommand(command)
     End Sub
     Public Sub Render(displayBuffer As IPixelSink) Implements IRenderer.Render
