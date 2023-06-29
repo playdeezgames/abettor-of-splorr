@@ -74,6 +74,8 @@
         SetState(BoilerplateState.Options, New OptionsState(Me, AddressOf SetCurrentState, context))
         SetState(BoilerplateState.WindowSize, New WindowSizeState(Me, AddressOf SetCurrentState, context))
         SetState(BoilerplateState.Volume, New VolumeState(Me, AddressOf SetCurrentState, context))
+        SetState(BoilerplateState.Load, New LoadState(Me, AddressOf SetCurrentState, context))
+        SetState(BoilerplateState.Save, New SaveState(Me, AddressOf SetCurrentState, context))
     End Sub
     Private OnSfx As Action(Of String)
     Public Sub HandleCommand(command As String) Implements IGameController.HandleCommand
