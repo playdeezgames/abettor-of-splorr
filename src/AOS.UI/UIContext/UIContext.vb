@@ -1,6 +1,6 @@
 ﻿Imports System.IO
 Imports System.Text.Json
-Public Class UIContext
+Public MustInherit Class UIContext
     Implements IUIContext
     Private ReadOnly fonts As New Dictionary(Of String, Font)
     ReadOnly Property ViewSize As (Integer, Integer) Implements IUIContext.ViewSize
@@ -19,4 +19,6 @@ Public Class UIContext
     Public Function Font(gameFont As String) As Font Implements IUIContext.Font
         Return fonts(gameFont)
     End Function
+
+    Public MustOverride Sub ShowSplashContent(displayBuffer As IPixelSink, font As Font) Implements IUIContext.ShowSplashContent
 End Class

@@ -12,15 +12,6 @@
     End Sub
     Public Overrides Sub Render(displayBuffer As IPixelSink)
         displayBuffer.Fill((0, 0), Context.ViewSize, BoilerplateHue.Black)
-        Dim font = Context.Font(UIFont)
-        With font
-            .WriteText(displayBuffer, (0, 0), "A Game in VB.NET About", BoilerplateHue.Orange)
-            .WriteText(displayBuffer, (0, font.Height), "Yer, the Monster,", BoilerplateHue.Orange)
-            .WriteText(displayBuffer, (0, font.Height * 2), "and Starting with Nothing", BoilerplateHue.Orange)
-            .WriteText(displayBuffer, (0, font.Height * 4), "A Production of TheGrumpyGameDev", BoilerplateHue.Tan)
-            .WriteText(displayBuffer, (0, font.Height * 6), "For ""Learn You a Game Jam: Pixel Edition""", BoilerplateHue.Brown)
-
-            Context.ShowStatusBar(displayBuffer, font, "Space/(A)", BoilerplateHue.Black, BoilerplateHue.LightGray)
-        End With
+        Context.ShowSplashContent(displayBuffer, Context.Font(UIFont))
     End Sub
 End Class
