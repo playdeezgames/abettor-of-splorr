@@ -1,6 +1,5 @@
 ﻿Public MustInherit Class BaseGameState
     Implements IGameController
-
     Protected ReadOnly Property Parent As IGameController
     Private ReadOnly SetCurrentState As Action(Of String, Boolean)
     Protected FontSource As IFontSource
@@ -68,5 +67,9 @@
     End Sub
     Public Overridable Sub OnStart()
         'default: do nothing!
+    End Sub
+
+    Public Sub SaveConfig() Implements IGameController.SaveConfig
+        Parent.SaveConfig()
     End Sub
 End Class

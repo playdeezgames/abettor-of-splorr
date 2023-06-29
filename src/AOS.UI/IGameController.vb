@@ -5,4 +5,5 @@
     Inherits IWindowSizerizer
     Inherits IUpdatorator
     ReadOnly Property QuitRequested As Boolean
+    Sub SaveConfig()
 End Interface

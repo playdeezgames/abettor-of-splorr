@@ -91,4 +91,8 @@
     Public Sub SetSizeHook(hook As Action(Of (Integer, Integer), Boolean)) Implements IWindowSizerizer.SetSizeHook
         _sizeHook = hook
     End Sub
+
+    Public Sub SaveConfig() Implements IGameController.SaveConfig
+        Settings.Save()
+    End Sub
 End Class
