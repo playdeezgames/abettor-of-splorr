@@ -30,4 +30,6 @@ Public MustInherit Class UIContext
     Public Function ControlsText(aButtonText As String, bButtonText As String) As String Implements IUIContext.ControlsText
         Return $"Space/(A) - {aButtonText} | Esc/(B) - {bButtonText}"
     End Function
+
+    Public MustOverride Sub ShowAboutContent(displayBuffer As IPixelSink, font As Font) Implements IUIContext.ShowAboutContent
 End Class
