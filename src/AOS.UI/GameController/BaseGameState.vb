@@ -27,7 +27,7 @@
             Parent.Volume = value
         End Set
     End Property
-    Public Property Size As (Integer, Integer) Implements IWindowSizerizer.Size
+    Public Property Size As (Integer, Integer) Implements IGameController.Size
         Get
             Return Parent.Size
         End Get
@@ -42,7 +42,7 @@
         End Get
     End Property
 
-    Public Property FullScreen As Boolean Implements IWindowSizerizer.FullScreen
+    Public Property FullScreen As Boolean Implements IGameController.FullScreen
         Get
             Return Parent.FullScreen
         End Get
@@ -59,7 +59,7 @@
     Public Sub PlaySfx(sfx As String) Implements IGameController.PlaySfx
         Parent.PlaySfx(sfx)
     End Sub
-    Public Sub SetSizeHook(hook As Action(Of (Integer, Integer), Boolean)) Implements IWindowSizerizer.SetSizeHook
+    Public Sub SetSizeHook(hook As Action(Of (Integer, Integer), Boolean)) Implements IGameController.SetSizeHook
         Parent.SetSizeHook(hook)
     End Sub
     Public Overridable Sub Update(elapsedTime As TimeSpan) Implements IGameController.Update

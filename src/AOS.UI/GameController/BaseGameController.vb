@@ -28,7 +28,7 @@
     Protected Sub SetState(state As String, handler As BaseGameState)
         _states(state) = handler
     End Sub
-    Public Property Size As (Integer, Integer) Implements IWindowSizerizer.Size
+    Public Property Size As (Integer, Integer) Implements IGameController.Size
         Get
             Return Settings.WindowSize
         End Get
@@ -52,7 +52,7 @@
             Return Not _stateStack.Any
         End Get
     End Property
-    Public Property FullScreen As Boolean Implements IWindowSizerizer.FullScreen
+    Public Property FullScreen As Boolean Implements IGameController.FullScreen
         Get
             Return Settings.FullScreen
         End Get
@@ -88,7 +88,7 @@
         OnSfx = handler
     End Sub
 
-    Public Sub SetSizeHook(hook As Action(Of (Integer, Integer), Boolean)) Implements IWindowSizerizer.SetSizeHook
+    Public Sub SetSizeHook(hook As Action(Of (Integer, Integer), Boolean)) Implements IGameController.SetSizeHook
         _sizeHook = hook
     End Sub
 
