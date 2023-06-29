@@ -34,4 +34,8 @@ Public MustInherit Class UIContext
     End Function
 
     Public MustOverride Sub ShowAboutContent(displayBuffer As IPixelSink, font As Font) Implements IUIContext.ShowAboutContent
+    Public MustOverride Sub AbandonGame() Implements IUIContext.AbandonGame
+    Public MustOverride Sub LoadGame(slot As Integer) Implements IUIContext.LoadGame
+    Public MustOverride Sub SaveGame(slot As Integer) Implements IUIContext.SaveGame
+    Public MustOverride Function DoesSlotExist(slot As Integer) As Boolean Implements IUIContext.DoesSlotExist
 End Class
