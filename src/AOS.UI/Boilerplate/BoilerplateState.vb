@@ -11,4 +11,5 @@
     Public Const Neutral = "Neutral"
     Public Const GameMenu = "GameMenu"
     Public Const Save = "Save"
+    Public Const Abandon = "Abandon"
 End Module
