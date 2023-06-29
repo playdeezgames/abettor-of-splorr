@@ -1,6 +1,6 @@
 ﻿Imports System.IO
 Imports System.Text.Json
-Public Class FontSource
+Public Class UIContext
     Implements IUIContext
     Private ReadOnly fonts As New Dictionary(Of String, Font)
     Sub New(fontFilenames As IReadOnlyDictionary(Of String, String))
