@@ -2,12 +2,12 @@
     Implements IGameController
     Protected ReadOnly Property Parent As IGameController
     Private ReadOnly SetCurrentState As Action(Of String, Boolean)
-    Protected FontSource As IUIContext
+    Protected Context As IUIContext
     Protected Const Zero = 0
-    Sub New(parent As IGameController, setState As Action(Of String, Boolean), fontSource As IUIContext)
+    Sub New(parent As IGameController, setState As Action(Of String, Boolean), context As IUIContext)
         Me.Parent = parent
         Me.SetCurrentState = setState
-        Me.FontSource = fontSource
+        Me.Context = context
     End Sub
     Protected Sub PopState()
         SetCurrentState(Nothing, False)
