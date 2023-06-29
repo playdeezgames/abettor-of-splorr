@@ -63,10 +63,11 @@
             End If
         End Set
     End Property
-    Sub New(settings As ISettings)
+    Sub New(settings As ISettings, context As IUIContext)
         Me.Settings = settings
         Me.Settings.Save()
         Me.Volume = settings.Volume
+        SetState(BoilerplateState.Splash, New SplashState(Me, AddressOf SetCurrentState, context))
     End Sub
     Private OnSfx As Action(Of String)
     Public Sub HandleCommand(command As String) Implements IGameController.HandleCommand
