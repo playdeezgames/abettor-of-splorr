@@ -62,7 +62,7 @@
     Public Sub SetSizeHook(hook As Action(Of (Integer, Integer), Boolean)) Implements IWindowSizerizer.SetSizeHook
         Parent.SetSizeHook(hook)
     End Sub
-    Public Overridable Sub Update(elapsedTime As TimeSpan) Implements IUpdatorator.Update
+    Public Overridable Sub Update(elapsedTime As TimeSpan) Implements IGameController.Update
         'default implementation: do nothing!
     End Sub
     Public Overridable Sub OnStart()

@@ -80,7 +80,7 @@
         OnSfx(sfx)
     End Sub
 
-    Public Sub Update(elapsedTime As TimeSpan) Implements IUpdatorator.Update
+    Public Sub Update(elapsedTime As TimeSpan) Implements IGameController.Update
         _states(_stateStack.Peek).Update(elapsedTime)
     End Sub
 

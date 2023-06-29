@@ -6,4 +6,5 @@
     Sub SaveConfig()
     Sub HandleCommand(cmd As String)
     Sub Render(displayBuffer As IPixelSink)
+    Sub Update(elapsedTime As TimeSpan)
 End Interface
