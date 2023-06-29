@@ -21,4 +21,13 @@ Public MustInherit Class UIContext
     End Function
 
     Public MustOverride Sub ShowSplashContent(displayBuffer As IPixelSink, font As Font) Implements IUIContext.ShowSplashContent
+
+    Public Sub ShowHeader(displayBuffer As IPixelSink, font As Font, text As String, foreground As Integer, background As Integer) Implements IUIContext.ShowHeader
+        displayBuffer.Fill((0, 0), (ViewSize.Item1, font.Height), background)
+        font.WriteText(displayBuffer, (ViewSize.Item1 \ 2 - font.TextWidth(text) \ 2, 0), text, foreground)
+    End Sub
+
+    Public Function ControlsText(aButtonText As String, bButtonText As String) As String Implements IUIContext.ControlsText
+        Return $"Space/(A) - {aButtonText} | Esc/(B) - {bButtonText}"
+    End Function
 End Class

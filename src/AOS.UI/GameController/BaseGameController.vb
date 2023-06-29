@@ -68,6 +68,7 @@
         Me.Settings.Save()
         Me.Volume = settings.Volume
         SetState(BoilerplateState.Splash, New SplashState(Me, AddressOf SetCurrentState, context))
+        SetState(BoilerplateState.MainMenu, New MainMenuState(Me, AddressOf SetCurrentState, context))
     End Sub
     Private OnSfx As Action(Of String)
     Public Sub HandleCommand(command As String) Implements IGameController.HandleCommand
