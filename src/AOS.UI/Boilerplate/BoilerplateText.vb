@@ -23,7 +23,7 @@
     'Friend Const MainMenuTitle = "Main Menu:"
     'Friend Const MoveText = "Move..."
     'Friend Const NeverMindText = "Never Mind"
-    'Friend Const NoText = "No"
+    Friend Const NoText = "No"
     Friend Const OptionsText = "Options..."
     'Friend Const OptionsTitle = "Options:"
     'Friend Const PickUpItemText = "Pick Up Item"
@@ -66,7 +66,7 @@
     'Friend Const Volume9Text = "90%"
     'Friend Const Volume10Text = "100%"
     'Friend Const WindowSizeTitle = "Window Size:"
-    'Friend Const YesText = "Yes"
+    Friend Const YesText = "Yes"
     'Friend Const MapCellWidth = 12
     'Friend Const MapCellHeight = 12
     'Friend Const CenterMapCellX = ViewWidth \ 2 - MapCellWidth \ 2
