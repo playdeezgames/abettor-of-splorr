@@ -12,7 +12,10 @@
         HeaderText = $"Current Size: {Size.Item1}x{Size.Item2}"
     End Sub
     Protected Overrides Function InitializeMenuItems() As List(Of (String, String))
-        HeaderText = $"Current Size: {Size.Item1}x{Size.Item2}"
-        Return Context.AvailableWindowSizes.Select(Function(x) ($"{x.Item1}x{x.Item2}", $"{x.Item1}x{x.Item2}")).ToList
+        Dim currentSize = $"{Size.Item1}x{Size.Item2}"
+        HeaderText = $"Current Size: {currentSize}"
+        Dim menuItems = Context.AvailableWindowSizes.Select(Function(x) ($"{x.Item1}x{x.Item2}", $"{x.Item1}x{x.Item2}")).ToList
+        MenuItemIndex = Math.Max(0, menuItems.FindIndex(Function(x) x.Item1 = currentSize))
+        Return menuItems
     End Function
 End Class
