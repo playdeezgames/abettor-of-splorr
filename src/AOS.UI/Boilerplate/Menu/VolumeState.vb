@@ -11,10 +11,15 @@
         HeaderText = $"Volume (Currently: {Volume * 100:f0}%)"
     End Sub
     Protected Overrides Function InitializeMenuItems() As List(Of (String, String))
-        HeaderText = $"Volume (Currently: {Volume * 100:f0}%)"
+        Dim currentVolume = $"{Volume * 100:f0}%"
+        HeaderText = $"Volume (Currently: {currentVolume})"
         Dim result As New List(Of (String, String))
         For index = 0 To 10
-            result.Add(($"{index * 10}%", $"{index * 10}"))
+            Dim menuItemText = $"{index * 10}%"
+            result.Add((menuItemText, $"{index * 10}"))
+            If menuItemText = currentVolume Then
+                MenuItemIndex = index
+            End If
         Next
         Return result
     End Function
