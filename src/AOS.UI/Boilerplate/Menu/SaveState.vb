@@ -1,17 +1,17 @@
 ﻿Friend Class SaveState
-    Inherits BasePickerState(Of String)
+    Inherits BasePickerState(Of Integer)
     Public Sub New(parent As IGameController, setState As Action(Of String, Boolean), context As IUIContext)
         MyBase.New(parent, setState, context, "Save Game", context.ControlsText("Select", "Cancel"), BoilerplateState.GameMenu)
     End Sub
-    Protected Overrides Sub OnActivateMenuItem(value As (String, String))
+    Protected Overrides Sub OnActivateMenuItem(value As (String, Integer))
         Dim slotIndex = CInt(value.Item2)
         Context.SaveGame(slotIndex)
         SetState(BoilerplateState.GameMenu)
     End Sub
-    Protected Overrides Function InitializeMenuItems() As List(Of (String, String))
-        Dim result As New List(Of (String, String))
+    Protected Overrides Function InitializeMenuItems() As List(Of (String, Integer))
+        Dim result As New List(Of (String, Integer))
         For slotIndex = 1 To 5
-            result.Add(($"Slot {slotIndex}{If(Context.DoesSlotExist(slotIndex), "(will overwrite)", "")}", $"{slotIndex}"))
+            result.Add(($"Slot {slotIndex}{If(Context.DoesSlotExist(slotIndex), "(will overwrite)", "")}", slotIndex))
         Next
         Return result
     End Function
