@@ -1,6 +1,6 @@
-﻿Public MustInherit Class BasePickerState
+﻿Public MustInherit Class BasePickerState(Of TItem)
     Inherits BaseGameState
-    Private _menuItems As New List(Of (String, String))
+    Private _menuItems As New List(Of (String, TItem))
     Protected MenuItemIndex As Integer
     Private ReadOnly _statusBarText As String
     Protected Property HeaderText As String
@@ -29,7 +29,7 @@
                 MenuItemIndex = (MenuItemIndex + 1) Mod _menuItems.Count
         End Select
     End Sub
-    Protected MustOverride Sub OnActivateMenuItem(value As (String, String))
+    Protected MustOverride Sub OnActivateMenuItem(value As (String, TItem))
     Public Overrides Sub Render(displayBuffer As IPixelSink)
         displayBuffer.Fill((0, 0), (Context.ViewSize.Item1, Context.ViewSize.Item2), BoilerplateHue.Black)
         Dim font = Context.Font(UIFont)
@@ -50,5 +50,5 @@
         MenuItemIndex = 0
         _menuItems = InitializeMenuItems()
     End Sub
-    Protected MustOverride Function InitializeMenuItems() As List(Of (String, String))
+    Protected MustOverride Function InitializeMenuItems() As List(Of (String, TItem))
 End Class

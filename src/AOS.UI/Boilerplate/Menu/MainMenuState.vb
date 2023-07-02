@@ -1,5 +1,5 @@
 ﻿Friend Class MainMenuState
-    Inherits BasePickerState
+    Inherits BasePickerState(Of String)
     Public Sub New(parent As IGameController, setState As Action(Of String, Boolean), context As IUIContext)
         MyBase.New(parent, setState, context, "Main Menu", context.ControlsText("Select", "Quit"), BoilerplateState.ConfirmQuit)
     End Sub

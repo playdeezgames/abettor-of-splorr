@@ -1,5 +1,5 @@
 ﻿Friend Class SaveState
-    Inherits BasePickerState
+    Inherits BasePickerState(Of String)
     Public Sub New(parent As IGameController, setState As Action(Of String, Boolean), context As IUIContext)
         MyBase.New(parent, setState, context, "Save Game", context.ControlsText("Select", "Cancel"), BoilerplateState.GameMenu)
     End Sub

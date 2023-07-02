@@ -1,5 +1,5 @@
 ﻿Friend Class OptionsState
-    Inherits BasePickerState
+    Inherits BasePickerState(Of String)
     Public Sub New(
                   parent As IGameController,
                   setState As Action(Of String, Boolean),
