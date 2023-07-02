@@ -1,11 +1,11 @@
 ﻿Friend Class LoadState
-    Inherits BasePickerState(Of String)
+    Inherits BasePickerState(Of Integer)
     Public Sub New(parent As IGameController, setState As Action(Of String, Boolean), context As IUIContext)
         MyBase.New(parent, setState, context, "Load Game", context.ControlsText("Select", "Cancel"), BoilerplateState.MainMenu)
     End Sub
 
-    Protected Overrides Sub OnActivateMenuItem(value As (String, String))
-        Dim slotIndex = CInt(value.Item2)
+    Protected Overrides Sub OnActivateMenuItem(value As (String, Integer))
+        Dim slotIndex = value.Item2
         If slotIndex > 0 AndAlso Context.DoesSlotExist(slotIndex) Then
             Context.LoadGame(slotIndex)
             SetState(BoilerplateState.Neutral)
@@ -15,15 +15,15 @@
         End If
     End Sub
 
-    Protected Overrides Function InitializeMenuItems() As List(Of (String, String))
-        Dim result = New List(Of (String, String))
+    Protected Overrides Function InitializeMenuItems() As List(Of (String, Integer))
+        Dim result = New List(Of (String, Integer))
         For slotIndex = 1 To 5
             If Context.DoesSlotExist(slotIndex) Then
-                result.Add(($"Slot {slotIndex}", $"{slotIndex}"))
+                result.Add(($"Slot {slotIndex}", slotIndex))
             End If
         Next
         If Not result.Any() Then
-            result.Add(("No Saves Exist!", "0"))
+            result.Add(("No Saves Exist!", 0))
         End If
         Return result
     End Function
