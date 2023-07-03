@@ -1,9 +1,9 @@
-﻿Friend Class OptionsState
-    Inherits BasePickerState(Of String)
+﻿Friend Class OptionsState(Of TGameContext)
+    Inherits BasePickerState(Of TGameContext, String)
     Public Sub New(
                   parent As IGameController,
                   setState As Action(Of String, Boolean),
-                  context As IUIContext)
+                  context As IUIContext(Of TGameContext))
         MyBase.New(parent, setState, context, "Options", context.ControlsText("Select", "Cancel"), Nothing)
     End Sub
 

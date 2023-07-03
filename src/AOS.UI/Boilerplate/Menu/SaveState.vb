@@ -1,6 +1,6 @@
-﻿Friend Class SaveState
-    Inherits BasePickerState(Of Integer)
-    Public Sub New(parent As IGameController, setState As Action(Of String, Boolean), context As IUIContext)
+﻿Friend Class SaveState(Of TGameContext)
+    Inherits BasePickerState(Of TGameContext, Integer)
+    Public Sub New(parent As IGameController, setState As Action(Of String, Boolean), context As IUIContext(Of TGameContext))
         MyBase.New(parent, setState, context, "Save Game", context.ControlsText("Select", "Cancel"), BoilerplateState.GameMenu)
     End Sub
     Protected Overrides Sub OnActivateMenuItem(value As (String, Integer))

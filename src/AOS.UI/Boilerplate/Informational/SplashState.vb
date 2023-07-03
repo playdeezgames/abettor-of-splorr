@@ -1,6 +1,6 @@
-﻿Friend Class SplashState
-    Inherits BaseGameState
-    Public Sub New(parent As IGameController, setState As Action(Of String, Boolean), context As IUIContext)
+﻿Friend Class SplashState(Of TGameContext)
+    Inherits BaseGameState(Of TGameContext)
+    Public Sub New(parent As IGameController, setState As Action(Of String, Boolean), context As IUIContext(Of TGameContext))
         MyBase.New(parent, setState, context)
     End Sub
 

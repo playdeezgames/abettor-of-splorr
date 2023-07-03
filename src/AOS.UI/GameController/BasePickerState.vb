@@ -1,5 +1,5 @@
-﻿Public MustInherit Class BasePickerState(Of TItem)
-    Inherits BaseGameState
+﻿Public MustInherit Class BasePickerState(Of TGameContext, TItem)
+    Inherits BaseGameState(Of TGameContext)
     Private _menuItems As New List(Of (String, TItem))
     Protected MenuItemIndex As Integer
     Private ReadOnly _statusBarText As String
@@ -8,7 +8,7 @@
     Public Sub New(
                   parent As IGameController,
                   setState As Action(Of String, Boolean),
-                  context As IUIContext,
+                  context As IUIContext(Of TGameContext),
                   headerText As String,
                   statusBarText As String,
                   cancelGameState As String)

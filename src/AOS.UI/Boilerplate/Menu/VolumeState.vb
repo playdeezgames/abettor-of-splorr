@@ -1,6 +1,6 @@
-﻿Friend Class VolumeState
-    Inherits BasePickerState(Of Single)
-    Public Sub New(parent As IGameController, setState As Action(Of String, Boolean), context As IUIContext)
+﻿Friend Class VolumeState(Of TGameContext)
+    Inherits BasePickerState(Of TGameContext, Single)
+    Public Sub New(parent As IGameController, setState As Action(Of String, Boolean), context As IUIContext(Of TGameContext))
         MyBase.New(parent, setState, context, "<placeholder>", context.ControlsText("Select", "Cancel"), BoilerplateState.Options)
     End Sub
     Protected Overrides Sub OnActivateMenuItem(value As (String, Single))
