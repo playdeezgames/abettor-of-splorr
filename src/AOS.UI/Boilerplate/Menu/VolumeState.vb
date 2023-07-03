@@ -4,8 +4,7 @@
         MyBase.New(parent, setState, context, "<placeholder>", context.ControlsText("Select", "Cancel"), BoilerplateState.Options)
     End Sub
     Protected Overrides Sub OnActivateMenuItem(value As (String, Single))
-        Dim percent = CInt(value.Item2)
-        Volume = percent * 0.01F
+        Volume = value.Item2
         PlaySfx(BoilerplateSfx.SfxVolumeTest)
         SaveConfig()
         HeaderText = $"Volume (Currently: {Volume * 100:f0}%)"
