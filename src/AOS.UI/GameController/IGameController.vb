@@ -10,4 +10,5 @@
     Property Size As (Integer, Integer)
     Property FullScreen As Boolean
     Sub SetSizeHook(hook As Action(Of (Integer, Integer), Boolean))
+    Property StartStateEnabled As Boolean
 End Interface

@@ -21,7 +21,9 @@
         SetCurrentState(state, False)
     End Sub
     Protected Sub SetStates(pushedState As String, nextState As String)
+        Parent.StartStateEnabled = False
         SetCurrentState(nextState, False)
+        Parent.StartStateEnabled = True
         SetCurrentState(pushedState, True)
     End Sub
     Public Property Volume As Single Implements IGameController.Volume
@@ -55,7 +57,7 @@
             Parent.FullScreen = value
         End Set
     End Property
-
+    Public Property StartStateEnabled As Boolean Implements IGameController.StartStateEnabled
     Public MustOverride Sub HandleCommand(cmd As String) Implements IGameController.HandleCommand
     Public MustOverride Sub Render(displayBuffer As IPixelSink) Implements IGameController.Render
     Public Sub SetSfxHook(handler As Action(Of String)) Implements IGameController.SetSfxHook

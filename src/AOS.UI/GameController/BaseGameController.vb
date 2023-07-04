@@ -10,20 +10,25 @@
         End If
         If Not String.IsNullOrEmpty(state) Then
             PushState(state)
-            _states(_stateStack.Peek).OnStart()
+            If StartStateEnabled Then
+                _states(_stateStack.Peek).OnStart()
+            End If
         End If
     End Sub
-
     Private Sub PushState(state As String)
         _stateStack.Push(state)
     End Sub
 
-    Private Function PopState() As String
+    Private Sub PopState()
         If _stateStack.Any Then
-            Return _stateStack.Pop()
+            _stateStack.Pop()
         End If
-        Return Nothing
-    End Function
+        If _stateStack.Any Then
+            If StartStateEnabled Then
+                _states(_stateStack.Peek).OnStart()
+            End If
+        End If
+    End Sub
 
     Protected Sub SetState(state As String, handler As BaseGameState(Of TGameContext))
         _states(state) = handler
@@ -63,6 +68,7 @@
             End If
         End Set
     End Property
+    Public Property StartStateEnabled As Boolean = True Implements IGameController.StartStateEnabled
     Sub New(settings As ISettings, context As IUIContext(Of TGameContext))
         Me.Settings = settings
         Me.Settings.Save()
