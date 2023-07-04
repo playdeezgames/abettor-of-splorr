@@ -2,7 +2,12 @@
     Implements IGameController
     Protected ReadOnly Property Parent As IGameController
     Private ReadOnly SetCurrentState As Action(Of String, Boolean)
-    Protected Context As IUIContext(Of TGameContext)
+    Protected ReadOnly Context As IUIContext(Of TGameContext)
+    Protected ReadOnly Property Game As TGameContext
+        Get
+            Return Context.Game
+        End Get
+    End Property
     Protected Const Zero = 0
     Sub New(parent As IGameController, setState As Action(Of String, Boolean), context As IUIContext(Of TGameContext))
         Me.Parent = parent
